@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <title>AstraMind AI Signals</title>
@@ -20,13 +20,12 @@
       padding: 16px;
       color: #fff;
       background:
-        radial-gradient(circle at 20% 20%, rgba(151, 71, 255, 0.35), transparent 55%),
+        radial-gradient(circle at 20% 20%, rgba(151, 71, 255, 0.25), transparent 55%),
         radial-gradient(circle at 80% 80%, rgba(255, 0, 153, 0.35), transparent 55%),
-        radial-gradient(circle at 0% 100%, rgba(0, 255, 255, 0.2), transparent 55%),
+        radial-gradient(circle at 0% 100%, rgba(0, 204, 255, 0.25), transparent 55%),
         #050017;
       background-attachment: fixed;
-      position: relative;
-      overflow: hidden;
+      overflow-y: auto;
     }
 
     body::before {
@@ -35,1097 +34,1099 @@
       inset: 0;
       pointer-events: none;
       background-image:
-        radial-gradient(2px 2px at 10% 20%, rgba(255, 255, 255, 0.6), transparent),
-        radial-gradient(1.5px 1.5px at 80% 30%, rgba(255, 255, 255, 0.4), transparent),
-        radial-gradient(1.5px 1.5px at 30% 80%, rgba(255, 255, 255, 0.5), transparent),
-        radial-gradient(2px 2px at 70% 60%, rgba(255, 255, 255, 0.35), transparent);
-      opacity: 0.6;
+        radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1.5px 1.5px at 80% 30%, rgba(255,255,255,0.45), transparent),
+        radial-gradient(1.5px 1.5px at 30% 80%, rgba(255,255,255,0.35), transparent),
+        radial-gradient(2px 2px at 60% 10%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1.8px 1.8px at 70% 70%, rgba(255,255,255,0.4), transparent);
+      opacity: 0.35;
       z-index: 0;
     }
 
-    #app {
+    .app {
       position: relative;
       z-index: 1;
+      max-width: 1100px;
       width: 100%;
-      max-width: 980px;
-    }
-
-    .card {
-      background: rgba(4, 0, 40, 0.9);
+      background: radial-gradient(circle at top left, #24114a, #070317 60%, #050012 100%);
       border-radius: 32px;
-      padding: 28px 24px 24px;
+      padding: 28px 28px 32px;
       box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.04),
-        0 22px 80px rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(18px);
+        0 24px 80px rgba(0,0,0,0.7),
+        0 0 0 1px rgba(255,255,255,0.05);
     }
 
-    .header-top {
+    @media (max-width: 640px) {
+      .app {
+        padding: 20px 18px 24px;
+        border-radius: 24px;
+      }
+    }
+
+    .app-header {
       text-align: center;
-      letter-spacing: 0.28em;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 18px;
+    }
+
+    .label-small {
+      letter-spacing: 0.35em;
       text-transform: uppercase;
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
       margin-bottom: 6px;
     }
 
-    .header-title {
-      text-align: center;
+    .title-main {
       font-size: 26px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
     }
 
-    .header-sub {
-      text-align: center;
+    .subtitle {
       font-size: 14px;
-      color: rgba(255, 255, 255, 0.7);
-      margin-bottom: 24px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .subtitle span {
+      color: #ff7bff;
+      font-weight: 600;
+    }
+
+    .lang-switcher {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .lang-pill {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(10,8,40,0.85);
+      color: rgba(255,255,255,0.8);
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .lang-pill[data-active="true"] {
+      background: linear-gradient(135deg, #ff4dd8, #ff7bff);
+      color: #160018;
+      border-color: rgba(255,255,255,0.85);
+      box-shadow:
+        0 8px 20px rgba(255,107,255,0.6),
+        0 0 14px rgba(255,107,255,0.8);
+    }
+
+    .lang-pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.6);
     }
 
     .section-title {
-      font-size: 18px;
+      margin-top: 22px;
+      margin-bottom: 14px;
+      font-size: 16px;
       font-weight: 600;
-      margin-bottom: 12px;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 960px) {
+      .game-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .game-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .game-card {
+      position: relative;
+      background: radial-gradient(circle at top left, #3c205f, #15102c 55%, #0c081b);
+      border-radius: 20px;
+      padding: 16px 16px 14px;
+      cursor: pointer;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.04);
+      box-shadow:
+        0 14px 40px rgba(0,0,0,0.65),
+        0 0 30px rgba(255, 107, 255, 0.06);
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .game-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.12), transparent 55%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 22px 55px rgba(0,0,0,0.9),
+        0 0 40px rgba(255, 107, 255, 0.22);
+      border-color: rgba(255,255,255,0.16);
+      background: radial-gradient(circle at top left, #4b2f88, #181233 55%, #0c081e);
+    }
+
+    .game-card:hover::before {
+      opacity: 1;
+    }
+
+    .game-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .game-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      background: radial-gradient(circle at 20% 0%, #ffe9ff, #ff47c0);
+      box-shadow: 0 0 18px rgba(255, 107, 255, 0.55);
+      flex-shrink: 0;
+    }
+
+    .game-title-main {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .game-title-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 2px;
+    }
+
+    .game-chip {
+      display: inline-flex;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(255,255,255,0.7);
+      background: rgba(0,0,0,0.26);
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-top: 8px;
+    }
+
+    .game-chip span {
+      color: #ff9af2;
     }
 
     .btn-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 12px;
+      margin-top: 18px;
     }
 
-    .btn {
-      border: none;
-      cursor: pointer;
+    .btn,
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 999px;
       padding: 10px 18px;
-      font-size: 14px;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
       font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      transition:
-        transform 0.12s ease,
-        box-shadow 0.12s ease,
-        background 0.12s ease,
-        color 0.12s ease;
-      white-space: nowrap;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+      outline: none;
     }
 
     .btn-primary {
-      background: linear-gradient(120deg, #ff5ef7, #b46bff);
-      color: #020012;
+      background: linear-gradient(135deg, #ff4dd8, #ff7bff);
+      color: #120014;
       box-shadow:
-        0 0 20px rgba(255, 95, 247, 0.7),
-        0 0 40px rgba(170, 110, 255, 0.5);
+        0 12px 24px rgba(255, 107, 255, 0.5),
+        0 0 18px rgba(255, 107, 255, 0.7);
     }
 
     .btn-primary:hover {
       transform: translateY(-1px);
       box-shadow:
-        0 0 30px rgba(255, 95, 247, 0.95),
-        0 0 55px rgba(170, 110, 255, 0.7);
+        0 20px 40px rgba(255, 107, 255, 0.85),
+        0 0 28px rgba(255, 107, 255, 0.9);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow:
+        0 6px 18px rgba(255, 107, 255, 0.55),
+        0 0 16px rgba(255, 107, 255, 0.7);
     }
 
     .btn-ghost {
-      background: rgba(122, 98, 255, 0.12);
-      color: rgba(255, 255, 255, 0.8);
-      border-radius: 999px;
-      border: 1px solid rgba(175, 150, 255, 0.35);
+      background: rgba(10,8,40,0.85);
+      color: rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.65);
     }
 
     .btn-ghost:hover {
-      background: rgba(149, 124, 255, 0.35);
-      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(20,18,60,1);
       transform: translateY(-1px);
+      box-shadow: 0 18px 32px rgba(0,0,0,0.9);
+    }
+
+    .btn-ghost:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.75);
     }
 
     .btn-pill-group {
-      display: inline-flex;
-      background: rgba(9, 1, 60, 0.9);
-      border-radius: 999px;
-      padding: 4px;
-      border: 1px solid rgba(160, 130, 255, 0.4);
-      gap: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
     }
 
     .btn-pill {
-      border-radius: 999px;
-      border: none;
-      padding: 6px 12px;
+      padding: 8px 14px;
       font-size: 12px;
-      cursor: pointer;
-      color: rgba(255, 255, 255, 0.7);
-      background: transparent;
-      transition: background 0.12s ease, color 0.12s ease;
-    }
-
-    .btn-pill-active {
-      background: linear-gradient(120deg, #ff5ef7, #b46bff);
-      color: #020012;
-    }
-
-    .game-grid {
-      margin-top: 10px;
-      display: grid;
-      gap: 16px;
-      max-width: 880px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    @media (min-width: 960px) {
-      .game-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    @media (min-width: 640px) and (max-width: 959px) {
-      .game-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 639px) {
-      .game-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .game-card {
-      background: radial-gradient(circle at top, rgba(225, 173, 255, 0.22), rgba(17, 4, 60, 0.9));
-      border-radius: 22px;
-      padding: 16px 14px 14px;
-      border: 1px solid rgba(180, 145, 255, 0.5);
-      cursor: pointer;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, background 0.12s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .game-card::after {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.18), transparent 60%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-
-    .game-card:hover::after {
-      opacity: 1;
-    }
-
-    .game-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.75);
-      border-color: rgba(255, 255, 255, 0.7);
-    }
-
-    .game-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 14px;
-      background: radial-gradient(circle at 30% 25%, #fff, #ff85ff 40%, #431cd7 90%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      margin-bottom: 10px;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
-    }
-
-    .game-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .game-sub {
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .back-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-      gap: 10px;
-    }
-
-    .back-btn {
       border-radius: 999px;
-      padding: 6px 14px;
-      border: none;
-      background: rgba(19, 9, 60, 0.9);
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 12px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border: 1px solid rgba(172, 150, 255, 0.55);
-      transition: background 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
+      background: rgba(15,10,45,0.95);
+      color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.6);
     }
 
-    .back-btn:hover {
-      background: rgba(33, 19, 98, 0.95);
+    .btn-pill[data-active="true"] {
+      background: linear-gradient(135deg, #ff4dd8, #ff7bff);
+      color: #160018;
+      border-color: rgba(255,255,255,0.85);
+      box-shadow:
+        0 14px 26px rgba(255, 107, 255, 0.6),
+        0 0 18px rgba(255, 107, 255, 0.8);
+    }
+
+    .btn-pill:hover {
       transform: translateY(-1px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 14px 26px rgba(0,0,0,0.8);
+      background: rgba(25,18,70,1);
     }
 
-    .back-btn span {
-      font-size: 13px;
+    .btn-pill[data-active="true"]:hover {
+      transform: translateY(-1px);
     }
 
-    .tagline {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.7);
-      text-align: right;
+    .panel {
+      margin-top: 20px;
+      padding: 18px 18px 16px;
+      border-radius: 20px;
+      background: radial-gradient(circle at top left, #3e1a57, #140a23 55%, #070414);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.85);
     }
 
-    .tagline span {
-      color: #ff8fff;
+    .panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .panel-title {
+      font-size: 15px;
       font-weight: 600;
     }
 
-    .question {
-      margin-bottom: 16px;
-      font-size: 14px;
+    .panel-subtitle {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
     }
 
-    .strategy-box {
-      margin-top: 14px;
-      padding: 14px 14px 12px;
-      border-radius: 18px;
-      background: radial-gradient(circle at top, rgba(210, 160, 255, 0.18), rgba(8, 0, 40, 0.96));
-      border: 1px solid rgba(190, 155, 255, 0.8);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
-      font-size: 13px;
-      line-height: 1.5;
+    .panel-subtitle span {
+      color: #ff9af2;
+    }
+
+    .strategy-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.9);
       white-space: pre-line;
     }
 
-    .strategy-title {
-      font-weight: 600;
-      margin-bottom: 6px;
-      font-size: 14px;
-    }
-
-    .strategy-footer {
-      margin-top: 10px;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .divider {
-      margin: 16px 0 10px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    }
-
-    /* Crash layout */
-
-    .crash-container {
-      margin-top: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .crash-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .crash-label {
+    .hint-text {
       font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255,255,255,0.7);
+      margin-top: 10px;
     }
 
-    .crash-label span {
-      color: #ff8fff;
-    }
-
-    .crash-main {
+    .crash-wrapper {
+      margin-top: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
-      padding: 18px;
-      border-radius: 26px;
-      background:
-        radial-gradient(circle at top, rgba(255, 133, 255, 0.3), rgba(10, 0, 40, 0.98));
-      border: 1px solid rgba(205, 160, 255, 0.9);
-      box-shadow:
-        0 20px 45px rgba(0, 0, 0, 0.9),
-        0 0 80px rgba(162, 106, 255, 0.7);
+      text-align: center;
+      gap: 18px;
     }
 
-    .crash-circle {
-      width: 210px;
-      height: 210px;
+    .crash-circle-outer {
+      width: 220px;
+      height: 220px;
       border-radius: 50%;
-      background: radial-gradient(circle at 30% 0, #ff8fff 0%, #3b166a 40%, #050010 80%);
-      box-shadow:
-        0 0 65px rgba(255, 143, 255, 0.9),
-        inset 0 0 35px rgba(6, 0, 40, 0.9);
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
+      background:
+        conic-gradient(from 220deg, #ff7bff, #7effff 40%, rgba(126,255,255,0.35) 60%, rgba(255,123,255,0.1) 80%, #ff7bff 100%);
+      box-shadow:
+        0 0 35px rgba(255,123,255,0.55),
+        0 0 80px rgba(56,255,255,0.3);
       overflow: hidden;
     }
 
-    .crash-circle::before {
-      content: "";
-      position: absolute;
-      inset: 10%;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      border-top-color: rgba(255, 255, 255, 0.85);
-      animation: spin 3s linear infinite;
-      opacity: 0.7;
-    }
-
     .crash-circle-inner {
-      position: relative;
-      z-index: 2;
-      text-align: center;
+      width: 76%;
+      height: 76%;
+      border-radius: 50%;
+      background: radial-gradient(circle at top, #3d1f63, #080214 65%, #02000b 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        inset 0 0 35px rgba(0,0,0,0.9),
+        0 0 30px rgba(0,0,0,0.8);
     }
 
     .crash-coeff {
-      font-size: 32px;
-      font-weight: 800;
+      font-size: 34px;
+      font-weight: 700;
       letter-spacing: 0.06em;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
-    .crash-coeff-label {
-      font-size: 12px;
-      letter-spacing: 0.16em;
+    .crash-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.78);
+      color: rgba(255,255,255,0.7);
     }
 
     .crash-time {
       font-size: 13px;
-      color: rgba(255, 255, 255, 0.88);
+      color: rgba(255,255,255,0.85);
     }
 
-    .crash-time span {
-      color: #ffb3ff;
-      font-weight: 600;
+    .footer-note {
+      margin-top: 18px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.58);
+      text-align: right;
     }
 
-    .crash-hint {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.72);
-      text-align: center;
-    }
-
-    .crash-hint span {
-      color: #ff8fff;
-    }
-
-    .btn-crash-row {
-      display: flex;
-      justify-content: center;
-    }
-
-    @keyframes spin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    @media (max-width: 600px) {
-      .card {
-        padding: 22px 16px 18px;
-        border-radius: 24px;
-      }
-      .crash-circle {
-        width: 180px;
-        height: 180px;
-      }
-      .header-title {
-        font-size: 22px;
-      }
+    .footer-note span {
+      color: #ff9af2;
     }
   </style>
 </head>
 <body>
-<div id="app"></div>
+<div class="app" id="app"></div>
 
 <script>
-  // --- Конфиг ---
+  const DEFAULT_LANG = "ru";
+  let currentLang = DEFAULT_LANG;
 
-  const LANGS = ["ru", "en", "es", "pt", "hi"];
-
-  const SLOT_GAMES = ["gates", "sweet", "doghouse", "sugar"];
-  const CRASH_GAMES = ["aviator", "chicken"];
-
-  const TEXTS = {
+  const UI_TEXT = {
     ru: {
-      brandTop: "ASTRAMIND AI",
-      brandTitle: "AI СИГНАЛЫ",
-      brandSub: "Выбери игру, для которой нужны сигналы.",
-      chooseLang: "Выбери язык интерфейса:",
-      chooseGame: "Выбери игру, для которой нужна стратегия:",
-      balanceQuestion: (gameTitle) =>
-        `Какой у тебя банк для игры ${gameTitle}?`,
-      balanceLow: "💵 Меньше 5 $",
-      balanceHigh: "💰 От 5 $ и выше",
-      back: "Меню",
-      moreStrategy: "Нужна ещё стратегия — выбери игру ещё раз 👇",
-      crashLabel: "КОЭФФИЦИЕНТ",
-      crashBtn: "ПОЛУЧИТЬ СИГНАЛ",
-      crashHint: "Нажми кнопку, чтобы получить новый сигнал.",
-      crashTimeLabel: (time) => `Сигнал на <span>${time}</span>`,
-      crashTimeHint:
-        "Это коэффициент на ближайшую раздачу (окно ~3 минуты). Играешь аккуратно, не all-in.",
-      langNames: {
-        ru: "Русский",
-        en: "English",
-        es: "Español",
-        pt: "Português",
-        hi: "Hindi",
-      },
-      games: {
-        gates: "⚡ Gates of Olympus",
-        sweet: "🍬 Sweet Bonanza",
-        doghouse: "🐶 Dog House Megaways",
-        sugar: "🍭 Sugar Rush",
-        aviator: "✈️ Aviator",
-        chicken: "🐔 Chicken Road",
-      },
-      gameSubtitles: {
-        gates: "Низкий / средний риск",
-        sweet: "Сладкие спины и иксы",
-        doghouse: "Волатильные спины",
-        sugar: "Сетап на серии бонусок",
-        aviator: "Краш-игра, ловим иксы",
-        chicken: "Краш-игра с уровнями риска",
-      },
-      strategyTitle: (gameTitle, balanceLabel) =>
-        `${gameTitle} — стратегия для банка ${balanceLabel}`,
-      balanceLabelLow: "< 5 $",
-      balanceLabelHigh: "≥ 5 $",
-      stopLossNote:
-        "Жёсткий стоп-лосс — минус ~40% от стартового банка. Дальше не заносим, а перезаходим позже.",
-      chickenDifficultyLabel: "Сложность ·",
-      chickenDiffs: {
-        easy: "Лёгкая",
-        normal: "Нормальная",
-        hard: "Жёсткая",
-      },
+      subtitleMenu: "Выбери игру, для которой нужны сигналы.",
+      subtitleBalance: "Подбор стратегии по размеру баланса.",
+      subtitleSlot: "Текстовые стратегии от AstraMind AI.",
+      subtitleCrash: "Краш-сигналы на ближайшие 3 минуты игрового времени.",
+      subtitleChickenDiff: "Chicken Road — выбери уровень риска для сигнала.",
+      chooseGameTitle: "Выбери игру, для которой нужна стратегия:",
+      footerNote: "Сигналы генерирует ИИ. Управляй риском и играй ответственно.",
+      balanceQuestion: "Какой у тебя баланс для игры {game}?",
+      balanceLowBtn: "💸 Меньше 5 $",
+      balanceHighBtn: "💰 От 5 $ и выше",
+      slotBalanceLowLabel: "< 5 $",
+      slotBalanceHighLabel: "≥ 5 $",
+      slotPanelTitle: "{game} — стратегия для баланса {balance}",
+      slotPanelSubtitle: "Играем аккуратно: фиксируй профит и не отдавай слотам обратно.",
+      slotNeedMore: "Нужна ещё стратегия? Жми «Новая стратегия» — бот соберёт другой сетап под эту же игру.",
+      btnNewStrategy: "🎯 Новая стратегия",
+      btnBackGames: "← Вернуться к выбору игры",
+      btnBackGamesShort: "← В меню игр",
+      crashPanelTitle: "{game} — сигнал по коэффициенту",
+      crashSubtitle: "Время сигнала: {time}{mode}",
+      crashModeLabel: " · уровень: {level}",
+      crashNextRound: "В следующем раунде ориентируйся на коэффициент x{coeff} к {time}.",
+      crashHint: "Нажми кнопку ниже, чтобы получить новый сигнал, когда подойдёт следующее время.",
+      btnGetSignal: "⚡ Получить сигнал",
+      chickenDiffTitle: "Выбери уровень риска для {game}:",
+      btnLevelEasy: "🐥 Лёгкий",
+      btnLevelNormal: "🐔 Нормальный",
+      btnLevelHard: "🔥 Жёсткий",
+      level_easy: "Лёгкий",
+      level_normal: "Нормальный",
+      level_hard: "Жёсткий"
     },
-
     en: {
-      brandTop: "ASTRAMIND AI",
-      brandTitle: "AI SIGNALS",
-      brandSub: "Choose the game you want signals for.",
-      chooseLang: "Choose your language:",
-      chooseGame: "Choose a game to get a strategy:",
-      balanceQuestion: (gameTitle) =>
-        `What's your bankroll for ${gameTitle}?`,
-      balanceLow: "💵 Under $5",
-      balanceHigh: "💰 From $5 and higher",
-      back: "Menu",
-      moreStrategy: "Need another setup? Pick a game again 👇",
-      crashLabel: "COEFFICIENT",
-      crashBtn: "GET SIGNAL",
-      crashHint: "Tap the button to get a fresh signal.",
-      crashTimeLabel: (time) => `Signal for <span>${time}</span>`,
-      crashTimeHint:
-        "This is a coefficient for the nearest round (~3 min window). Don't go all-in.",
-      langNames: {
-        ru: "Русский",
-        en: "English",
-        es: "Español",
-        pt: "Português",
-        hi: "Hindi",
-      },
-      games: {
-        gates: "⚡ Gates of Olympus",
-        sweet: "🍬 Sweet Bonanza",
-        doghouse: "🐶 Dog House Megaways",
-        sugar: "🍭 Sugar Rush",
-        aviator: "✈️ Aviator",
-        chicken: "🐔 Chicken Road",
-      },
-      gameSubtitles: {
-        gates: "Low / mid risk grind",
-        sweet: "Candy spins & multipliers",
-        doghouse: "High volatility spins",
-        sugar: "Bonus series setup",
-        aviator: "Crash game, hunting x",
-        chicken: "Crash with risk levels",
-      },
-      strategyTitle: (gameTitle, balanceLabel) =>
-        `${gameTitle} — setup for bankroll ${balanceLabel}`,
-      balanceLabelLow: "< $5",
-      balanceLabelHigh: "≥ $5",
-      stopLossNote:
-        "Hard stop-loss — about −40% from starting bankroll. After that stop and cool down.",
-      chickenDifficultyLabel: "Difficulty ·",
-      chickenDiffs: {
-        easy: "Easy",
-        normal: "Normal",
-        hard: "Hard",
-      },
+      subtitleMenu: "Choose the game you want signals for.",
+      subtitleBalance: "Strategy selection based on your balance.",
+      subtitleSlot: "Text strategies generated by AstraMind AI.",
+      subtitleCrash: "Crash signals for the next 3 minutes of game time.",
+      subtitleChickenDiff: "Chicken Road — choose risk level for the signal.",
+      chooseGameTitle: "Choose a game to get a strategy:",
+      footerNote: "Signals are AI-generated. Manage your risk and play responsibly.",
+      balanceQuestion: "What is your balance for {game}?",
+      balanceLowBtn: "💸 Less than $5",
+      balanceHighBtn: "💰 $5 and above",
+      slotBalanceLowLabel: "< $5",
+      slotBalanceHighLabel: "≥ $5",
+      slotPanelTitle: "{game} — strategy for balance {balance}",
+      slotPanelSubtitle: "Play carefully: lock in profit and don't give it back to the slots.",
+      slotNeedMore: "Need another strategy? Hit “New strategy” — the bot will build a different setup for this game.",
+      btnNewStrategy: "🎯 New strategy",
+      btnBackGames: "← Back to game list",
+      btnBackGamesShort: "← Games menu",
+      crashPanelTitle: "{game} — coefficient signal",
+      crashSubtitle: "Signal time: {time}{mode}",
+      crashModeLabel: " · level: {level}",
+      crashNextRound: "For the next round, aim for x{coeff} around {time}.",
+      crashHint: "Press the button below to get a new signal when the next time comes.",
+      btnGetSignal: "⚡ Get signal",
+      chickenDiffTitle: "Choose risk level for {game}:",
+      btnLevelEasy: "🐥 Easy",
+      btnLevelNormal: "🐔 Normal",
+      btnLevelHard: "🔥 Hard",
+      level_easy: "Easy",
+      level_normal: "Normal",
+      level_hard: "Hard"
     },
-
-    es: {}, pt: {}, hi: {},
+    es: {
+      subtitleMenu: "Elige el juego para recibir señales.",
+      subtitleBalance: "Estrategia según el tamaño de tu saldo.",
+      subtitleSlot: "Estrategias de texto generadas por AstraMind AI.",
+      subtitleCrash: "Señales de crash para los próximos 3 minutos.",
+      subtitleChickenDiff: "Chicken Road — elige el nivel de riesgo.",
+      chooseGameTitle: "Elige un juego para obtener estrategia:",
+      footerNote: "Las señales las genera IA. Controla tu riesgo y juega con responsabilidad.",
+      balanceQuestion: "¿Qué saldo tienes para {game}?",
+      balanceLowBtn: "💸 Menos de 5 $",
+      balanceHighBtn: "💰 5 $ o más",
+      slotBalanceLowLabel: "< 5 $",
+      slotBalanceHighLabel: "≥ 5 $",
+      slotPanelTitle: "{game} — estrategia para saldo {balance}",
+      slotPanelSubtitle: "Juega con calma: fija la ganancia y no la devuelvas al casino.",
+      slotNeedMore: "¿Necesitas otra estrategia? Pulsa “Nueva” y el bot generará otra configuración.",
+      btnNewStrategy: "🎯 Nueva estrategia",
+      btnBackGames: "← Volver a los juegos",
+      btnBackGamesShort: "← Menú juegos",
+      crashPanelTitle: "{game} — señal de coeficiente",
+      crashSubtitle: "Hora de la señal: {time}{mode}",
+      crashModeLabel: " · nivel: {level}",
+      crashNextRound: "En la próxima ronda apunta a x{coeff} alrededor de {time}.",
+      crashHint: "Pulsa el botón para obtener una nueva señal en el siguiente tiempo.",
+      btnGetSignal: "⚡ Obtener señal",
+      chickenDiffTitle: "Elige nivel de riesgo para {game}:",
+      btnLevelEasy: "🐥 Fácil",
+      btnLevelNormal: "🐔 Medio",
+      btnLevelHard: "🔥 Alto",
+      level_easy: "Fácil",
+      level_normal: "Medio",
+      level_hard: "Alto"
+    },
+    pt: {
+      subtitleMenu: "Escolha o jogo para receber sinais.",
+      subtitleBalance: "Estratégia de acordo com o seu saldo.",
+      subtitleSlot: "Estratégias de texto geradas pelo AstraMind AI.",
+      subtitleCrash: "Sinais de crash para os próximos 3 minutos.",
+      subtitleChickenDiff: "Chicken Road — escolha o nível de risco.",
+      chooseGameTitle: "Escolha um jogo para receber estratégia:",
+      footerNote: "Os sinais são gerados por IA. Gerencie o risco e jogue com responsabilidade.",
+      balanceQuestion: "Qual é o seu saldo para {game}?",
+      balanceLowBtn: "💸 Menos de 5 $",
+      balanceHighBtn: "💰 5 $ ou mais",
+      slotBalanceLowLabel: "< 5 $",
+      slotBalanceHighLabel: "≥ 5 $",
+      slotPanelTitle: "{game} — estratégia para saldo {balance}",
+      slotPanelSubtitle: "Jogue com calma: fixe o lucro e não devolva para o slot.",
+      slotNeedMore: "Precisa de outra estratégia? Clique em “Nova estratégia” e o bot monta outra configuração.",
+      btnNewStrategy: "🎯 Nova estratégia",
+      btnBackGames: "← Voltar aos jogos",
+      btnBackGamesShort: "← Menu de jogos",
+      crashPanelTitle: "{game} — sinal de coeficiente",
+      crashSubtitle: "Horário do sinal: {time}{mode}",
+      crashModeLabel: " · nível: {level}",
+      crashNextRound: "Na próxima rodada mire em x{coeff} por volta de {time}.",
+      crashHint: "Clique no botão para receber um novo sinal no próximo horário.",
+      btnGetSignal: "⚡ Receber sinal",
+      chickenDiffTitle: "Escolha o nível de risco para {game}:",
+      btnLevelEasy: "🐥 Fácil",
+      btnLevelNormal: "🐔 Médio",
+      btnLevelHard: "🔥 Alto",
+      level_easy: "Fácil",
+      level_normal: "Médio",
+      level_hard: "Alto"
+    },
+    hi: {
+      subtitleMenu: "जिस गेम के लिए सिग्नल चाहिए उसे चुनें।",
+      subtitleBalance: "आपके बैलेंस के अनुसार स्ट्रेटेजी चयन।",
+      subtitleSlot: "AstraMind AI द्वारा बनाई गई टेक्स्ट स्ट्रेटेजीज़।",
+      subtitleCrash: "अगले 3 मिनट के लिए क्रैश सिग्नल।",
+      subtitleChickenDiff: "Chicken Road — रिस्क लेवल चुनें।",
+      chooseGameTitle: "स्ट्रेटेजी के लिए गेम चुनें:",
+      footerNote: "सिग्नल AI जनरेट करता है। रिस्क कंट्रोल करो और जिम्मेदारी से खेलो।",
+      balanceQuestion: "{game} के लिए तुम्हारा बैलेंस कितना है?",
+      balanceLowBtn: "💸 5 $ से कम",
+      balanceHighBtn: "💰 5 $ या ज़्यादा",
+      slotBalanceLowLabel: "< 5 $",
+      slotBalanceHighLabel: "≥ 5 $",
+      slotPanelTitle: "{game} — बैलेंस {balance} के लिए स्ट्रेटेजी",
+      slotPanelSubtitle: "शांत играй: профит фиксируй, слотам назад не отдавай.",
+      slotNeedMore: "और स्ट्रेटेजी चाहिए? “New strategy” दबाओ — бот соберёт новый сетап.",
+      btnNewStrategy: "🎯 New strategy",
+      btnBackGames: "← गेम लिस्ट पर वापस",
+      btnBackGamesShort: "← गेम मेन्यू",
+      crashPanelTitle: "{game} — коэффициент сигнал",
+      crashSubtitle: "सिग्नल टाइम: {time}{mode}",
+      crashModeLabel: " · लेवल: {level}",
+      crashNextRound: "अगले раунд में लगभग {time} पर x{coeff} पकड़ने की कोशिश करो।",
+      crashHint: "अगले टाइम स्लॉट पर नया सिग्नल लेने के लिए नीचे वाला बटन दबाओ।",
+      btnGetSignal: "⚡ Get signal",
+      chickenDiffTitle: "{game} के लिए रिस्क लेवल चुनो:",
+      btnLevelEasy: "🐥 Easy",
+      btnLevelNormal: "🐔 Normal",
+      btnLevelHard: "🔥 Hard",
+      level_easy: "Easy",
+      level_normal: "Normal",
+      level_hard: "Hard"
+    }
   };
 
-  // Остальные языки — как английский (потом можно будет перевести)
-  ["es", "pt", "hi"].forEach((lng) => (TEXTS[lng] = { ...TEXTS.en }));
+  const LANG_LABELS = { ru: "RU", en: "EN", es: "ES", pt: "PT", hi: "HI" };
 
-  // --- Стратегии для слотов (3 варианта на low/high) ---
+  const GAMES = {
+    gates: { key: "gates", icon: "⚡", crash: false },
+    sweet: { key: "sweet", icon: "🍬", crash: false },
+    doghouse: { key: "doghouse", icon: "🐶", crash: false },
+    sugar: { key: "sugar", icon: "🔍", crash: false },
+    aviator: { key: "aviator", icon: "✈️", crash: true },
+    chicken: { key: "chicken", icon: "🐔", crash: true, hasDifficulty: true }
+  };
 
-  const STRATEGIES = {
+  const GAME_TEXT = {
+    ru: {
+      gates: { title: "Gates of Olympus", subtitle: "Низкий / средний риск", chip: "Слот · гринд" },
+      sweet: { title: "Sweet Bonanza", subtitle: "Сладкие спины и иксы", chip: "Слот · множители" },
+      doghouse: { title: "Dog House Megaways", subtitle: "Волатильные спины", chip: "Слот · megaways" },
+      sugar: { title: "Sugar Rush", subtitle: "Сетап на серии бонусок", chip: "Слот · серии" },
+      aviator: { title: "Aviator", subtitle: "Краш-игра, ловим х", chip: "Crash · x-hunt" },
+      chicken: { title: "Chicken Road", subtitle: "Краш-игра с уровнями риска", chip: "Crash · levels" }
+    },
+    en: {
+      gates: { title: "Gates of Olympus", subtitle: "Low / mid risk grind", chip: "Slot · grind" },
+      sweet: { title: "Sweet Bonanza", subtitle: "Candy spins & multipliers", chip: "Slot · multipliers" },
+      doghouse: { title: "Dog House Megaways", subtitle: "High volatility spins", chip: "Slot · megaways" },
+      sugar: { title: "Sugar Rush", subtitle: "Bonus series setup", chip: "Slot · series" },
+      aviator: { title: "Aviator", subtitle: "Crash game, hunting x", chip: "Crash · x-hunt" },
+      chicken: { title: "Chicken Road", subtitle: "Crash game with risk levels", chip: "Crash · levels" }
+    },
+    es: {
+      gates: { title: "Gates of Olympus", subtitle: "Riesgo bajo/medio", chip: "Slot · grind" },
+      sweet: { title: "Sweet Bonanza", subtitle: "Giros dulces y multiplicadores", chip: "Slot · multipliers" },
+      doghouse: { title: "Dog House Megaways", subtitle: "Giros volátiles", chip: "Slot · megaways" },
+      sugar: { title: "Sugar Rush", subtitle: "Series de bonus", chip: "Slot · series" },
+      aviator: { title: "Aviator", subtitle: "Crash, cazando coeficientes", chip: "Crash · x-hunt" },
+      chicken: { title: "Chicken Road", subtitle: "Crash con niveles de riesgo", chip: "Crash · levels" }
+    },
+    pt: {
+      gates: { title: "Gates of Olympus", subtitle: "Risco baixo/médio", chip: "Slot · grind" },
+      sweet: { title: "Sweet Bonanza", subtitle: "Spins doces e multiplicadores", chip: "Slot · multipliers" },
+      doghouse: { title: "Dog House Megaways", subtitle: "Spins voláteis", chip: "Slot · megaways" },
+      sugar: { title: "Sugar Rush", subtitle: "Setup de bônus em série", chip: "Slot · series" },
+      aviator: { title: "Aviator", subtitle: "Crash, caçando coeficientes", chip: "Crash · x-hunt" },
+      chicken: { title: "Chicken Road", subtitle: "Crash com níveis de risco", chip: "Crash · levels" }
+    },
+    hi: {
+      gates: { title: "Gates of Olympus", subtitle: "Low / mid risk", chip: "Slot · grind" },
+      sweet: { title: "Sweet Bonanza", subtitle: "Candy spins & x", chip: "Slot · multipliers" },
+      doghouse: { title: "Dog House Megaways", subtitle: "High volatility spins", chip: "Slot · megaways" },
+      sugar: { title: "Sugar Rush", subtitle: "Bonus series setup", chip: "Slot · series" },
+      aviator: { title: "Aviator", subtitle: "Crash game, hunt x", chip: "Crash · x-hunt" },
+      chicken: { title: "Chicken Road", subtitle: "Crash with risk levels", chip: "Crash · levels" }
+    }
+  };
+
+  /* Стратегии: подробно RU + EN. Остальные языки подхватывают EN как fallback. */
+  const SLOT_STRATEGIES = {
     ru: {
       gates: {
         low: [
-          `1) Прокрути слот 15 раз со ставкой 0.10 $.
-2) Прогрей: 10 спинов по 0.20 $.
-3) Если банк позволяет — бери бонуску по минималке.
-4) Если на покупку не хватает — ещё 25 спинов по 0.40 $, после этого стоп.
-
-Стоп-лосс: −40% от стартового банка.`,
-          `1) 20 спинов по 0.10 $ — просто смотри, как ведёт себя слот.
-2) Поймал 2–3 мультика х10+ за сессию — подними ставку до 0.20 $ ещё на 15 спинов.
-3) Если бонуска так и не упала — заверши сессию, слот «холодный».`,
-          `1) Делай 3–4 короткие сессии по 10 спинов 0.10 $ с паузой 2–3 минуты.
-2) В сессии, где поймал хороший разгон (мульты, много туманов) — докручивай до 30–40 спинов.
-3) Не покупай бонуску при балансе < 3 $, только спины.`,
+          "1) Прокрути слот 15 раз по ставке 0.10 $.\n2) Прогрей слот ещё 10 спинов по 0.20 $.\n3) Если банк позволяет — купи бонуску за минималку.\n4) Если не хватает — крути ещё 25 спинов по 0.40 $ и после этого остановка.\n\nСтоп-лосс: минус ~40% от стартового баланса.",
+          "1) Запусти 20 спинов по 0.10 $ в авто-режиме.\n2) Если за серию увидел 2–3 молнии x10+ — подними ставку до 0.30 $ ещё на 15 спинов.\n3) Любой занос x50+ от текущей ставки — вернись к 0.10 $ и добей ещё 10 спокойных спинов.\n\nВышел в плюс 30–50% — заканчивай сессию.",
+          "1) Начни с 10 спинов по 0.15 $.\n2) Дальше 10 спинов по 0.25 $.\n3) Если за 20 спинов нет нормальных мультиков — перезаход в слот через 10–15 минут.\n4) Если дала x100+ — сразу фиксируй профит и не доигрывай."
         ],
         high: [
-          `1) Начни с 25 спинов по 0.20–0.40 $ (1–2% банка).
-2) Если слот выдаёт частые множители — бери бонуску на 5–8% банка.
-3) После любой бонуски х150+ опускай ставку обратно и делай перерыв.`,
-          `1) Делай пачки по 30 спинов с авто-спином на 0.20–0.40 $.
-2) Если за пачку нет ни одного внятного х20+ — меняй слот или делай паузу.
-3) Сильный занос (х300+) = стоп сессии, забираешь профит.`,
-          `1) 15 спинов на 0.20 $, 15 на 0.40 $, смотришь, где слот лучше отвечает.
-2) Нашёл комфортную ставку — крути ещё 40–50 спинов максимум.
-3) Бонуска без икса — не отыгрываешься сразу, берёшь паузу.`,
-        ],
+          "1) Ставь 1–2% от банка на спин.\n2) 25–35 спинов спокойной прокрутки.\n3) При хорошем заходе — 2–3 попытки бонуски подряд на той же ставке.\n4) Любой занос x200+ — режь ставку в 2 раза и дотягивай до +50–80% профита.\n\nСтоп-лосс: минус 30–35% от банка.",
+          "1) Разогрев: 20 спинов по 0.40–0.60 $.\n2) Если часто сыпет множители до x10 — покупай 1–2 бонуски подряд.\n3) При серии пустых бонусок — возвращайся к спинам и жди откат.\n4) Цель — поймать x300+ за сессию и зафиксировать.",
+          "1) Определи максимум потерь на сессию (25–30% от банка).\n2) Играешь сериями по 10 спинов: 2 серии по базовой ставке, 1 серия с увеличенной в 1.5–2 раза.\n3) Бонуски покупаешь только после серии сильных спинов.\n4) Как только вышел в плюс 50%+ — останавливаешься."
+        ]
       },
       sweet: {
         low: [
-          `1) 20 спинов по 0.10 $.
-2) Если быстрая серия пустых спинов — остановись, сделай паузу 3–4 минуты.
-3) Поймал х50+ — снижай ставку и закрепляй профит.`,
-          `1) Держи ставку 0.10–0.20 $, не прыгай.
-2) Отрабатывай пачками по 25 спинов.
-3) За сессию не больше 75–100 спинов, дальше слот обычно «съедает».`,
-          `1) 10 аккуратных спинов по 0.10 $.
-2) Если в эти 10 спинов было много конфет/скаттеров — добавь ещё 20–30 спинов.
-3) Без признаков активности — меняй игру, не насилуй Sweet.`,
+          "1) 10 спинов по 0.10 $.\n2) Ещё 15 спинов по 0.20 $.\n3) При появлении частых ретригеров и множителей — можно взять одну бонуску за минималку.\n4) Если бонуска пустая — дозакрути 20 спинов по 0.10 $ и сделай паузу.",
+          "1) Крути 25 спинов по 0.10–0.15 $.\n2) Если увидел 2–3 захода с кучей фруктов, но без нормального множителя — слот «заряжается».\n3) Возьми одну бонуску и после неё ещё 10 спокойных спинов.\n4) Не гоняй подряд много бонусок на маленьком балансе.",
+          "1) Разминка: 15 спинов по 0.12 $.\n2) Дальше 10 спинов по 0.18 $.\n3) Если за это время нет нормальных хитов — смена слота или пауза.\n4) Любой занос x80+ — фиксируй и не отдавай назад."
         ],
         high: [
-          `1) Стартуй с 20 спинов по 0.20–0.40 $.
-2) Поймал бонуску с х100+ — срезай ставку вдвое и ещё 20 спинов максимум.
-3) Не более 3-х покупок бонуски за сессию.`,
-          `1) Работай циклами: 30 спинов → оценка → либо ещё 30, либо выход.
-2) При хорошем отклике бери бонуску не чаще, чем раз в 40 спинов.
-3) Общий лимит на сессию — 15–20% банка.`,
-          `1) Выбери фиксированную ставку (1–3% от банка).
-2) Играешь только пока держишься в коридоре −20% / +50% от старта.
-3) Вышел за границы — сессию закрывай.`,
-        ],
+          "1) Ставь 1–3% от банка на спин.\n2) 15–20 обычных спинов + иногда покупка бонусок.\n3) Стоп-вин: +60–80% к банку или одна сильная бонуска.\n4) Стоп-лосс: −40% от старта.",
+          "1) 30–40 спинов по средне-высокой ставке.\n2) Если слот даёт конфеты, но без множителей — покупай 1–2 бонуски.\n3) После мощной бонуски сразу снижай ставку и докручивай остаток сессии.\n4) Цель — забрать 1–2 топовых бонуски за вечер.",
+          "1) Определи лимит потерь (не больше 30% от депозита).\n2) Чередуй 2–3 обычных спина и одну покупку бонуски.\n3) При серии слабых бонусок — уходи из слота минимум на час.\n4) Сильный занос x250+ — точка выхода."
+        ]
       },
       doghouse: {
         low: [
-          `1) Высокая волатильность — крути короткими пачками по 10 спинов 0.10–0.20 $.
-2) Если за 20–30 спинов нет вообще никаких линий — меняй слот, он спит.
-3) Не пытайся отыграться именно здесь, это слот «на характер».`,
-          `1) 15 спинов на минималке, смотришь количество вайлдов.
-2) Много собак — добавь ещё 20–25 спинов.
-3) Мало движухи — уходи, ищи более «живой» слот.`,
-          `1) Стратегия «укус и бег»: 2–3 захода по 10–15 спинов с паузами.
-2) Как только поймал хороший х50+ — фиксируй профит и не возвращайся в этот слот сегодня.`,
+          "1) 20 спинов по 0.10 $ на классике.\n2) Если часто падают домики — продолжай ещё 20 спинов.\n3) Одна пробная бонуска на минималку.\n4) Если пусто — лучше сменить слот, чем сливать маленький банк.",
+          "1) Крути 15–25 спинов по 0.12–0.16 $.\n2) При серии спинов с собаками и домиками — бери бонуску.\n3) После бонуски ещё 10 спинов и пауза.\n4) Стоп-лосс: −30–35% от баланса.",
+          "1) Начни на обычной Dog House.\n2) 20 спинов по небольшим ставкам, смотри на поведение.\n3) Если зашло 2+ нормальных хита — можно рискнуть одной бонуской.\n4) Нет отдачи — не душим слот, уходим."
         ],
         high: [
-          `1) Ставка 0.20–0.40 $, не более 2–3% от банка.
-2) Циклы по 20–25 спинов.
-3) Любая бонуска с хорошим иксом — повод завершить сессию, Dog House умеет резко забирать назад.`,
-          `1) Разогрей 15 спинами средне-высокой ставки.
-2) Дальше — не больше двух покупок бонуски.
-3) Если обе слабые — меняй слот, не корми пса.`,
-          `1) Определи лимит потерь для этого слота (10–15% банка).
-2) Пока в пределах лимита — играешь пачками по 20 спинов.
-3) Лимит выбит — сразу стоп, без «ещё пару спинов».`,
-        ],
+          "1) Выбирай Megaways.\n2) Ставь 1–2% от банка на спин.\n3) 30–40 спинов, ловим паттерн с домиками.\n4) Как только дала сильную бонуску — снижаем ставку и добиваем до общей цели +50–70%.",
+          "1) Серии по 10–15 спинов с относительно высокой ставкой.\n2) Если за серию мало домиков — делай паузу.\n3) Ловишь одну жирную бонуску x300+ — фиксируешь и не возвращаешься в слот в эту сессию.",
+          "1) Для агрессивной игры готовь лимит потерь до 35% от банка.\n2) Играешь только по Megaways, покупая бонуски после серий «жирных» спинов.\n3) 2–3 пустые бонуски подряд — жёсткий стоп и смена игры."
+        ]
       },
       sugar: {
         low: [
-          `1) 20 спинов по 0.10 $.
-2) Если часто собираются кластеры конфет — добавь ещё 20–30 спинов.
-3) Нет движения — меняй слот, Sugar любит сериями, а не по одному спину.`,
-          `1) Смотришь первые 15–20 спинов: есть ли большие кластеры и цепочки.
-2) Есть активность — крути до 60–80 спинов максимум.
-3) Нет — сразу выход, не жди «чуда».`,
-          `1) Стратегия «коротких забегов»: 3 захода по 15 спинов с паузами.
-2) Слот дал бонуску — срезай ставку и доигрывай только ещё один маленький заход.`,
+          "1) 20 спинов по 0.10 $.\n2) Смотрим на серию — если много мелких хитов, слот может готовиться.\n3) После этого берём одну бонуску.\n4) Если пусто — ещё 10 спинов и пауза.",
+          "1) 15–25 спинов по 0.12–0.18 $.\n2) Если видишь кластеры, но без множителей — хорошая точка для покупки бонуски.\n3) После одной хорошей бонуски обязательно снижай ставку.",
+          "1) Разогрев: 10 спинов по 0.10 $, далее 10 по 0.16 $.\n2) При первых нормальных множителях можно зайти в бонус.\n3) Если две бонуски подряд пустые — слот лучше отложить."
         ],
         high: [
-          `1) Банк раздели на 30–40 спинов, ставка 2–3% от банка.
-2) Пару сильных бонусок подряд — хороший знак, но это и точка выхода.
-3) Не давай слоту шанс забрать всё обратно.`,
-          `1) Ставка 0.20–0.40 $ или выше, но не более 3% от банка.
-2) Цикл: 25 спинов → оценка → продолжить или сменить игру.
-3) Сильный минус по циклу — сразу смена слота.`,
-          `1) Работай сериями: 40–50 спинов максимум на одной ставке.
-2) Bonus x200+ — сразу фиксируешь сессию и уходишь в другой слот/перерыв.`,
-        ],
-      },
+          "1) Ставка 1–3% от депозита.\n2) Играешь сериями по 20 спинов.\n3) После серии с хорошими кластерами покупаешь 1–2 бонуски.\n4) Цель — поймать 1–2 сильные бонуски и уйти в плюс 60–100%.",
+          "1) Агрессивный режим: чаще используешь покупки бонусок, чем спины.\n2) Следишь за сериями — если слот «сыпет», докупаешь.\n3) При первом мощном выстреле x300+ ставишь точку.",
+          "1) Определи жёсткий стоп-лосс (30–35% от банка).\n2) Чередуй авто-спины и точечные покупки бонусок.\n3) Как только суммарный плюс превысил 50% — прекращай сессию."
+        ]
+      }
     },
-
-    en: {}, es: {}, pt: {}, hi: {},
+    en: {
+      gates: {
+        low: [
+          "1) Spin the slot 15 times with $0.10.\n2) Warm it up with 10 more spins at $0.20.\n3) If the bankroll allows, buy one minimum bonus.\n4) If you can’t buy bonus — do 25 more spins at $0.40 and stop.\n\nStop-loss: about −40% of starting balance.",
+          "1) Run 20 auto-spins at $0.10.\n2) If you see 2–3 lightning hits x10+ in the series — raise to $0.30 for 15 more spins.\n3) Any hit x50+ from current bet — drop back to $0.10 and finish with 10 chill spins.\n\nWhen you’re +30–50% — end the session.",
+          "1) Start with 10 spins at $0.15.\n2) Then 10 more at $0.25.\n3) If after 20 spins there are no good multis — leave and re-enter the slot in 10–15 minutes.\n4) If you catch x100+ — lock the profit and don’t overplay it."
+        ],
+        high: [
+          "1) Bet 1–2% of bankroll per spin.\n2) Do 25–35 calm spins.\n3) On good start — try 2–3 bonuses in a row on same bet.\n4) Any x200+ hit — cut bet in half and grind to +50–80% profit.\n\nStop-loss: −30–35% of bankroll.",
+          "1) Warmup: 20 spins at $0.40–0.60.\n2) If you often see multis up to x10 — buy 1–2 bonuses in a row.\n3) After a streak of dead bonuses — go back to spins and wait for recovery.\n4) Goal: catch x300+ during the session and fix profit.",
+          "1) Decide max loss for session (25–30% of bankroll).\n2) Play series of 10 spins: 2 series on base bet, 1 series with bet x1.5–2.\n3) Buy bonuses only after a run of strong spins.\n4) As soon as you’re +50% or more — stop."
+        ]
+      },
+      sweet: {
+        low: [
+          "1) 10 spins at $0.10.\n2) 15 more spins at $0.20.\n3) If you see frequent retriggers and multis — buy one minimum bonus.\n4) If the bonus is dead — finish 20 spins at $0.10 and take a break.",
+          "1) Spin 25 times at $0.10–0.15.\n2) If you see 2–3 spins with many fruits but weak multis — the slot is “charging”.\n3) Take one bonus and then 10 calm spins.\n4) Don’t spam many bonuses in a row on tiny balance.",
+          "1) Warmup: 15 spins at $0.12.\n2) Then 10 spins at $0.18.\n3) If there are no solid hits — change slot or pause.\n4) Any x80+ hit — lock it and don’t return the profit."
+        ],
+        high: [
+          "1) Bet 1–3% of bankroll per spin.\n2) 15–20 regular spins + occasional bonus buys.\n3) Take profit when you reach +60–80% or hit one strong bonus.\n4) Stop-loss: −40% from start.",
+          "1) 30–40 spins on medium-high stake.\n2) If slot gives a lot of candy but no multis — buy 1–2 bonuses.\n3) After a strong bonus immediately lower the bet and spin out the rest.\n4) Goal: collect 1–2 top bonuses for the evening.",
+          "1) Set max loss (not more than 30% of deposit).\n2) Alternate 2–3 regular spins with one bonus buy.\n3) If you get several weak bonuses in a row — leave the slot for at least an hour.\n4) Big hit x250+ — exit point."
+        ]
+      },
+      doghouse: {
+        low: [
+          "1) 20 spins at $0.10 on classic Dog House.\n2) If houses drop often — do 20 more spins.\n3) Try one minimum bonus.\n4) If it’s dead — better change slot than burn small bankroll.",
+          "1) Spin 15–25 times at $0.12–0.16.\n2) When you see series with dogs + houses — buy a bonus.\n3) After bonus — 10 more spins and pause.\n4) Stop-loss: −30–35% of balance.",
+          "1) Start on regular Dog House.\n2) 20 spins with small bet, watch behaviour.\n3) If you get 2+ decent hits — you can try one bonus.\n4) No payout? Don’t force it, leave."
+        ],
+        high: [
+          "1) Play Megaways.\n2) Bet 1–2% of bankroll per spin.\n3) Do 30–40 spins, hunting patterns with houses.\n4) After a strong bonus — reduce bet and grind until +50–70% total.",
+          "1) Series of 10–15 spins with relatively high bet.\n2) If there are few houses in the series — pause.\n3) One fat x300+ bonus — fix profit and don’t touch slot again this session.",
+          "1) For aggressive mode accept loss limit up to 35%.\n2) Play only Megaways, buying bonuses after “juicy” spin series.\n3) 2–3 dead bonuses in a row — hard stop and change game."
+        ]
+      },
+      sugar: {
+        low: [
+          "1) 20 spins at $0.10.\n2) If you see many small hits in a row — slot may be warming up.\n3) Then buy one bonus.\n4) If it’s dead — 10 more spins and pause.",
+          "1) 15–25 spins at $0.12–0.18.\n2) When you see clusters but no strong multis — good moment to buy a bonus.\n3) After a good bonus, always lower the bet.",
+          "1) Warmup: 10 spins at $0.10, then 10 at $0.16.\n2) On first solid multis you can go for a bonus.\n3) Two dead bonuses in a row — leave the slot."
+        ],
+        high: [
+          "1) Bet 1–3% of deposit per spin.\n2) Play series of 20 spins.\n3) After a strong cluster series buy 1–2 bonuses.\n4) Goal: catch 1–2 powerful bonuses and leave +60–100%.",
+          "1) Aggressive mode: more bonus buys than spins.\n2) If slot is “raining” symbols — keep buying.\n3) First x300+ shot is your stop point.",
+          "1) Set hard stop-loss (30–35% of bankroll).\n2) Alternate auto-spins and targeted bonus buys.\n3) Once total profit exceeds 50% — end the session."
+        ]
+      }
+    }
   };
 
-  // для остальных языков — те же стратегии (можно будет перевести позже)
-  STRATEGIES.en = STRATEGIES.ru;
-  STRATEGIES.es = STRATEGIES.ru;
-  STRATEGIES.pt = STRATEGIES.ru;
-  STRATEGIES.hi = STRATEGIES.ru;
+  /* кэш сигналов для краш-игр: ключ = gameMode + "-" + HH-MM через 3 минуты */
+  const signalCache = {};
 
-  // --- State ---
+  function tr(key, vars = {}) {
+    const dict = UI_TEXT[currentLang] || UI_TEXT[DEFAULT_LANG];
+    let str = dict[key] || UI_TEXT[DEFAULT_LANG][key] || "";
+    for (const k in vars) {
+      const val = String(vars[k]);
+      str = str.split("{" + k + "}").join(val);
+    }
+    return str;
+  }
 
-  let currentLang = "ru";
-  let currentGame = null;
-  let currentBalanceType = null; // "low" | "high"
-  let chickenDifficulty = "normal"; // "easy" | "normal" | "hard"
-  let signalCache = {}; // { key: { time: "HH:MM", coeff: number } }
+  function getGameLangData(gameKey) {
+    const langPack = GAME_TEXT[currentLang] || GAME_TEXT[DEFAULT_LANG];
+    return langPack[gameKey] || GAME_TEXT[DEFAULT_LANG][gameKey];
+  }
+
+  function formatFutureTimeLabel(minutesAhead = 3) {
+    const now = new Date();
+    const future = new Date(now.getTime() + minutesAhead * 60000);
+    return future.toLocaleTimeString(undefined, {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function getFutureTimeKey(minutesAhead = 3) {
+    const now = new Date();
+    const future = new Date(now.getTime() + minutesAhead * 60000);
+    const h = future.getHours().toString().padStart(2, "0");
+    const m = future.getMinutes().toString().padStart(2, "0");
+    return `${h}-${m}`;
+  }
+
+  function generateCrashCoeff() {
+    const r = Math.random();
+    let min, max;
+    if (r < 0.8) {
+      min = 1.1;
+      max = 20;
+    } else {
+      min = 20;
+      max = 100;
+    }
+    const value = min + Math.random() * (max - min);
+    return value.toFixed(2);
+  }
+
+  function getCrashSignal(gameModeKey) {
+    const timeKey = getFutureTimeKey(3);
+    const fullKey = `${gameModeKey}-${timeKey}`;
+    if (signalCache[fullKey]) {
+      return signalCache[fullKey];
+    }
+    const coeff = generateCrashCoeff();
+    const label = formatFutureTimeLabel(3);
+    const res = { timeLabel: label, coeff: coeff };
+    signalCache[fullKey] = res;
+    return res;
+  }
 
   const app = document.getElementById("app");
+  let currentScreen = "menu";
+  let currentGame = null;
+  let currentBalanceType = "low";
+  let currentDifficulty = null;
 
-  // --- Helpers ---
-
-  function getTexts() {
-    return TEXTS[currentLang] || TEXTS.en;
-  }
-
-  function getStrategies() {
-    return STRATEGIES[currentLang] || STRATEGIES.en;
-  }
-
-  function createButton(text, className, onClick) {
-    const btn = document.createElement("button");
-    btn.className = "btn " + className;
-    btn.innerHTML = text;
-    btn.onclick = onClick;
-    return btn;
-  }
-
-  function formatFutureTime(minutesAhead = 3) {
-    const date = new Date(Date.now() + minutesAhead * 60 * 1000);
-    const hh = String(date.getHours()).padStart(2, "0");
-    const mm = String(date.getMinutes()).padStart(2, "0");
-    return `${hh}:${mm}`;
-  }
-
-  function randomCoeff(game) {
-    let v;
-    if (game === "chicken") {
-      if (chickenDifficulty === "easy") {
-        const r = Math.random();
-        if (r < 0.9) v = 1.1 + Math.random() * (5 - 1.1);
-        else v = 5 + Math.random() * (20 - 5);
-      } else if (chickenDifficulty === "hard") {
-        const r = Math.random();
-        if (r < 0.4) v = 1.1 + Math.random() * (20 - 1.1);
-        else v = 20 + Math.random() * (100 - 20);
-      } else {
-        const r = Math.random();
-        if (r < 0.75) v = 1.1 + Math.random() * (20 - 1.1);
-        else v = 20 + Math.random() * (100 - 20);
-      }
-    } else {
-      const r = Math.random();
-      if (r < 0.8) v = 1.1 + Math.random() * (20 - 1.1);
-      else v = 20 + Math.random() * (100 - 20);
-    }
-    return Math.round(v * 100) / 100;
-  }
-
-  // --- Render ---
-
-  function renderLanguageScreen() {
-    const t = getTexts();
-
-    app.innerHTML = "";
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <div class="header-top">${t.brandTop}</div>
-      <div class="header-title">${t.brandTitle}</div>
-      <div class="header-sub">${t.brandSub}</div>
-      <div class="section-title">${t.chooseLang}</div>
+  function renderLangSwitcher() {
+    const langs = Object.keys(LANG_LABELS);
+    return `
+      <div class="lang-switcher">
+        ${langs
+          .map(
+            (l) =>
+              `<button class="lang-pill" data-active="${l === currentLang}" onclick="setLang('${l}')">${LANG_LABELS[l]}</button>`
+          )
+          .join("")}
+      </div>
     `;
-
-    const row = document.createElement("div");
-    row.className = "btn-row";
-
-    LANGS.forEach((lng) => {
-      const name = t.langNames[lng] || lng.toUpperCase();
-      const btn = createButton(name, "btn-ghost", () => {
-        currentLang = lng;
-        renderGameScreen();
-      });
-      row.appendChild(btn);
-    });
-
-    card.appendChild(row);
-    app.appendChild(card);
   }
 
-  function renderGameScreen() {
-    const t = getTexts();
-
-    app.innerHTML = "";
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <div class="header-top">${t.brandTop}</div>
-      <div class="header-title">${t.brandTitle}</div>
-      <div class="header-sub">${t.brandSub}</div>
-      <div class="section-title">${t.chooseGame}</div>
+  function renderHeader(subtitleKey) {
+    const subtitle = tr(subtitleKey);
+    return `
+      <div class="app-header">
+        <div class="label-small">ASTRAMIND AI</div>
+        <div class="title-main">AI SIGNALS</div>
+        <div class="subtitle">${subtitle}</div>
+        ${renderLangSwitcher()}
+      </div>
     `;
+  }
 
-    const grid = document.createElement("div");
-    grid.className = "game-grid";
+  function renderGameGrid() {
+    const cards = Object.values(GAMES)
+      .map((game) => {
+        const t = getGameLangData(game.key);
+        const chipParts = t.chip.split("·");
+        return `
+        <div class="game-card" onclick="selectGame('${game.key}')">
+          <div class="game-card-header">
+            <div class="game-icon">${game.icon}</div>
+            <div>
+              <div class="game-title-main">${t.title}</div>
+              <div class="game-title-sub">${t.subtitle}</div>
+            </div>
+          </div>
+          <div class="game-chip"><span>${(chipParts[0] || "").trim()}</span>&nbsp;· ${(chipParts[1] || "").trim()}</div>
+        </div>
+      `;
+      })
+      .join("");
 
-    const allGames = [...SLOT_GAMES, ...CRASH_GAMES];
+    return `
+      <div class="section-title">${tr("chooseGameTitle")}</div>
+      <div class="game-grid">
+        ${cards}
+      </div>
+    `;
+  }
 
-    allGames.forEach((gameKey) => {
-      const gCard = document.createElement("div");
-      gCard.className = "game-card";
-      gCard.onclick = () => {
-        currentGame = gameKey;
-        if (SLOT_GAMES.includes(gameKey)) {
-          renderBalanceScreen();
-        } else {
-          renderCrashScreen();
-        }
-      };
-
-      const icon = document.createElement("div");
-      icon.className = "game-icon";
-      icon.textContent = t.games[gameKey].split(" ")[0];
-
-      const title = document.createElement("div");
-      title.className = "game-title";
-      title.textContent = t.games[gameKey];
-
-      const sub = document.createElement("div");
-      sub.className = "game-sub";
-      sub.textContent = t.gameSubtitles[gameKey];
-
-      gCard.appendChild(icon);
-      gCard.appendChild(title);
-      gCard.appendChild(sub);
-      grid.appendChild(gCard);
-    });
-
-    card.appendChild(grid);
-    app.appendChild(card);
+  function renderMenu() {
+    app.innerHTML = `
+      ${renderHeader("subtitleMenu")}
+      ${renderGameGrid()}
+      <div class="footer-note">
+        ${tr("footerNote")}
+      </div>
+    `;
   }
 
   function renderBalanceScreen() {
-    const t = getTexts();
-    const gameTitle = t.games[currentGame];
-
-    app.innerHTML = "";
-    const card = document.createElement("div");
-    card.className = "card";
-
-    const topRow = document.createElement("div");
-    topRow.className = "back-row";
-
-    const backBtn = document.createElement("button");
-    backBtn.className = "back-btn";
-    backBtn.innerHTML = "← <span>" + t.back + "</span>";
-    backBtn.onclick = () => renderGameScreen();
-
-    const tag = document.createElement("div");
-    tag.className = "tagline";
-    tag.innerHTML = `<span>${gameTitle}</span> · slot`;
-
-    topRow.appendChild(backBtn);
-    topRow.appendChild(tag);
-    card.appendChild(topRow);
-
-    const q = document.createElement("div");
-    q.className = "question";
-    q.textContent = t.balanceQuestion(gameTitle);
-    card.appendChild(q);
-
-    const row = document.createElement("div");
-    row.className = "btn-row";
-
-    const lowBtn = createButton(t.balanceLow, "btn-ghost", () => {
-      currentBalanceType = "low";
-      renderStrategyScreen();
-    });
-    const highBtn = createButton(t.balanceHigh, "btn-primary", () => {
-      currentBalanceType = "high";
-      renderStrategyScreen();
-    });
-
-    row.appendChild(lowBtn);
-    row.appendChild(highBtn);
-    card.appendChild(row);
-
-    app.appendChild(card);
+    const g = currentGame;
+    const t = getGameLangData(g.key);
+    app.innerHTML = `
+      ${renderHeader("subtitleBalance")}
+      <div class="section-title">${tr("balanceQuestion", { game: t.title })}</div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="chooseBalance('low')">${tr("balanceLowBtn")}</button>
+        <button class="btn btn-ghost" onclick="chooseBalance('high')">${tr("balanceHighBtn")}</button>
+        <button class="btn btn-primary" style="margin-left:auto;" onclick="backToMenu()">${tr("btnBackGamesShort")}</button>
+      </div>
+    `;
   }
 
-  function renderStrategyScreen() {
-    const t = getTexts();
-    const gameTitle = t.games[currentGame];
+  function getRandomSlotStrategy() {
+    const langPack =
+      SLOT_STRATEGIES[currentLang] || SLOT_STRATEGIES.en || SLOT_STRATEGIES.ru;
+    const gameStrats = langPack[currentGame.key] || SLOT_STRATEGIES.en[currentGame.key];
+    const pool = gameStrats[currentBalanceType];
+    const idx = Math.floor(Math.random() * pool.length);
+    return pool[idx];
+  }
+
+  function renderSlotStrategy() {
+    const g = currentGame;
+    const t = getGameLangData(g.key);
     const balanceLabel =
       currentBalanceType === "low"
-        ? t.balanceLabelLow
-        : t.balanceLabelHigh;
+        ? tr("slotBalanceLowLabel")
+        : tr("slotBalanceHighLabel");
+    const text = getRandomSlotStrategy();
 
-    const strategies = getStrategies()[currentGame][currentBalanceType];
-    const randomIndex = Math.floor(Math.random() * strategies.length);
-    const strategyText = strategies[randomIndex];
+    app.innerHTML = `
+      ${renderHeader("subtitleSlot")}
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">${tr("slotPanelTitle", {
+            game: t.title,
+            balance: balanceLabel
+          })}</div>
+          <div class="panel-subtitle">${tr("slotPanelSubtitle")}</div>
+        </div>
+        <div class="strategy-text">${text}</div>
+        <div class="hint-text">
+          ${tr("slotNeedMore")}
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="renderSlotStrategy()">${tr(
+            "btnNewStrategy"
+          )}</button>
+          <button class="btn btn-ghost" onclick="backToMenu()">${tr(
+            "btnBackGames"
+          )}</button>
+        </div>
+      </div>
+      <div style="margin-top:20px;">
+        ${renderGameGrid()}
+      </div>
+    `;
+  }
 
-    app.innerHTML = "";
-    const card = document.createElement("div");
-    card.className = "card";
-
-    const topRow = document.createElement("div");
-    topRow.className = "back-row";
-
-    const backBtn = document.createElement("button");
-    backBtn.className = "back-btn";
-    backBtn.innerHTML = "← <span>" + t.back + "</span>";
-    backBtn.onclick = () => renderBalanceScreen();
-
-    const tag = document.createElement("div");
-    tag.className = "tagline";
-    tag.innerHTML = `<span>${gameTitle}</span> · slot`;
-
-    topRow.appendChild(backBtn);
-    topRow.appendChild(tag);
-    card.appendChild(topRow);
-
-    const box = document.createElement("div");
-    box.className = "strategy-box";
-
-    const title = document.createElement("div");
-    title.className = "strategy-title";
-    title.textContent = t.strategyTitle(gameTitle, balanceLabel);
-
-    const text = document.createElement("div");
-    text.textContent = strategyText;
-
-    const footer = document.createElement("div");
-    footer.className = "strategy-footer";
-    footer.textContent = t.stopLossNote;
-
-    box.appendChild(title);
-    box.appendChild(text);
-    box.appendChild(footer);
-    card.appendChild(box);
-
-    const divider = document.createElement("div");
-    divider.className = "divider";
-    card.appendChild(divider);
-
-    const info = document.createElement("div");
-    info.className = "question";
-    info.textContent = t.moreStrategy;
-    card.appendChild(info);
-
-    const row = document.createElement("div");
-    row.className = "btn-row";
-
-    const games = [...SLOT_GAMES, ...CRASH_GAMES];
-    games.forEach((g) => {
-      const btn = createButton(
-        t.games[g],
-        g === currentGame ? "btn-primary" : "btn-ghost",
-        () => {
-          currentGame = g;
-          if (SLOT_GAMES.includes(g)) {
-            renderBalanceScreen();
-          } else {
-            renderCrashScreen();
-          }
-        }
-      );
-      row.appendChild(btn);
-    });
-
-    card.appendChild(row);
-    app.appendChild(card);
+  function renderCrashDifficulty() {
+    const g = currentGame;
+    const t = getGameLangData(g.key);
+    app.innerHTML = `
+      ${renderHeader("subtitleChickenDiff")}
+      <div class="section-title">${tr("chickenDiffTitle", {
+        game: t.title
+      })}</div>
+      <div class="btn-pill-group">
+        <button class="btn-pill" onclick="setDifficulty('easy')">${tr(
+          "btnLevelEasy"
+        )}</button>
+        <button class="btn-pill" onclick="setDifficulty('normal')">${tr(
+          "btnLevelNormal"
+        )}</button>
+        <button class="btn-pill" onclick="setDifficulty('hard')">${tr(
+          "btnLevelHard"
+        )}</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="backToMenu()">${tr(
+          "btnBackGamesShort"
+        )}</button>
+      </div>
+    `;
   }
 
   function renderCrashScreen() {
-    const t = getTexts();
-    const gameTitle = t.games[currentGame];
+    const g = currentGame;
+    const t = getGameLangData(g.key);
+    let modeLabel = "";
+    let cacheKey = g.key;
 
-    app.innerHTML = "";
-    const card = document.createElement("div");
-    card.className = "card";
-
-    const topRow = document.createElement("div");
-    topRow.className = "back-row";
-
-    const backBtn = document.createElement("button");
-    backBtn.className = "back-btn";
-    backBtn.innerHTML = "← <span>" + t.back + "</span>";
-    backBtn.onclick = () => renderGameScreen();
-
-    const tag = document.createElement("div");
-    tag.className = "tagline";
-    tag.innerHTML = `<span>${gameTitle}</span> · crash`;
-
-    topRow.appendChild(backBtn);
-    topRow.appendChild(tag);
-    card.appendChild(topRow);
-
-    const container = document.createElement("div");
-    container.className = "crash-container";
-
-    const labelRow = document.createElement("div");
-    labelRow.className = "crash-top-row";
-
-    const leftLabel = document.createElement("div");
-    leftLabel.className = "crash-label";
-    leftLabel.innerHTML =
-      t.crashLabel +
-      " · <span>" +
-      (currentGame === "chicken" ? "CHICKEN ROAD" : "AVIATOR") +
-      "</span>";
-
-    labelRow.appendChild(leftLabel);
-
-    if (currentGame === "chicken") {
-      const diffWrap = document.createElement("div");
-      const diffLabel = document.createElement("div");
-      diffLabel.style.fontSize = "12px";
-      diffLabel.style.color = "rgba(255,255,255,0.7)";
-      diffLabel.style.marginBottom = "4px";
-      diffLabel.textContent = t.chickenDifficultyLabel;
-
-      const group = document.createElement("div");
-      group.className = "btn-pill-group";
-
-      ["easy", "normal", "hard"].forEach((mode) => {
-        const b = document.createElement("button");
-        b.className =
-          "btn-pill " +
-          (chickenDifficulty === mode ? "btn-pill-active" : "");
-        b.textContent = t.chickenDiffs[mode];
-        b.onclick = () => {
-          chickenDifficulty = mode;
-          renderCrashScreen();
-        };
-        group.appendChild(b);
-      });
-
-      diffWrap.appendChild(diffLabel);
-      diffWrap.appendChild(group);
-      labelRow.appendChild(diffWrap);
+    if (g.key === "chicken") {
+      if (!currentDifficulty) currentDifficulty = "normal";
+      cacheKey = `${g.key}-${currentDifficulty}`;
+      const levelName = tr("level_" + currentDifficulty);
+      modeLabel = tr("crashModeLabel", { level: levelName });
     }
 
-    container.appendChild(labelRow);
+    const signal = getCrashSignal(cacheKey);
 
-    const main = document.createElement("div");
-    main.className = "crash-main";
-
-    const circle = document.createElement("div");
-    circle.className = "crash-circle";
-
-    const inner = document.createElement("div");
-    inner.className = "crash-circle-inner";
-
-    const coeffEl = document.createElement("div");
-    coeffEl.className = "crash-coeff";
-
-    const coeffLabel = document.createElement("div");
-    coeffLabel.className = "crash-coeff-label";
-    coeffLabel.textContent = t.crashLabel;
-
-    inner.appendChild(coeffEl);
-    inner.appendChild(coeffLabel);
-    circle.appendChild(inner);
-
-    const timeEl = document.createElement("div");
-    timeEl.className = "crash-time";
-
-    const hintEl = document.createElement("div");
-    hintEl.className = "crash-hint";
-
-    function updateSignal() {
-      const targetTime = formatFutureTime(3);
-
-      const key =
-        currentGame === "chicken"
-          ? currentGame + "|" + chickenDifficulty
-          : currentGame;
-
-      let saved = signalCache[key];
-      let coeff;
-
-      if (saved && saved.time === targetTime) {
-        coeff = saved.coeff;
-      } else {
-        coeff = randomCoeff(currentGame);
-        signalCache[key] = { time: targetTime, coeff };
-      }
-
-      coeffEl.textContent = "x" + coeff.toFixed(2);
-      timeEl.innerHTML = t.crashTimeLabel(targetTime);
-      hintEl.innerHTML = t.crashTimeHint;
-    }
-
-    updateSignal();
-
-    main.appendChild(circle);
-    main.appendChild(timeEl);
-    main.appendChild(hintEl);
-    container.appendChild(main);
-
-    const btnRow = document.createElement("div");
-    btnRow.className = "btn-crash-row";
-
-    const crashBtn = createButton(t.crashBtn, "btn-primary", () =>
-      updateSignal()
-    );
-    crashBtn.style.minWidth = "260px";
-
-    btnRow.appendChild(crashBtn);
-    container.appendChild(btnRow);
-
-    card.appendChild(container);
-    app.appendChild(card);
+    app.innerHTML = `
+      ${renderHeader("subtitleCrash")}
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">${tr("crashPanelTitle", {
+            game: t.title
+          })}</div>
+          <div class="panel-subtitle">${tr("crashSubtitle", {
+            time: signal.timeLabel,
+            mode: modeLabel
+          })}</div>
+        </div>
+        <div class="crash-wrapper">
+          <div class="crash-circle-outer">
+            <div class="crash-circle-inner">
+              <div class="crash-coeff">x${signal.coeff}</div>
+              <div class="crash-label">COEFFICIENT</div>
+            </div>
+          </div>
+          <div class="crash-time">
+            ${tr("crashNextRound", {
+              coeff: signal.coeff,
+              time: signal.timeLabel
+            })}
+          </div>
+          <div class="hint-text">
+            ${tr("crashHint")}
+          </div>
+          <button class="btn btn-primary" onclick="refreshCrash('${cacheKey}')">
+            ${tr("btnGetSignal")}
+          </button>
+          <div class="btn-row" style="justify-content:center; margin-top:8px;">
+            ${
+              g.key === "chicken"
+                ? `<button class="btn btn-ghost" onclick="currentScreen='crashDifficulty'; render();">
+                    ${tr("btnLevelNormal")}
+                  </button>`
+                : ""
+            }
+            <button class="btn btn-ghost" onclick="backToMenu()">${tr(
+              "btnBackGamesShort"
+            )}</button>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
-  // --- Init ---
-  renderLanguageScreen();
+  function render() {
+    if (currentScreen === "menu") {
+      renderMenu();
+    } else if (currentScreen === "balance") {
+      renderBalanceScreen();
+    } else if (currentScreen === "slotStrategy") {
+      renderSlotStrategy();
+    } else if (currentScreen === "crashDifficulty") {
+      renderCrashDifficulty();
+    } else if (currentScreen === "crash") {
+      renderCrashScreen();
+    }
+  }
+
+  window.selectGame = function (key) {
+    currentGame = GAMES[key];
+    currentDifficulty = null;
+    if (currentGame.crash) {
+      if (currentGame.key === "chicken") {
+        currentScreen = "crashDifficulty";
+      } else {
+        currentScreen = "crash";
+      }
+    } else {
+      currentScreen = "balance";
+    }
+    render();
+  };
+
+  window.chooseBalance = function (type) {
+    currentBalanceType = type;
+    currentScreen = "slotStrategy";
+    render();
+  };
+
+  window.backToMenu = function () {
+    currentScreen = "menu";
+    render();
+  };
+
+  window.setDifficulty = function (level) {
+    currentDifficulty = level;
+    currentScreen = "crash";
+    render();
+  };
+
+  window.refreshCrash = function () {
+    currentScreen = "crash";
+    render();
+  };
+
+  window.setLang = function (lang) {
+    if (!UI_TEXT[lang]) return;
+    currentLang = lang;
+    render();
+  };
+
+  // старт
+  render();
 </script>
 </body>
 </html>
