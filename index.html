@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>AstraMind AI Signals</title>
@@ -456,7 +456,7 @@
 <div class="app" id="app"></div>
 
 <script>
-  const DEFAULT_LANG = "ru";
+  const DEFAULT_LANG = "en"; // теперь по умолчанию английский
   let currentLang = DEFAULT_LANG;
 
   const UI_TEXT = {
@@ -520,11 +520,11 @@
       btnGetSignal: "⚡ Get signal",
       chickenDiffTitle: "Choose risk level for {game}:",
       btnLevelEasy: "🐥 Easy",
-      btnLevelNormal: "🐔 Normal",
-      btnLevelHard: "🔥 Hard",
+      btnLevelNormal: "🐔 Hard",
+      btnLevelHard: "🔥 Very hard",
       level_easy: "Easy",
-      level_normal: "Normal",
-      level_hard: "Hard"
+      level_normal: "Hard",
+      level_hard: "Very hard"
     },
     es: {
       subtitleMenu: "Elige el juego para recibir señales.",
@@ -627,7 +627,8 @@
     }
   };
 
-  const LANG_LABELS = { ru: "RU", en: "EN", es: "ES", pt: "PT", hi: "HI" };
+  // порядок языков: EN первый
+  const LANG_LABELS = { en: "EN", ru: "RU", es: "ES", pt: "PT", hi: "HI" };
 
   const GAMES = {
     gates: { key: "gates", icon: "⚡", crash: false },
