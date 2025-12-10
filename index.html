@@ -1,0 +1,1544 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>AstraMind AI Signals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #040014;
+      --bg2: #070321;
+      --card-bg: #0e0824;
+      --accent: #c048ff;
+      --accent2: #ff4bff;
+      --accent-soft: rgba(192, 72, 255, 0.35);
+      --text-main: #f8f4ff;
+      --text-muted: #9a8cc3;
+      --danger: #ff3b6b;
+      --radius-lg: 22px;
+      --radius-sm: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro", "Roboto", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #2a1d7a 0, #040014 55%) fixed,
+        radial-gradient(circle at bottom, #12051f 0, #040014 55%) fixed;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.4) 0, transparent 60%),
+        radial-gradient(1.5px 1.5px at 80% 10%, rgba(255,255,255,0.35) 0, transparent 60%),
+        radial-gradient(1.5px 1.5px at 30% 80%, rgba(255,255,255,0.3) 0, transparent 60%);
+      opacity: .6;
+      z-index: 0;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 500px;
+      padding: 20px 18px 28px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 6px;
+      letter-spacing: 0.18em;
+      font-size: 11px;
+      color: var(--accent2);
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .hint {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* LANGUAGE SCREEN */
+
+    .lang-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .lang-btn {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255,255,255,0.06);
+      background: radial-gradient(circle at top left, #2b1552 0, var(--card-bg) 55%);
+      color: var(--text-main);
+      padding: 12px 10px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.6);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: transform .08s ease-out, box-shadow .08s ease-out, border-color .08s;
+    }
+
+    .lang-btn span.flag {
+      font-size: 20px;
+    }
+
+    .lang-btn span.name {
+      letter-spacing: 0.04em;
+    }
+
+    .lang-btn:active {
+      transform: translateY(1px) scale(.99);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      border-color: var(--accent-soft);
+    }
+
+    /* GAME GRID */
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .game-card {
+      background: radial-gradient(circle at top left, #31145a 0, var(--card-bg) 55%);
+      border-radius: var(--radius-lg);
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6);
+      cursor: pointer;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, border-color 0.12s;
+    }
+
+    .game-card.active {
+      border-color: var(--accent-soft);
+      box-shadow: 0 0 26px rgba(192, 72, 255, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .game-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top, #4b2d86 0, #0b041b 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      font-size: 26px;
+    }
+
+    .game-name {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+
+    /* PANELS */
+
+    .panel {
+      margin-top: 16px;
+      padding: 18px 16px 22px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, #090218 0, #14092e 40%, #09021a 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 14px;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      border: none;
+      outline: none;
+      font-size: 13px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: #1a1031;
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .panel-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .panel-label span {
+      color: var(--accent2);
+    }
+
+    /* CIRCLE */
+
+    .circle-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 12px 0 18px;
+    }
+
+    .circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: radial-gradient(circle at top, #2d1767 0, #050015 60%);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.75);
+    }
+
+    .circle-ring {
+      width: 176px;
+      height: 176px;
+      border-radius: 50%;
+      border: 3px solid rgba(192, 72, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .circle-ring::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        var(--accent) 70deg,
+        var(--accent2) 120deg,
+        transparent 170deg
+      );
+      animation: spin 2.4s linear infinite;
+      opacity: 0.7;
+    }
+
+    .circle-core {
+      position: absolute;
+      inset: 18%;
+      border-radius: 50%;
+      background: radial-gradient(circle at top, #30176b 0, #060014 70%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .coeff-value {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .coeff-caption {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .panel-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .btn-main {
+      margin-top: 16px;
+      width: 100%;
+      border-radius: 999px;
+      border: none;
+      padding: 15px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, var(--accent) 0, var(--accent2) 100%);
+      color: #fdf5ff;
+      cursor: pointer;
+      box-shadow: 0 16px 34px rgba(192, 72, 255, 0.6);
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, filter 0.08s;
+    }
+
+    .btn-main:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 10px 22px rgba(192, 72, 255, 0.45);
+      filter: brightness(0.96);
+    }
+
+    .btn-main.loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .balance-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+
+    .bal-btn {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: #130926;
+      color: var(--text-main);
+      padding: 9px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .bal-btn.active {
+      border-color: var(--accent-soft);
+      background: radial-gradient(circle at top, #3c1774 0, #0b021e 70%);
+    }
+
+    .slot-question {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .slot-text {
+      white-space: pre-line;
+      font-size: 13px;
+      line-height: 1.45;
+      margin-top: 6px;
+    }
+
+    .slot-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--accent2);
+    }
+
+    .slot-box {
+      margin-top: 8px;
+      padding: 10px 11px 12px;
+      border-radius: var(--radius-sm);
+      background: rgba(7, 2, 24, 0.9);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .small-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .chip {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      color: var(--text-muted);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 380px) {
+      .circle {
+        width: 175px;
+        height: 175px;
+      }
+      .circle-ring {
+        width: 152px;
+        height: 152px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="app">
+    <div class="brand">ASTRAMIND AI</div>
+    <div class="subtitle" id="subtitleMain">AI SIGNALS</div>
+    <div class="hint" id="hintMain">Loading…</div>
+
+    <!-- LANGUAGE SECTION -->
+    <section id="section-lang" class="section active">
+      <div class="lang-grid">
+        <button class="lang-btn" data-lang="en">
+          <span class="flag">🇬🇧</span>
+          <span class="name">English</span>
+        </button>
+        <button class="lang-btn" data-lang="ru">
+          <span class="flag">🇷🇺</span>
+          <span class="name">Русский</span>
+        </button>
+        <button class="lang-btn" data-lang="es">
+          <span class="flag">🇪🇸</span>
+          <span class="name">Español</span>
+        </button>
+        <button class="lang-btn" data-lang="pt">
+          <span class="flag">🇧🇷</span>
+          <span class="name">Português</span>
+        </button>
+        <button class="lang-btn" data-lang="hi">
+          <span class="flag">🇮🇳</span>
+          <span class="name">हिन्दी</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- GAME SECTION -->
+    <section id="section-games" class="section">
+      <div class="game-grid">
+        <div class="game-card" data-game="gates">
+          <div class="game-icon">⚡</div>
+          <div class="game-name">Gates of Olympus</div>
+        </div>
+        <div class="game-card" data-game="sweet">
+          <div class="game-icon">🍬</div>
+          <div class="game-name">Sweet Bonanza</div>
+        </div>
+        <div class="game-card" data-game="doghouse">
+          <div class="game-icon">🐶</div>
+          <div class="game-name">Dog House Megaways</div>
+        </div>
+        <div class="game-card" data-game="sugar">
+          <div class="game-icon">🍭</div>
+          <div class="game-name">Sugar Rush</div>
+        </div>
+        <div class="game-card" data-game="aviator">
+          <div class="game-icon">✈️</div>
+          <div class="game-name">Aviator</div>
+        </div>
+        <div class="game-card" data-game="chicken">
+          <div class="game-icon">🐔</div>
+          <div class="game-name">Chicken Road</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CRASH PANEL -->
+    <section id="section-crash" class="section">
+      <div class="panel">
+        <div class="panel-header">
+          <button class="back-btn" id="backFromCrash">‹ <span id="backLabel1">Menu</span></button>
+          <div class="panel-label" id="crashLabel">COEFFICIENT · <span>AVIATOR</span></div>
+        </div>
+        <div class="circle-wrap">
+          <div class="circle">
+            <div class="circle-ring"></div>
+            <div class="circle-core">
+              <div id="crashCoeff" class="coeff-value">x1.00</div>
+              <div class="coeff-caption" id="crashCaption">COEFFICIENT</div>
+            </div>
+          </div>
+          <div class="panel-note" id="crashNote">
+            Tap the button to generate a new coefficient.
+          </div>
+        </div>
+        <button id="crashBtn" class="btn-main">GET SIGNAL</button>
+      </div>
+    </section>
+
+    <!-- SLOT PANEL -->
+    <section id="section-slot" class="section">
+      <div class="panel">
+        <div class="panel-header">
+          <button class="back-btn" id="backFromSlot">‹ <span id="backLabel2">Menu</span></button>
+          <div class="panel-label" id="slotLabel">SLOT · <span>GATES OF OLYMPUS</span></div>
+        </div>
+        <div class="slot-question" id="slotQuestion">
+          What is your balance for this game?
+        </div>
+        <div class="balance-row">
+          <button class="bal-btn" data-balance="low" id="balLowBtn">💵 &lt; 5 $</button>
+          <button class="bal-btn" data-balance="high" id="balHighBtn">💰 ≥ 5 $</button>
+        </div>
+        <div class="slot-box">
+          <div class="slot-title" id="slotStratTitle">Strategy</div>
+          <div class="slot-text" id="slotStratText">
+            Select your balance to get a strategy.
+          </div>
+          <div class="chips" id="slotChips">
+            <div class="chip" id="chipRisk">RISK · MEDIUM</div>
+            <div class="chip" id="chipBank">BANK · CONTROL</div>
+          </div>
+          <div class="small-note" id="slotDisclaimer">
+            This is not financial advice. Play responsibly.
+          </div>
+        </div>
+        <button id="slotNextBtn" class="btn-main" style="margin-top:14px;">NEW STRATEGY</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.expand();
+    }
+
+    // ====== ТЕКСТЫ ДЛЯ 5 ЯЗЫКОВ ======
+
+    const UI = {
+      en: {
+        subtitle: "AI SIGNALS",
+        hint_lang: "Choose your language to start.",
+        hint_games: "Select a game to get AI-based signals.",
+        back_menu: "Menu",
+        crash_caption: "COEFFICIENT",
+        crash_note: "Tap the button to generate a new coefficient.",
+        crash_btn: "GET SIGNAL",
+        slot_question: "What is your balance for this game?",
+        bal_low: "💵 Less than 5 $",
+        bal_high: "💰 5 $ or more",
+        slot_title: "Strategy",
+        slot_default: "Select your balance to get a strategy.",
+        slot_btn: "NEW STRATEGY",
+        chip_risk_low: "RISK · LOW",
+        chip_risk_med: "RISK · MEDIUM",
+        chip_risk_high: "RISK · HIGH",
+        chip_bank: "BANK · CONTROL",
+        disclaimer: "This is not financial advice. Play responsibly.",
+        game_names: {
+          gates: "Gates of Olympus",
+          sweet: "Sweet Bonanza",
+          doghouse: "Dog House Megaways",
+          sugar: "Sugar Rush",
+          aviator: "Aviator",
+          chicken: "Chicken Road"
+        }
+      },
+      ru: {
+        subtitle: "AI СИГНАЛЫ",
+        hint_lang: "Выбери язык, с которого начнём.",
+        hint_games: "Выбери игру, для которой нужны сигналы.",
+        back_menu: "Меню",
+        crash_caption: "КОЭФФИЦИЕНТ",
+        crash_note: "Нажми кнопку, чтобы получить новый коэффициент.",
+        crash_btn: "ПОЛУЧИТЬ СИГНАЛ",
+        slot_question: "Какой у тебя баланс для этой игры?",
+        bal_low: "💵 Меньше 5 $",
+        bal_high: "💰 От 5 $ и выше",
+        slot_title: "Стратегия",
+        slot_default: "Выбери свой баланс, чтобы получить стратегию.",
+        slot_btn: "НОВАЯ СТРАТЕГИЯ",
+        chip_risk_low: "РИСК · НИЗКИЙ",
+        chip_risk_med: "РИСК · СРЕДНИЙ",
+        chip_risk_high: "РИСК · ВЫСОКИЙ",
+        chip_bank: "БАНК · КОНТРОЛЬ",
+        disclaimer: "Это не финансовый совет. Играй ответственно.",
+        game_names: {
+          gates: "Gates of Olympus",
+          sweet: "Sweet Bonanza",
+          doghouse: "Dog House Megaways",
+          sugar: "Sugar Rush",
+          aviator: "Aviator",
+          chicken: "Chicken Road"
+        }
+      },
+      es: {
+        subtitle: "SEÑALES AI",
+        hint_lang: "Elige tu idioma para empezar.",
+        hint_games: "Elige un juego para recibir señales.",
+        back_menu: "Menú",
+        crash_caption: "COEFICIENTE",
+        crash_note: "Pulsa el botón para generar un nuevo coeficiente.",
+        crash_btn: "OBTENER SEÑAL",
+        slot_question: "¿Cuál es tu saldo para este juego?",
+        bal_low: "💵 Menos de 5 $",
+        bal_high: "💰 5 $ o más",
+        slot_title: "Estrategia",
+        slot_default: "Elige tu saldo para obtener una estrategia.",
+        slot_btn: "NUEVA ESTRATEGIA",
+        chip_risk_low: "RIESGO · BAJO",
+        chip_risk_med: "RIESGO · MEDIO",
+        chip_risk_high: "RIESGO · ALTO",
+        chip_bank: "BANCA · CONTROL",
+        disclaimer: "No es un consejo financiero. Juega con responsabilidad.",
+        game_names: {
+          gates: "Gates of Olympus",
+          sweet: "Sweet Bonanza",
+          doghouse: "Dog House Megaways",
+          sugar: "Sugar Rush",
+          aviator: "Aviator",
+          chicken: "Chicken Road"
+        }
+      },
+      pt: {
+        subtitle: "SINAIS AI",
+        hint_lang: "Escolha seu idioma para começar.",
+        hint_games: "Escolha um jogo para receber sinais.",
+        back_menu: "Menu",
+        crash_caption: "COEFICIENTE",
+        crash_note: "Toque no botão para gerar um novo coeficiente.",
+        crash_btn: "PEGAR SINAL",
+        slot_question: "Qual é o seu saldo para este jogo?",
+        bal_low: "💵 Menos de 5 $",
+        bal_high: "💰 5 $ ou mais",
+        slot_title: "Estratégia",
+        slot_default: "Escolha seu saldo para receber uma estratégia.",
+        slot_btn: "NOVA ESTRATÉGIA",
+        chip_risk_low: "RISCO · BAIXO",
+        chip_risk_med: "RISCO · MÉDIO",
+        chip_risk_high: "RISCO · ALTO",
+        chip_bank: "BANCA · CONTROLE",
+        disclaimer: "Não é conselho financeiro. Jogue com responsabilidade.",
+        game_names: {
+          gates: "Gates of Olympus",
+          sweet: "Sweet Bonanza",
+          doghouse: "Dog House Megaways",
+          sugar: "Sugar Rush",
+          aviator: "Aviator",
+          chicken: "Chicken Road"
+        }
+      },
+      hi: {
+        subtitle: "AI SIGNALS",
+        hint_lang: "शुरू करने के लिए भाषा चुनो.",
+        hint_games: "जिस गेम के लिए सिग्नल चाहिए, उसे चुनो.",
+        back_menu: "Menu",
+        crash_caption: "COEFFICIENT",
+        crash_note: "नया कोएफ़िशент लेने के लिए बटन दबाओ.",
+        crash_btn: "GET SIGNAL",
+        slot_question: "इस गेम के लिए अभी तुम्हारा बैलेंस कितना है?",
+        bal_low: "💵 5$ से कम",
+        bal_high: "💰 5$ या ज़्यादा",
+        slot_title: "Strategy",
+        slot_default: "स्टратегी लेने के लिए बैलेंस चुनो.",
+        slot_btn: "NEW STRATEGY",
+        chip_risk_low: "RISK · LOW",
+        chip_risk_med: "RISK · MEDIUM",
+        chip_risk_high: "RISK · HIGH",
+        chip_bank: "BANK · CONTROL",
+        disclaimer: "यह फाइनेंशियल सलाह नहीं है. जिम्मेदारी से खेलो.",
+        game_names: {
+          gates: "Gates of Olympus",
+          sweet: "Sweet Bonanza",
+          doghouse: "Dog House Megaways",
+          sugar: "Sugar Rush",
+          aviator: "Aviator",
+          chicken: "Chicken Road"
+        }
+      }
+    };
+
+    // ====== СТРАТЕГИИ СЛОТОВ: 4 слота * 2 баланса * 5 языков * ≥3 варианта ======
+
+    const slotStrategies = {
+      gates: {
+        low: {
+          en: [
+            "⚡ Gates of Olympus — low balance (< 5$)\n\n" +
+            "1) Spin 15 times with $0.10.\n" +
+            "2) Warm up: 10 spins with $0.20.\n" +
+            "3) If balance ≥ $3 — buy the cheapest bonus once.\n" +
+            "4) If you still have no bonus — 25 more spins with $0.40 and stop.\n\n" +
+            "Hard stop-loss: about −40% from your start.",
+            "⚡ Gates — micro grind\n\n" +
+            "1) 20 spins with $0.08–0.10.\n" +
+            "2) Any hit above x30 — cut stake in half and keep spinning 10–15 times.\n" +
+            "3) If you see only dead spins for 20+ rounds — leave the slot.\n" +
+            "4) Never risk last dollar on a bonus.",
+            "⚡ Gates — safe entry\n\n" +
+            "1) 10 cheap spins to check how multipliers drop.\n" +
+            "2) If you get at least one x25+ hit — repeat 10 more spins.\n" +
+            "3) No strong multis after 30 spins = change game.\n" +
+            "4) Protect the last 30–40% of balance, don't touch it."
+          ],
+          ru: [
+            "⚡ Gates of Olympus — баланс < 5$\n\n" +
+            "1) 15 спинов по 0.10 $.\n" +
+            "2) Прогрев: ещё 10 спинов по 0.20 $.\n" +
+            "3) Если банк ≥ 3 $ — один раз берёшь самую дешёвую бонуску.\n" +
+            "4) Если бонус не поймал — ещё 25 спинов по 0.40 $ и стоп.\n\n" +
+            "Жёсткий стоп-лосс: просадка ~40% от старта.",
+            "⚡ Gates — микро-гринд\n\n" +
+            "1) 20 спинов по 0.08–0.10 $.\n" +
+            "2) Поймал х30+ — режешь ставку вдвое и крутишь ещё 10–15 спинов.\n" +
+            "3) 20+ мёртвых спинов подряд — просто выходишь из слота.\n" +
+            "4) Последние деньги в бонус не заливаешь.",
+            "⚡ Gates — аккуратный заход\n\n" +
+            "1) 10 дешёвых спинов, смотришь, как падают множители.\n" +
+            "2) Поймал хотя бы один х25+ — делаешь ещё 10 спинов.\n" +
+            "3) За 30 спинов ни одной нормальной мульты — меняешь игру.\n" +
+            "4) Последние 30–40% банка считаешь неприкасаемыми."
+          ],
+          es: [
+            "⚡ Gates — saldo bajo (< 5$)\n\n" +
+            "1) 15 giros con 0.10$.\n" +
+            "2) 10 giros más con 0.20$ para calentar.\n" +
+            "3) Si tienes ≥ 3$ compra un bonus mínimo una sola vez.\n" +
+            "4) Si no sale nada, 25 giros con 0.40$ y paras.\n" +
+            "Stop-loss duro: ~40% de caída.",
+            "⚡ Gates — modo seguro\n\n" +
+            "1) 20 giros con apuesta pequeña.\n" +
+            "2) Cualquier hit x30+ = baja la apuesta a la mitad.\n" +
+            "3) 20 giros muertos seguidos = cambia de slot.",
+            "⚡ Gates — prueba rápida\n\n" +
+            "1) 10 giros baratos.\n" +
+            "2) Si ves un multi fuerte (x20+) haz otros 10 giros.\n" +
+            "3) Si el juego está muerto, protege el saldo y sal."
+          ],
+          pt: [
+            "⚡ Gates — saldo baixo (< 5$)\n\n" +
+            "1) 15 giros com 0,10$.\n" +
+            "2) 10 giros de aquecimento com 0,20$.\n" +
+            "3) Se o saldo for ≥ 3$ compre um bônus mínimo uma vez.\n" +
+            "4) Se nada acontecer, faça 25 giros com 0,40$ e pare.\n" +
+            "Stop-loss: queda de ~40%.",
+            "⚡ Gates — grind leve\n\n" +
+            "1) 20 giros em aposta micro.\n" +
+            "2) Hit x30+ = corta a aposta pela metade.\n" +
+            "3) 20 giros mortos = troca de slot.",
+            "⚡ Gates — teste rápido\n\n" +
+            "1) 10 giros pequenos.\n" +
+            "2) Viu multi forte x20+? Mais 10 giros.\n" +
+            "3) Slot apagado? Protege a banca e sai."
+          ],
+          hi: [
+            "⚡ Gates — low balance (< 5$)\n\n" +
+            "1) 0.10$ पर 15 स्पिन.\n" +
+            "2) 0.20$ पर 10 स्पिन warm-up.\n" +
+            "3) बैलेंस 3$+ हो तो एक बार minimum bonus लो.\n" +
+            "4) कुछ नहीं дал — 0.40$ पर 25 स्पिन और स्टॉप.\n" +
+            "लगभग −40% पर hard stop-loss.",
+            "⚡ Gates — safe grind\n\n" +
+            "1) 20 cheap स्पिन.\n" +
+            "2) कोई भी x30+ आया तो bet आधी कर दो.\n" +
+            "3) 20 dead स्पिन подряд — slot बदल दो.",
+            "⚡ Gates — quick check\n\n" +
+            "1) 10 छोटे स्पिन.\n" +
+            "2) अगर x20+ दिखा तो 10 और स्पिन.\n" +
+            "3) slot dead लगे तो balance बचाकर निकल जाओ."
+          ]
+        },
+        high: {
+          en: [
+            "⚡ Gates — balance ≥ 5$\n\n" +
+            "1) Bet 2–3% of your bankroll per spin.\n" +
+            "2) 30–40 spins, turbo allowed but watch dead streaks.\n" +
+            "3) 1 bonus buy every 20–30 spins, not more.\n" +
+            "4) Stop-win: +70–100% or one x100+ hit.\n" +
+            "5) Stop-loss: −40–50% from start.",
+            "⚡ Gates — aggressive mode\n\n" +
+            "1) Start with 1.5–2% per spin.\n" +
+            "2) Slot is hot? Raise to 3–4% for 15 spins.\n" +
+            "3) Any x150+ hit — cut bet at least in half.\n" +
+            "4) Double your balance and leave the slot.",
+            "⚡ Gates — bonus focus\n\n" +
+            "1) 15 test spins with small bet.\n" +
+            "2) If you see many multis, buy 2–3 medium bonuses.\n" +
+            "3) Two dead bonuses in a row = switch game.\n" +
+            "4) Don't chase losses with max bet."
+          ],
+          ru: [
+            "⚡ Gates — баланс ≥ 5$\n\n" +
+            "1) Ставь 2–3% от банка на спин.\n" +
+            "2) 30–40 спинов, можно в турбо, но следи за сериями пустых.\n" +
+            "3) Бонуску берёшь не чаще 1 раза на 20–30 спинов.\n" +
+            "4) Стоп-вин: +70–100% к банку или один занос x100+.\n" +
+            "5) Стоп-лосс: −40–50% от старта.",
+            "⚡ Gates — агрессивный режим\n\n" +
+            "1) Начни с 1.5–2% от банка на спин.\n" +
+            "2) Слот греется? Поднимай до 3–4% на 15 спинов.\n" +
+            "3) Любой х150+ — режешь ставку минимум вдвое.\n" +
+            "4) Удвоил баланс — фиксируешь и выходишь.",
+            "⚡ Gates — упор на бонусы\n\n" +
+            "1) 15 пробных спинов на небольшой ставке.\n" +
+            "2) Мультов много — берёшь 2–3 бонуски средней цены.\n" +
+            "3) Две мёртвые бонуски подряд — меняешь слот.\n" +
+            "4) Не отбиваешься максимальной ставкой."
+          ],
+          es: [
+            "⚡ Gates — saldo ≥ 5$\n\n" +
+            "1) Apuesta 2–3% de la banca por giro.\n" +
+            "2) 30–40 giros, turbo opcional.\n" +
+            "3) Bonus cada 20–30 giros como máximo.\n" +
+            "4) Stop-win: +70–100% o un hit x100+.\n" +
+            "5) Stop-loss: −40–50% desde el inicio.",
+            "⚡ Gates — modo agresivo\n\n" +
+            "1) Empieza con 1.5–2% por giro.\n" +
+            "2) Si el slot está caliente, sube a 3–4%.\n" +
+            "3) Cualquier x150+ = baja la apuesta a la mitad.\n" +
+            "4) Duplicas saldo y sales.",
+            "⚡ Gates — bonus game focus\n\n" +
+            "1) 15 giros de prueba.\n" +
+            "2) Muchos multis = 2–3 bonus medios.\n" +
+            "3) Dos bonus muertos seguidos = cambia de juego."
+          ],
+          pt: [
+            "⚡ Gates — saldo ≥ 5$\n\n" +
+            "1) Use 2–3% da banca por giro.\n" +
+            "2) 30–40 giros, turbo opcional.\n" +
+            "3) Bônus no máximo a cada 20–30 giros.\n" +
+            "4) Stop-win: +70–100% ou um hit x100+.\n" +
+            "5) Stop-loss: −40–50%.",
+            "⚡ Gates — modo agressivo\n\n" +
+            "1) Comece com 1.5–2% por giro.\n" +
+            "2) Slot quente? 3–4% por 15 giros.\n" +
+            "3) Hit x150+ = corta a aposta pela metade.\n" +
+            "4) Duplicou a banca, encerra a sessão.",
+            "⚡ Gates — foco em bônus\n\n" +
+            "1) 15 giros de teste.\n" +
+            "2) Muitos multis = 2–3 bônus médios.\n" +
+            "3) Dois bônus mortos = muda de jogo."
+          ],
+          hi: [
+            "⚡ Gates — balance ≥ 5$\n\n" +
+            "1) हर स्पिन पर बैंक का 2–3% बेट.\n" +
+            "2) 30–40 स्पिन, turbo चलेगा पर dead streak देखो.\n" +
+            "3) 20–30 स्पिन में 1 बार से ज़्यादा bonus मत लो.\n" +
+            "4) Stop-win: +70–100% या x100+.\n" +
+            "5) Stop-loss: −40–50%.",
+            "⚡ Gates — aggressive mode\n\n" +
+            "1) 1.5–2% से शुरू करो.\n" +
+            "2) slot hot लगे तो 3–4% पर 15 स्पिन.\n" +
+            "3) कोई x150+ आये तो bet आधी कर दो.\n" +
+            "4) balance x2 होते ही बाहर.",
+            "⚡ Gates — bonus focus\n\n" +
+            "1) 15 test स्पिन.\n" +
+            "2) multis अच्छे हैं तो 2–3 medium bonus.\n" +
+            "3) 2 dead bonus подряд = नया slot."
+          ]
+        }
+      },
+      // === Sweet Bonanza ===
+      sweet: {
+        low: {
+          en: [
+            "🍬 Sweet Bonanza — low balance (< 5$)\n\n" +
+            "1) 20 spins with $0.10.\n" +
+            "2) If you see 2–3 hits above x5 — add 10 spins with $0.20.\n" +
+            "3) Do not buy bonuses on this balance, only base game.\n" +
+            "4) 15+ dead spins in a row = stop and change game.",
+            "🍬 Sweet — sugar warm-up\n\n" +
+            "1) 10 test spins with minimum bet.\n" +
+            "2) Any tumble with x20+ total win — repeat 10 spins.\n" +
+            "3) If every board is dry — protect your money and leave.\n" +
+            "4) Treat last 2$ as untouchable bank.",
+            "🍬 Sweet — small grind\n\n" +
+            "1) 15–20 spins at 1–2% of balance.\n" +
+            "2) After each good hit (x30+) reduce stake a bit.\n" +
+            "3) 30 spins without decent multis = new slot."
+          ],
+          ru: [
+            "🍬 Sweet Bonanza — баланс < 5$\n\n" +
+            "1) 20 спинов по 0.10 $.\n" +
+            "2) Видишь 2–3 выплаты выше x5 — добавь 10 спинов по 0.20 $.\n" +
+            "3) На таком банке бонуски не покупаем, крутим только основу.\n" +
+            "4) 15+ мёртвых спинов подряд — стоп и смена игры.",
+            "🍬 Sweet — сладкий прогрев\n\n" +
+            "1) 10 тестовых спинов на минимальной ставке.\n" +
+            "2) Любая нормальная тумбла с общим выигрышем x20+ — ещё 10 спинов.\n" +
+            "3) Если каждый экран мёртвый — сохраняй деньги и выходи.\n" +
+            "4) Последние 2$ считаем неприкосновенным банком.",
+            "🍬 Sweet — малый гринд\n\n" +
+            "1) 15–20 спинов с нагрузкой 1–2% от баланса.\n" +
+            "2) После каждой хорошей выплаты (x30+) чуть режь ставку.\n" +
+            "3) 30 спинов без нормальных множителей — меняем слот."
+          ],
+          es: [
+            "🍬 Sweet — saldo bajo (< 5$)\n\n" +
+            "1) 20 giros con 0.10$.\n" +
+            "2) Si ves varias ganancias x5+ haz 10 giros con 0.20$.\n" +
+            "3) No compres bonus con banco tan pequeño.\n" +
+            "4) 15 giros muertos seguidos = stop.",
+            "🍬 Sweet — calentamiento\n\n" +
+            "1) 10 giros mínimos.\n" +
+            "2) Buena caída x20+ = otros 10 giros.\n" +
+            "3) Slot seco = cuida tu saldo y sal.",
+            "🍬 Sweet — grind pequeño\n\n" +
+            "1) 15–20 giros al 1–2% del saldo.\n" +
+            "2) Buena ganancia x30+ = baja un poco la apuesta.\n" +
+            "3) Sin multis fuertes en 30 giros = cambia."
+          ],
+          pt: [
+            "🍬 Sweet — saldo baixo (< 5$)\n\n" +
+            "1) 20 giros com 0,10$.\n" +
+            "2) Viu 2–3 ganhos x5+? Faça 10 giros com 0,20$.\n" +
+            "3) Não compre bônus com banca pequena.\n" +
+            "4) 15+ giros mortos = stop.",
+            "🍬 Sweet — aquecimento\n\n" +
+            "1) 10 giros mínimos.\n" +
+            "2) Hit x20+ = mais 10 giros.\n" +
+            "3) Slot seco = protege a banca e sai.",
+            "🍬 Sweet — grind leve\n\n" +
+            "1) 15–20 giros com 1–2% da banca.\n" +
+            "2) Ganho x30+ = reduz um pouco a aposta.\n" +
+            "3) 30 giros sem multis fortes = outro jogo."
+          ],
+          hi: [
+            "🍬 Sweet — low balance (< 5$)\n\n" +
+            "1) 0.10$ पर 20 स्पिन.\n" +
+            "2) 2–3 बार x5+ आया तो 0.20$ पर 10 स्पिन.\n" +
+            "3) इतना छोटा bank हो तो bonus मत खरीदो.\n" +
+            "4) 15 dead स्पिन подряд = stop.",
+            "🍬 Sweet — warm-up\n\n" +
+            "1) 10 minimum स्पिन.\n" +
+            "2) कोई x20+ tumble आया तो 10 और स्पिन.\n" +
+            "3) slot सूखा लगे तो balance बचाकर निकलो.",
+            "🍬 Sweet — small grind\n\n" +
+            "1) 15–20 स्पिन, bet = bank का 1–2%.\n" +
+            "2) x30+ win पर bet थोड़ा कम करो.\n" +
+            "3) 30 स्पिन तक कोई strong multi नहीं = नया slot."
+          ]
+        },
+        high: {
+          en: [
+            "🍬 Sweet Bonanza — balance ≥ 5$\n\n" +
+            "1) Bet 1–3% of balance per spin.\n" +
+            "2) Mix 15–20 base spins with rare bonus buys.\n" +
+            "3) Stop-win: +60–80% or one strong bonus.\n" +
+            "4) Stop-loss: −40% from start.",
+            "🍬 Sweet — semi-aggressive\n\n" +
+            "1) 10–15 spins at 2% of bank.\n" +
+            "2) Slot is hot? Buy 1–2 medium bonuses.\n" +
+            "3) Two dead bonuses in a row = change game.\n" +
+            "4) Don't martingale bets after a loss.",
+            "🍬 Sweet — x100 hunt\n\n" +
+            "1) Fix bet at 2–3%.\n" +
+            "2) Aim for one x100+ bonus, then cut stake to 1%.\n" +
+            "3) If you lose half of starting bank — session over."
+          ],
+          ru: [
+            "🍬 Sweet Bonanza — баланс ≥ 5$\n\n" +
+            "1) Ставь 1–3% от баланса на спин.\n" +
+            "2) 15–20 обычных спинов + изредка покупка бонусок.\n" +
+            "3) Стоп-вин: +60–80% к банку или одна сильная бонуска.\n" +
+            "4) Стоп-лосс: −40% от старта.",
+            "🍬 Sweet — полуагрессивный режим\n\n" +
+            "1) 10–15 спинов по 2% от банка.\n" +
+            "2) Слот играет — бери 1–2 бонуски средней цены.\n" +
+            "3) Две мёртвые бонуски подряд — меняешь слот.\n" +
+            "4) Не поднимаешь ставку лесенкой после минусов.",
+            "🍬 Sweet — охота за x100\n\n" +
+            "1) Фиксируешь ставку на уровне 2–3% от банка.\n" +
+            "2) Цель — поймать одну бонуску x100+, потом режешь до 1%.\n" +
+            "3) Потерял половину стартового банка — сессию закрываешь."
+          ],
+          es: [
+            "🍬 Sweet — saldo ≥ 5$\n\n" +
+            "1) Apuesta 1–3% del saldo por giro.\n" +
+            "2) 15–20 giros base + algunos bonus.\n" +
+            "3) Stop-win: +60–80% o un bonus fuerte.\n" +
+            "4) Stop-loss: −40%.",
+            "🍬 Sweet — modo semi agresivo\n\n" +
+            "1) 10–15 giros al 2%.\n" +
+            "2) Slot caliente = 1–2 bonus medios.\n" +
+            "3) Dos bonus muertos = cambia de juego.",
+            "🍬 Sweet — hunting x100\n\n" +
+            "1) Apuesta fija 2–3%.\n" +
+            "2) Un bonus x100+ = baja la apuesta a 1%.\n" +
+            "3) Si pierdes 50% de banca, termina sesión."
+          ],
+          pt: [
+            "🍬 Sweet — saldo ≥ 5$\n\n" +
+            "1) Aposta 1–3% do saldo por giro.\n" +
+            "2) 15–20 giros base + raros bônus.\n" +
+            "3) Stop-win: +60–80% ou um bom bônus.\n" +
+            "4) Stop-loss: −40%.",
+            "🍬 Sweet — semi agressivo\n\n" +
+            "1) 10–15 giros com 2% da banca.\n" +
+            "2) Slot quente? 1–2 bônus médios.\n" +
+            "3) Dois bônus mortos = troca o jogo.",
+            "🍬 Sweet — caça x100\n\n" +
+            "1) Aposta fixa 2–3%.\n" +
+            "2) Um bônus x100+ = reduz para 1%.\n" +
+            "3) Perdeu 50% da banca? Sessão encerrada."
+          ],
+          hi: [
+            "🍬 Sweet — balance ≥ 5$\n\n" +
+            "1) हर स्पिन पर bank का 1–3%.\n" +
+            "2) 15–20 base स्पिन + कभी-कभी bonus.\n" +
+            "3) Stop-win: +60–80% या strong bonus.\n" +
+            "4) Stop-loss: −40%.",
+            "🍬 Sweet — semi-aggressive\n\n" +
+            "1) 10–15 स्पिन, bet = 2% bank.\n" +
+            "2) slot hot लगे तो 1–2 medium bonus.\n" +
+            "3) दो dead bonus подряд = नया game.",
+            "🍬 Sweet — x100 hunt\n\n" +
+            "1) bet 2–3% fix रखो.\n" +
+            "2) एक x100+ bonus आया तो bet 1% कर दो.\n" +
+            "3) start bank का 50% उड़ा तो session बंद."
+          ]
+        }
+      },
+      // === Dog House Megaways ===
+      doghouse: {
+        low: {
+          en: [
+            "🐶 Dog House Megaways — low balance (< 5$)\n\n" +
+            "1) 15 spins with minimum bet.\n" +
+            "2) If slot is dead, max 10 more spins and leave.\n" +
+            "3) Hunt bonuses from base game, don't buy them.\n" +
+            "4) Any good wild line — take short profit and lower bet.",
+            "🐶 Dog House — test run\n\n" +
+            "1) 10 cheap spins.\n" +
+            "2) If you see sticky wilds early — 10 more spins.\n" +
+            "3) No hits at all? Protect the rest of balance.\n" +
+            "4) Stop-loss: about −35% from start.",
+            "🐶 Dog House — low-risk\n\n" +
+            "1) Keep stake under 2% of bankroll.\n" +
+            "2) 20 spins max for one attempt.\n" +
+            "3) One bonus with x40+ is enough to leave the slot."
+          ],
+          ru: [
+            "🐶 Dog House Megaways — баланс < 5$\n\n" +
+            "1) 15 спинов по минимальной ставке.\n" +
+            "2) Слот мёртвый — максимум ещё 10 спинов и выходим.\n" +
+            "3) Бонуски не покупаем, только ловим с обычных спинов.\n" +
+            "4) Поймал хорошую линию вайлдов — фиксируешь быстрый плюс и режешь ставку.",
+            "🐶 Dog House — тестовый заход\n\n" +
+            "1) 10 дешёвых спинов.\n" +
+            "2) Ранние липкие вайлды — ещё 10 спинов.\n" +
+            "3) Совсем пусто? Береги остаток банка.\n" +
+            "4) Стоп-лосс: примерно −35% от старта.",
+            "🐶 Dog House — низкий риск\n\n" +
+            "1) Ставка не больше 2% от банка.\n" +
+            "2) На одну попытку — до 20 спинов.\n" +
+            "3) Одна бонуска с x40+ уже повод уйти из слота."
+          ],
+          es: [
+            "🐶 Dog House — saldo bajo (< 5$)\n\n" +
+            "1) 15 giros con apuesta mínima.\n" +
+            "2) Slot muerto = máximo 10 giros más y sal.\n" +
+            "3) No compres bonus, búscalos en el juego base.",
+            "🐶 Dog House — prueba\n\n" +
+            "1) 10 giros baratos.\n" +
+            "2) Wilds pegajosos = 10 giros extra.\n" +
+            "3) Sin hits importantes = protege tu saldo.",
+            "🐶 Dog House — bajo riesgo\n\n" +
+            "1) Apuesta < 2% de la banca.\n" +
+            "2) 20 giros máximo.\n" +
+            "3) Un bonus x40+ es suficiente para irte."
+          ],
+          pt: [
+            "🐶 Dog House — saldo baixo (< 5$)\n\n" +
+            "1) 15 giros na aposta mínima.\n" +
+            "2) Slot morto = no máximo 10 giros a mais.\n" +
+            "3) Não compre bônus, só caça no jogo base.",
+            "🐶 Dog House — teste\n\n" +
+            "1) 10 giros baratos.\n" +
+            "2) Wilds grudados cedo = mais 10 giros.\n" +
+            "3) Nada paga? Protege a banca.",
+            "🐶 Dog House — risco baixo\n\n" +
+            "1) Aposta < 2% da banca.\n" +
+            "2) 20 giros por tentativa.\n" +
+            "3) Um bônus x40+ e você sai."
+          ],
+          hi: [
+            "🐶 Dog House — low balance (< 5$)\n\n" +
+            "1) minimum bet पर 15 स्पिन.\n" +
+            "2) slot dead लगे तो 10 और स्पिन के बाद निकल जाओ.\n" +
+            "3) bonus buy नहीं, सिर्फ base game से पकड़ो.\n" +
+            "4) कोई अच्छी wild line आये तो थोड़ा profit lock करो.",
+            "🐶 Dog House — test run\n\n" +
+            "1) 10 छोटे स्पिन.\n" +
+            "2) early sticky wild दिखे तो 10 और स्पिन.\n" +
+            "3) कुछ भी नहीं платит — balance बचाओ.",
+            "🐶 Dog House — low-risk\n\n" +
+            "1) bet < bank का 2%.\n" +
+            "2) max 20 स्पिन एक попытка.\n" +
+            "3) x40+ bonus मिला तो slot छोड़ दो."
+          ]
+        },
+        high: {
+          en: [
+            "🐶 Dog House — balance ≥ 5$\n\n" +
+            "1) Bet 1–3% of bankroll.\n" +
+            "2) 20–30 base spins + 1–2 bonus buys if slot is active.\n" +
+            "3) Stop-win: +70–100% or one very strong bonus.\n" +
+            "4) Stop-loss: −40–50% from start.",
+            "🐶 Dog House — bonus hunt\n\n" +
+            "1) 15 test spins.\n" +
+            "2) If hits are good, buy medium bonus.\n" +
+            "3) Two dead bonuses in a row — move to another game.\n" +
+            "4) Don't stay after x200+ mega win.",
+            "🐶 Dog House — stable mode\n\n" +
+            "1) Keep bet around 2%.\n" +
+            "2) Focus on long sessions with many small hits.\n" +
+            "3) Stop when you reach +80% or −40%."
+          ],
+          ru: [
+            "🐶 Dog House — баланс ≥ 5$\n\n" +
+            "1) Ставь 1–3% от банка.\n" +
+            "2) 20–30 обычных спинов + 1–2 бонуски, если слот живой.\n" +
+            "3) Стоп-вин: +70–100% или одна очень жирная бонуска.\n" +
+            "4) Стоп-лосс: −40–50% от старта.",
+            "🐶 Dog House — охота на бонусы\n\n" +
+            "1) 15 тестовых спинов.\n" +
+            "2) Если слот льёт — бери бонуску средней цены.\n" +
+            "3) Две мёртвые подряд — смена игры.\n" +
+            "4) После заноса x200+ не залипаешь в этом слоте.",
+            "🐶 Dog House — стабильный режим\n\n" +
+            "1) Держи ставку около 2% от банка.\n" +
+            "2) Играешь длинные сессии, забирая много мелких плюсов.\n" +
+            "3) Остановись при +80% к банку или −40%."
+          ],
+          es: [
+            "🐶 Dog House — saldo ≥ 5$\n\n" +
+            "1) Apuesta 1–3% de la banca.\n" +
+            "2) 20–30 giros base + 1–2 bonus si el slot está vivo.\n" +
+            "3) Stop-win: +70–100% o un bonus muy fuerte.\n" +
+            "4) Stop-loss: −40–50%.",
+            "🐶 Dog House — caza de bonus\n\n" +
+            "1) 15 giros de prueba.\n" +
+            "2) Buen ritmo = compra bonus medio.\n" +
+            "3) Dos bonus muertos = cambia de juego.",
+            "🐶 Dog House — modo estable\n\n" +
+            "1) Apuesta ~2% del saldo.\n" +
+            "2) Busca sesiones largas con muchos hits pequeños.\n" +
+            "3) Para con +80% o −40%."
+          ],
+          pt: [
+            "🐶 Dog House — saldo ≥ 5$\n\n" +
+            "1) Aposta 1–3% da banca.\n" +
+            "2) 20–30 giros base + 1–2 bônus se o slot estiver vivo.\n" +
+            "3) Stop-win: +70–100% ou um bônus forte.\n" +
+            "4) Stop-loss: −40–50%.",
+            "🐶 Dog House — caça bônus\n\n" +
+            "1) 15 giros de teste.\n" +
+            "2) Slot pagando = bônus médio.\n" +
+            "3) Dois bônus mortos = trocar de jogo.",
+            "🐶 Dog House — modo estável\n\n" +
+            "1) Aposta perto de 2%.\n" +
+            "2) Foque em várias small wins.\n" +
+            "3) Pare em +80% ou −40%."
+          ],
+          hi: [
+            "🐶 Dog House — balance ≥ 5$\n\n" +
+            "1) bet = bank का 1–3%.\n" +
+            "2) 20–30 base स्पिन + 1–2 bonus अगर slot alive.\n" +
+            "3) Stop-win: +70–100% या strong bonus.\n" +
+            "4) Stop-loss: −40–50%.",
+            "🐶 Dog House — bonus hunt\n\n" +
+            "1) 15 test स्पिन.\n" +
+            "2) game दे रहा है तो medium bonus.\n" +
+            "3) दो dead bonus подряд = नया game.",
+            "🐶 Dog House — stable mode\n\n" +
+            "1) bet ~2%.\n" +
+            "2) छोटे-छोटे wins जमा करो.\n" +
+            "3) +80% या −40% पर session बंद."
+          ]
+        }
+      },
+      // === Sugar Rush ===
+      sugar: {
+        low: {
+          en: [
+            "🍭 Sugar Rush — low balance (< 5$)\n\n" +
+            "1) 15 spins on minimum bet.\n" +
+            "2) Goal: build multipliers slowly and leave on a decent hit.\n" +
+            "3) 15–20 dead spins in a row = end the session.\n" +
+            "4) Rough stop-loss: −30% from starting bank.",
+            "🍭 Sugar — cluster start\n\n" +
+            "1) 10 test spins.\n" +
+            "2) If you see many small clusters, keep another 10 spins.\n" +
+            "3) No movement on the board = new game.\n" +
+            "4) Never push last dollars into this slot.",
+            "🍭 Sugar — micro mode\n\n" +
+            "1) Use lowest bet possible.\n" +
+            "2) Aim for one or two x40+ hits.\n" +
+            "3) After that, leave and save the rest."
+          ],
+          ru: [
+            "🍭 Sugar Rush — баланс < 5$\n\n" +
+            "1) 15 спинов по минимальной ставке.\n" +
+            "2) Цель — понемногу раскачивать множители и уйти при нормальном заносе.\n" +
+            "3) 15–20 пустых спинов подряд — сессию закрываем.\n" +
+            "4) Ориентировочный стоп-лосс: −30% от стартового банка.",
+            "🍭 Sugar — старт на кластерах\n\n" +
+            "1) 10 тестовых спинов.\n" +
+            "2) Видишь много мелких связок — крути ещё 10 спинов.\n" +
+            "3) Поле мёртвое, ничего не собирается — меняешь игру.\n" +
+            "4) Последние доллары сюда не закидываем.",
+            "🍭 Sugar — микро-режим\n\n" +
+            "1) Используй минимально возможную ставку.\n" +
+            "2) Цель — поймать 1–2 заноса x40+.\n" +
+            "3) После этого лучше выйти и сохранить остаток."
+          ],
+          es: [
+            "🍭 Sugar — saldo bajo (< 5$)\n\n" +
+            "1) 15 giros en apuesta mínima.\n" +
+            "2) Busca construir multiplicadores poco a poco.\n" +
+            "3) 15–20 giros muertos = fin de sesión.\n" +
+            "4) Stop-loss aproximado: −30%.",
+            "🍭 Sugar — clusters\n\n" +
+            "1) 10 giros de prueba.\n" +
+            "2) Muchos grupos pequeños = 10 giros más.\n" +
+            "3) Nada se forma = cámbiate de slot.",
+            "🍭 Sugar — modo micro\n\n" +
+            "1) Usa la apuesta más baja.\n" +
+            "2) Objetivo: 1–2 hits x40+ y salir."
+          ],
+          pt: [
+            "🍭 Sugar — saldo baixo (< 5$)\n\n" +
+            "1) 15 giros na aposta mínima.\n" +
+            "2) Objetivo: construir multiplicadores aos poucos.\n" +
+            "3) 15–20 giros mortos = fim da sessão.\n" +
+            "4) Stop-loss ~30% da banca.",
+            "🍭 Sugar — clusters\n\n" +
+            "1) 10 giros de teste.\n" +
+            "2) Muitos grupos pequenos = mais 10 giros.\n" +
+            "3) Nada conecta = troque de slot.",
+            "🍭 Sugar — modo micro\n\n" +
+            "1) Aposta mínima sempre.\n" +
+            "2) Mirar 1–2 hits x40+ e sair."
+          ],
+          hi: [
+            "🍭 Sugar — low balance (< 5$)\n\n" +
+            "1) minimum bet पर 15 स्पिन.\n" +
+            "2) धीरे-धीरे multipliers build होने दो.\n" +
+            "3) 15–20 dead स्पिन подряд = session end.\n" +
+            "4) लगभग −30% पर stop-loss.",
+            "🍭 Sugar — cluster start\n\n" +
+            "1) 10 test स्पिन.\n" +
+            "2) छोटे-छोटे clusters दिखें तो 10 और.\n" +
+            "3) board dead लगे तो नया game.",
+            "🍭 Sugar — micro mode\n\n" +
+            "1) possible lowest bet.\n" +
+            "2) target: 1–2 x40+ hits.\n" +
+            "3) उसके बाद profit बचाकर निकल जाओ."
+          ]
+        },
+        high: {
+          en: [
+            "🍭 Sugar Rush — balance ≥ 5$\n\n" +
+            "1) Bet 1–3% of bank per spin.\n" +
+            "2) 25–40 spins, watch how multipliers stack.\n" +
+            "3) Stop-win: +70–100% or one massive hit.\n" +
+            "4) Stop-loss: −40% from start.",
+            "🍭 Sugar — multiplier hunt\n\n" +
+            "1) Fix bet at 2%.\n" +
+            "2) Stay while board keeps building multipliers.\n" +
+            "3) Once you get x150+ total win, drop bet to 1% or leave.",
+            "🍭 Sugar — session plan\n\n" +
+            "1) Plan max 50 spins for one sitting.\n" +
+            "2) After each big cluster win, take a short break.\n" +
+            "3) Respect your stop-loss and don't chase."
+          ],
+          ru: [
+            "🍭 Sugar Rush — баланс ≥ 5$\n\n" +
+            "1) Ставь 1–3% от банка на спин.\n" +
+            "2) 25–40 спинов, смотри, как копятся множители.\n" +
+            "3) Стоп-вин: +70–100% к банку или один мощный занос.\n" +
+            "4) Стоп-лосс: −40% от старта.",
+            "🍭 Sugar — охота за множителями\n\n" +
+            "1) Фиксируешь ставку около 2% от банка.\n" +
+            "2) Пока поле строит множители — продолжаешь сессию.\n" +
+            "3) Поймал общий выигрыш x150+ — режешь ставку до 1% или выходишь.",
+            "🍭 Sugar — план сессии\n\n" +
+            "1) На одну посиделку максимум 50 спинов.\n" +
+            "2) После каждого крупного кластера делай паузу.\n" +
+            "3) Соблюдай стоп-лосс, не догоняйся."
+          ],
+          es: [
+            "🍭 Sugar — saldo ≥ 5$\n\n" +
+            "1) Apuesta 1–3% de la banca por giro.\n" +
+            "2) 25–40 giros mirando los multiplicadores.\n" +
+            "3) Stop-win: +70–100% o un gran hit.\n" +
+            "4) Stop-loss: −40%.",
+            "🍭 Sugar — hunt de multiplicadores\n\n" +
+            "1) Apuesta fija 2%.\n" +
+            "2) Mientras el tablero construya multis, sigue.\n" +
+            "3) Hit total x150+ = baja a 1% o sal.",
+            "🍭 Sugar — plan de sesión\n\n" +
+            "1) Máx 50 giros por sesión.\n" +
+            "2) Descanso corto después de cada hit grande.\n" +
+            "3) Respeta el stop-loss."
+          ],
+          pt: [
+            "🍭 Sugar — saldo ≥ 5$\n\n" +
+            "1) Aposta 1–3% da banca por giro.\n" +
+            "2) 25–40 giros acompanhando multiplicadores.\n" +
+            "3) Stop-win: +70–100% ou um grande hit.\n" +
+            "4) Stop-loss: −40%.",
+            "🍭 Sugar — caça multiplicador\n\n" +
+            "1) Aposta fixa 2%.\n" +
+            "2) Enquanto o grid estiver construindo multis, continua.\n" +
+            "3) Ganho total x150+ = aposta 1% ou encerra.",
+            "🍭 Sugar — plano de sessão\n\n" +
+            "1) Máximo 50 giros por sessão.\n" +
+            "2) Pausa após hits grandes.\n" +
+            "3) Respeite o stop-loss."
+          ],
+          hi: [
+            "🍭 Sugar — balance ≥ 5$\n\n" +
+            "1) bet = bank का 1–3%.\n" +
+            "2) 25–40 स्पिन, multipliers पर नज़र.\n" +
+            "3) Stop-win: +70–100% या बड़ा hit.\n" +
+            "4) Stop-loss: −40%.",
+            "🍭 Sugar — multiplier hunt\n\n" +
+            "1) bet 2% fix.\n" +
+            "2) जब तक board build कर रहा है, खेलते रहो.\n" +
+            "3) total win x150+ = bet 1% या quit.",
+            "🍭 Sugar — session plan\n\n" +
+            "1) एक session में max 50 स्पिन.\n" +
+            "2) हर बड़े cluster के बाद थोड़ी break.\n" +
+            "3) stop-loss तोड़कर कभी मत खेलो."
+          ]
+        }
+      }
+    };
+
+    // ====== STATE ======
+
+    let currentLang = "en";
+    let currentGame = null;  // gates, sweet, doghouse, sugar, aviator, chicken
+    let currentBalance = "low";
+    const lastStrategyIndex = {}; // key: lang_game_balance -> idx
+
+    // ====== HELPERS ======
+
+    function setSection(id) {
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    function ui() {
+      return UI[currentLang] || UI.en;
+    }
+
+    function updateMainTexts() {
+      document.getElementById("subtitleMain").textContent = ui().subtitle;
+      const sectionLangActive = document.getElementById("section-lang").classList.contains("active");
+      document.getElementById("hintMain").textContent = sectionLangActive ? ui().hint_lang : ui().hint_games;
+
+      document.getElementById("backLabel1").textContent = ui().back_menu;
+      document.getElementById("backLabel2").textContent = ui().back_menu;
+
+      document.getElementById("crashCaption").textContent = ui().crash_caption;
+      document.getElementById("crashNote").textContent = ui().crash_note;
+      document.getElementById("crashBtn").textContent = ui().crash_btn;
+
+      document.getElementById("slotQuestion").textContent = ui().slot_question;
+      document.getElementById("balLowBtn").textContent = ui().bal_low;
+      document.getElementById("balHighBtn").textContent = ui().bal_high;
+      document.getElementById("slotStratTitle").textContent = ui().slot_title;
+      document.getElementById("slotStratText").textContent = ui().slot_default;
+      document.getElementById("slotNextBtn").textContent = ui().slot_btn;
+      document.getElementById("chipBank").textContent = ui().chip_bank;
+      document.getElementById("slotDisclaimer").textContent = ui().disclaimer;
+
+      // game labels
+      document.querySelectorAll(".game-card").forEach(card => {
+        const code = card.dataset.game;
+        const name = ui().game_names[code] || card.querySelector(".game-name").textContent;
+        card.querySelector(".game-name").textContent = name;
+      });
+    }
+
+    function coeffWeighted() {
+      // 80% шанс 1.1–20, 20% шанс 20–100
+      const r = Math.random();
+      let min, max;
+      if (r < 0.8) {
+        min = 1.1;
+        max = 20;
+      } else {
+        min = 20;
+        max = 100;
+      }
+      const v = Math.random() * (max - min) + min;
+      return Number(v.toFixed(2));
+    }
+
+    function getSlotStrategyText(game, balance) {
+      const lang = currentLang;
+      const gameObj = slotStrategies[game];
+      if (!gameObj) return ui().slot_default;
+      const tier = gameObj[balance] || gameObj.low;
+      if (!tier) return ui().slot_default;
+
+      let texts = tier[lang] || tier.en;
+      if (!texts) texts = tier.en;
+      if (typeof texts === "string") texts = [texts];
+
+      const key = lang + "_" + game + "_" + balance;
+      const lastIdx = lastStrategyIndex[key];
+
+      let idx = 0;
+      if (texts.length === 1) {
+        idx = 0;
+      } else {
+        const variants = [];
+        for (let i = 0; i < texts.length; i++) {
+          if (i !== lastIdx) variants.push(i);
+        }
+        idx = variants[Math.floor(Math.random() * variants.length)];
+      }
+      lastStrategyIndex[key] = idx;
+      return texts[idx];
+    }
+
+    function updateRiskChips(game, balance) {
+      const chipRisk = document.getElementById("chipRisk");
+      if (balance === "low") {
+        chipRisk.textContent = ui().chip_risk_low;
+      } else {
+        // пусть слоты gates/sugar high — высокий риск, остальные средний
+        if (game === "gates" || game === "sugar") {
+          chipRisk.textContent = ui().chip_risk_high;
+        } else {
+          chipRisk.textContent = ui().chip_risk_med;
+        }
+      }
+    }
+
+    // ====== EVENTS ======
+
+    // language choose
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentLang = btn.dataset.lang || "en";
+        setSection("section-games");
+        updateMainTexts();
+      });
+    });
+
+    // games choose
+    document.querySelectorAll(".game-card").forEach(card => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".game-card").forEach(c => c.classList.remove("active"));
+        card.classList.add("active");
+        currentGame = card.dataset.game;
+
+        const name = ui().game_names[currentGame] || card.querySelector(".game-name").textContent;
+
+        if (currentGame === "aviator" || currentGame === "chicken") {
+          setSection("section-crash");
+          document.getElementById("crashLabel").innerHTML = `${ui().crash_caption} · <span>${name.toUpperCase()}</span>`;
+          document.getElementById("hintMain").textContent = ui().hint_games;
+        } else {
+          setSection("section-slot");
+          document.getElementById("slotLabel").innerHTML = `SLOT · <span>${name.toUpperCase()}</span>`;
+          document.getElementById("slotStratText").textContent = ui().slot_default;
+          document.getElementById("balLowBtn").classList.remove("active");
+          document.getElementById("balHighBtn").classList.remove("active");
+          currentBalance = "low";
+          updateRiskChips(currentGame, currentBalance);
+          document.getElementById("hintMain").textContent = ui().hint_games;
+        }
+      });
+    });
+
+    // back buttons
+    document.getElementById("backFromCrash").addEventListener("click", () => {
+      setSection("section-games");
+      updateMainTexts();
+    });
+    document.getElementById("backFromSlot").addEventListener("click", () => {
+      setSection("section-games");
+      updateMainTexts();
+    });
+
+    // crash button
+    document.getElementById("crashBtn").addEventListener("click", () => {
+      const btn = document.getElementById("crashBtn");
+      const coeffEl = document.getElementById("crashCoeff");
+      btn.classList.add("loading");
+      btn.textContent = "...";
+
+      setTimeout(() => {
+        const c = coeffWeighted();
+        coeffEl.textContent = "x" + c.toFixed(2);
+        btn.classList.remove("loading");
+        btn.textContent = ui().crash_btn;
+      }, 650);
+    });
+
+    // balance buttons
+    document.getElementById("balLowBtn").addEventListener("click", () => {
+      currentBalance = "low";
+      document.getElementById("balLowBtn").classList.add("active");
+      document.getElementById("balHighBtn").classList.remove("active");
+      const text = getSlotStrategyText(currentGame, currentBalance);
+      document.getElementById("slotStratText").textContent = text;
+      updateRiskChips(currentGame, currentBalance);
+    });
+    document.getElementById("balHighBtn").addEventListener("click", () => {
+      currentBalance = "high";
+      document.getElementById("balHighBtn").classList.add("active");
+      document.getElementById("balLowBtn").classList.remove("active");
+      const text = getSlotStrategyText(currentGame, currentBalance);
+      document.getElementById("slotStratText").textContent = text;
+      updateRiskChips(currentGame, currentBalance);
+    });
+
+    // new strategy button
+    document.getElementById("slotNextBtn").addEventListener("click", () => {
+      const text = getSlotStrategyText(currentGame, currentBalance);
+      document.getElementById("slotStratText").textContent = text;
+      updateRiskChips(currentGame, currentBalance);
+    });
+
+    // init
+    updateMainTexts();
+  </script>
+</body>
+</html>
