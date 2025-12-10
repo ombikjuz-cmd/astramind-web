@@ -47,7 +47,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 900px;
+      max-width: 980px;
     }
 
     .card {
@@ -171,8 +171,28 @@
     .game-grid {
       margin-top: 10px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 14px;
+      gap: 16px;
+      max-width: 880px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (min-width: 960px) {
+      .game-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 640px) and (max-width: 959px) {
+      .game-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 639px) {
+      .game-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .game-card {
@@ -418,6 +438,11 @@
       color: #ff8fff;
     }
 
+    .btn-crash-row {
+      display: flex;
+      justify-content: center;
+    }
+
     @keyframes spin {
       from {
         transform: rotate(0deg);
@@ -439,9 +464,6 @@
       .header-title {
         font-size: 22px;
       }
-      .game-grid {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      }
     }
   </style>
 </head>
@@ -449,7 +471,7 @@
 <div id="app"></div>
 
 <script>
-  // --- Config ---
+  // --- Конфиг ---
 
   const LANGS = ["ru", "en", "es", "pt", "hi"];
 
@@ -512,7 +534,6 @@
       },
     },
 
-    // Остальные языки более коротко, но структура та же
     en: {
       brandTop: "ASTRAMIND AI",
       brandTitle: "AI SIGNALS",
@@ -571,7 +592,7 @@
     es: {}, pt: {}, hi: {},
   };
 
-  // для остальных языков просто используем английские тексты как fallback
+  // Остальные языки — как английский (потом можно будет перевести)
   ["es", "pt", "hi"].forEach((lng) => (TEXTS[lng] = { ...TEXTS.en }));
 
   // --- Стратегии для слотов (3 варианта на low/high) ---
@@ -679,7 +700,7 @@
     en: {}, es: {}, pt: {}, hi: {},
   };
 
-  // для остальных языков просто используем те же русские стратегии, но можно будет позже перевести
+  // для остальных языков — те же стратегии (можно будет перевести позже)
   STRATEGIES.en = STRATEGIES.ru;
   STRATEGIES.es = STRATEGIES.ru;
   STRATEGIES.pt = STRATEGIES.ru;
@@ -691,6 +712,7 @@
   let currentGame = null;
   let currentBalanceType = null; // "low" | "high"
   let chickenDifficulty = "normal"; // "easy" | "normal" | "hard"
+  let signalCache = {}; // { key: { time: "HH:MM", coeff: number } }
 
   const app = document.getElementById("app");
 
@@ -722,34 +744,28 @@
   function randomCoeff(game) {
     let v;
     if (game === "chicken") {
-      // завязка на сложность
       if (chickenDifficulty === "easy") {
-        // чаще маленькие безопасные
         const r = Math.random();
         if (r < 0.9) v = 1.1 + Math.random() * (5 - 1.1);
         else v = 5 + Math.random() * (20 - 5);
       } else if (chickenDifficulty === "hard") {
-        // больше шанс на жирные иксы, но и риск
         const r = Math.random();
         if (r < 0.4) v = 1.1 + Math.random() * (20 - 1.1);
         else v = 20 + Math.random() * (100 - 20);
       } else {
-        // normal
         const r = Math.random();
         if (r < 0.75) v = 1.1 + Math.random() * (20 - 1.1);
         else v = 20 + Math.random() * (100 - 20);
       }
     } else {
-      // обычный краш (Aviator)
       const r = Math.random();
       if (r < 0.8) v = 1.1 + Math.random() * (20 - 1.1);
       else v = 20 + Math.random() * (100 - 20);
     }
-
     return Math.round(v * 100) / 100;
   }
 
-  // --- Render functions ---
+  // --- Render ---
 
   function renderLanguageScreen() {
     const t = getTexts();
@@ -856,7 +872,6 @@
 
     topRow.appendChild(backBtn);
     topRow.appendChild(tag);
-
     card.appendChild(topRow);
 
     const q = document.createElement("div");
@@ -878,8 +893,8 @@
 
     row.appendChild(lowBtn);
     row.appendChild(highBtn);
-
     card.appendChild(row);
+
     app.appendChild(card);
   }
 
@@ -913,7 +928,6 @@
 
     topRow.appendChild(backBtn);
     topRow.appendChild(tag);
-
     card.appendChild(topRow);
 
     const box = document.createElement("div");
@@ -933,7 +947,6 @@
     box.appendChild(title);
     box.appendChild(text);
     box.appendChild(footer);
-
     card.appendChild(box);
 
     const divider = document.createElement("div");
@@ -1009,7 +1022,6 @@
 
     labelRow.appendChild(leftLabel);
 
-    // блок сложности только для Chicken Road
     if (currentGame === "chicken") {
       const diffWrap = document.createElement("div");
       const diffLabel = document.createElement("div");
@@ -1068,11 +1080,25 @@
     hintEl.className = "crash-hint";
 
     function updateSignal() {
-      const coeff = randomCoeff(currentGame);
-      const time = formatFutureTime(3);
+      const targetTime = formatFutureTime(3);
+
+      const key =
+        currentGame === "chicken"
+          ? currentGame + "|" + chickenDifficulty
+          : currentGame;
+
+      let saved = signalCache[key];
+      let coeff;
+
+      if (saved && saved.time === targetTime) {
+        coeff = saved.coeff;
+      } else {
+        coeff = randomCoeff(currentGame);
+        signalCache[key] = { time: targetTime, coeff };
+      }
 
       coeffEl.textContent = "x" + coeff.toFixed(2);
-      timeEl.innerHTML = t.crashTimeLabel(time);
+      timeEl.innerHTML = t.crashTimeLabel(targetTime);
       hintEl.innerHTML = t.crashTimeHint;
     }
 
@@ -1084,8 +1110,7 @@
     container.appendChild(main);
 
     const btnRow = document.createElement("div");
-    btnRow.style.display = "flex";
-    btnRow.style.justifyContent = "center";
+    btnRow.className = "btn-crash-row";
 
     const crashBtn = createButton(t.crashBtn, "btn-primary", () =>
       updateSignal()
