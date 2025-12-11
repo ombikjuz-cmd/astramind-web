@@ -456,7 +456,8 @@
 <div class="app" id="app"></div>
 
 <script>
-  const DEFAULT_LANG = "en"; // теперь по умолчанию английский
+  // язык по умолчанию — EN
+  const DEFAULT_LANG = "en";
   let currentLang = DEFAULT_LANG;
 
   const UI_TEXT = {
@@ -520,11 +521,11 @@
       btnGetSignal: "⚡ Get signal",
       chickenDiffTitle: "Choose risk level for {game}:",
       btnLevelEasy: "🐥 Easy",
-      btnLevelNormal: "🐔 Hard",
-      btnLevelHard: "🔥 Very hard",
+      btnLevelNormal: "🐔 Normal",
+      btnLevelHard: "🔥 Hard",
       level_easy: "Easy",
-      level_normal: "Hard",
-      level_hard: "Very hard"
+      level_normal: "Normal",
+      level_hard: "Hard"
     },
     es: {
       subtitleMenu: "Elige el juego para recibir señales.",
@@ -592,43 +593,49 @@
       level_normal: "Médio",
       level_hard: "Alto"
     },
-    hi: {
-      subtitleMenu: "जिस गेम के लिए सिग्नल चाहिए उसे चुनें।",
-      subtitleBalance: "आपके बैलेंस के अनुसार स्ट्रेटेजी चयन।",
-      subtitleSlot: "AstraMind AI द्वारा बनाई गई टेक्स्ट स्ट्रेटेजीज़।",
-      subtitleCrash: "अगले 3 मिनट के लिए क्रैश सिग्नल।",
-      subtitleChickenDiff: "Chicken Road — रिस्क लेवल चुनें।",
-      chooseGameTitle: "स्ट्रेटेजी के लिए गेम चुनें:",
-      footerNote: "सिग्नल AI जनरेट करता है। रिस्क कंट्रोल करो और जिम्मेदारी से खेलो।",
-      balanceQuestion: "{game} के लिए तुम्हारा बैलेंस कितना है?",
-      balanceLowBtn: "💸 5 $ से कम",
-      balanceHighBtn: "💰 5 $ या ज़्यादा",
+    fr: {
+      subtitleMenu: "Choisis le jeu pour lequel tu veux des signaux.",
+      subtitleBalance: "Sélection de la stratégie en fonction de ton bankroll.",
+      subtitleSlot: "Stratégies texte générées par AstraMind AI.",
+      subtitleCrash: "Signaux crash pour les 3 prochaines minutes de jeu.",
+      subtitleChickenDiff: "Chicken Road — choisis le niveau de risque du signal.",
+      chooseGameTitle: "Choisis un jeu pour obtenir une stratégie :",
+      footerNote: "Les signaux sont générés par l'IA. Gère ton risque et joue de manière responsable.",
+      balanceQuestion: "Quel est ton solde pour {game} ?",
+      balanceLowBtn: "💸 Moins de 5 $",
+      balanceHighBtn: "💰 5 $ et plus",
       slotBalanceLowLabel: "< 5 $",
       slotBalanceHighLabel: "≥ 5 $",
-      slotPanelTitle: "{game} — बैलेंस {balance} के लिए स्ट्रेटेजी",
-      slotPanelSubtitle: "शांत играй: профит фиксируй, слотам назад не отдавай.",
-      slotNeedMore: "और स्ट्रेटेजी चाहिए? “New strategy” दबाओ — бот соберёт новый сетап.",
-      btnNewStrategy: "🎯 New strategy",
-      btnBackGames: "← गेम लिस्ट पर वापस",
-      btnBackGamesShort: "← गेम मेन्यू",
-      crashPanelTitle: "{game} — коэффициент сигнал",
-      crashSubtitle: "सिग्नल टाइम: {time}{mode}",
-      crashModeLabel: " · लेवल: {level}",
-      crashNextRound: "अगले раунд में लगभग {time} पर x{coeff} पकड़ने की कोशिश करो।",
-      crashHint: "अगले टाइम स्लॉट पर नया सिग्नल लेने के लिए नीचे वाला बटन दबाओ।",
-      btnGetSignal: "⚡ Get signal",
-      chickenDiffTitle: "{game} के लिए रिस्क लेवल चुनो:",
-      btnLevelEasy: "🐥 Easy",
-      btnLevelNormal: "🐔 Normal",
-      btnLevelHard: "🔥 Hard",
-      level_easy: "Easy",
-      level_normal: "Normal",
-      level_hard: "Hard"
+      slotPanelTitle: "{game} — stratégie pour un solde {balance}",
+      slotPanelSubtitle: "Joue prudemment : bloque ton profit et ne le rends pas aux slots.",
+      slotNeedMore: "Besoin d'une autre stratégie ? Clique sur « Nouvelle stratégie » — le bot préparera un autre setup pour ce jeu.",
+      btnNewStrategy: "🎯 Nouvelle stratégie",
+      btnBackGames: "← Retour à la liste des jeux",
+      btnBackGamesShort: "← Menu des jeux",
+      crashPanelTitle: "{game} — signal de coefficient",
+      crashSubtitle: "Heure du signal : {time}{mode}",
+      crashModeLabel: " · niveau : {level}",
+      crashNextRound: "Pour la prochaine manche, vise x{coeff} autour de {time}.",
+      crashHint: "Appuie sur le bouton ci-dessous pour obtenir un nouveau signal au prochain créneau.",
+      btnGetSignal: "⚡ Obtenir un signal",
+      chickenDiffTitle: "Choisis le niveau de risque pour {game} :",
+      btnLevelEasy: "🐥 Facile",
+      btnLevelNormal: "🐔 Moyen",
+      btnLevelHard: "🔥 Élevé",
+      level_easy: "Facile",
+      level_normal: "Moyen",
+      level_hard: "Élevé"
     }
   };
 
-  // порядок языков: EN первый
-  const LANG_LABELS = { en: "EN", ru: "RU", es: "ES", pt: "PT", hi: "HI" };
+  // порядок языков в свитчере
+  const LANG_LABELS = {
+    en: "EN",
+    ru: "RU",
+    es: "ES",
+    pt: "PT",
+    fr: "FR"
+  };
 
   const GAMES = {
     gates: { key: "gates", icon: "⚡", crash: false },
@@ -672,13 +679,37 @@
       aviator: { title: "Aviator", subtitle: "Crash, caçando coeficientes", chip: "Crash · x-hunt" },
       chicken: { title: "Chicken Road", subtitle: "Crash com níveis de risco", chip: "Crash · levels" }
     },
-    hi: {
-      gates: { title: "Gates of Olympus", subtitle: "Low / mid risk", chip: "Slot · grind" },
-      sweet: { title: "Sweet Bonanza", subtitle: "Candy spins & x", chip: "Slot · multipliers" },
-      doghouse: { title: "Dog House Megaways", subtitle: "High volatility spins", chip: "Slot · megaways" },
-      sugar: { title: "Sugar Rush", subtitle: "Bonus series setup", chip: "Slot · series" },
-      aviator: { title: "Aviator", subtitle: "Crash game, hunt x", chip: "Crash · x-hunt" },
-      chicken: { title: "Chicken Road", subtitle: "Crash with risk levels", chip: "Crash · levels" }
+    fr: {
+      gates: {
+        title: "Gates of Olympus",
+        subtitle: "Risque faible / moyen",
+        chip: "Slot · grind"
+      },
+      sweet: {
+        title: "Sweet Bonanza",
+        subtitle: "Spins sucrés et multiplicateurs",
+        chip: "Slot · multiplicateurs"
+      },
+      doghouse: {
+        title: "Dog House Megaways",
+        subtitle: "Spins à forte volatilité",
+        chip: "Slot · megaways"
+      },
+      sugar: {
+        title: "Sugar Rush",
+        subtitle: "Setup de séries de bonus",
+        chip: "Slot · séries"
+      },
+      aviator: {
+        title: "Aviator",
+        subtitle: "Jeu crash, chasse aux multiplicateurs",
+        chip: "Crash · chasse x"
+      },
+      chicken: {
+        title: "Chicken Road",
+        subtitle: "Jeu crash avec niveaux de risque",
+        chip: "Crash · niveaux"
+      }
     }
   };
 
