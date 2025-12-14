@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AstraMind AI Signals</title>
 
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -10,799 +10,1618 @@
   <meta http-equiv="Expires" content="0" />
 
   <style>
-    * { box-sizing: border-box; font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial; }
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
     body{
-      margin:0; color:#fff;
       min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      color:#fff;
       background:
-        radial-gradient(circle at 20% 20%, rgba(151, 71, 255, 0.28), transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(255, 0, 153, 0.22), transparent 55%),
-        radial-gradient(circle at 0% 100%, rgba(0, 255, 255, 0.14), transparent 55%),
-        #060016;
-      display:flex; justify-content:center;
-      padding:14px;
+        radial-gradient(circle at 20% 20%, rgba(151, 71, 255, 0.35), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(255, 0, 153, 0.35), transparent 55%),
+        radial-gradient(circle at 0% 100%, rgba(0, 255, 255, 0.2), transparent 55%),
+        #050017;
+      background-attachment:fixed;
+      position:relative;
+      overflow:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1.5px 1.5px at 80% 30%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1.5px 1.5px at 30% 80%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(2px 2px at 70% 60%, rgba(255,255,255,0.35), transparent);
+      opacity:0.6;
+      z-index:0;
     }
 
-    .topbar{
-      position:fixed; left:0; right:0; top:0; z-index:50;
-      padding:10px 12px;
-      display:flex; justify-content:space-between; align-items:center;
-      background:rgba(0,0,0,.40); backdrop-filter: blur(12px);
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .badge{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:6px 10px; border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      font-size:12px;
-    }
-    .dot{ width:8px; height:8px; border-radius:50%; background:#3cff7f; box-shadow:0 0 10px rgba(60,255,127,.9); }
-    #onlineCount{ font-variant-numeric:tabular-nums; font-weight:900; }
+    #app{ position:relative; z-index:1; width:100%; max-width:900px; }
 
-    .supportBtn{
-      border:0; cursor:pointer;
-      padding:8px 12px; border-radius:999px;
-      background:rgba(122, 98, 255, 0.18);
-      border:1px solid rgba(175, 150, 255, 0.35);
-      color:#fff; font-weight:800; font-size:12px;
-    }
-
-    .wrap{ width:100%; max-width:560px; padding-top:62px; padding-bottom:28px; }
     .card{
-      background: rgba(4, 0, 40, 0.86);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:22px;
-      padding:18px;
-      box-shadow: 0 22px 70px rgba(0,0,0,.55);
-      backdrop-filter: blur(14px);
+      background: rgba(4, 0, 40, 0.9);
+      border-radius: 32px;
+      padding: 28px 24px 24px;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 22px 80px rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(18px);
     }
 
-    .brandTop{
+    .header-top{
       text-align:center;
-      letter-spacing:.28em;
+      letter-spacing:0.28em;
       font-size:11px;
-      opacity:.70;
+      color:rgba(255,255,255,0.6);
+      text-transform:uppercase;
       margin-bottom:6px;
     }
-    .title{
+    .header-title{
       text-align:center;
-      font-weight:1000;
       font-size:26px;
-      margin:0 0 6px;
-      letter-spacing:.06em;
+      font-weight:800;
+      letter-spacing:0.06em;
       text-transform:uppercase;
+      margin-bottom:4px;
     }
-    .sub{
+    .header-sub{
       text-align:center;
-      opacity:.82;
-      margin:0 0 8px;
-      font-size:13px;
+      font-size:14px;
+      color:rgba(255,255,255,0.7);
+      margin-bottom:16px;
     }
     .build{
       text-align:center;
       font-size:11px;
-      opacity:.65;
-      margin-bottom:14px;
+      color:rgba(255,255,255,0.55);
+      margin-bottom:18px;
     }
 
-    .langRow{
-      display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
-      margin-bottom:14px;
-    }
-    .pill{
-      border:1px solid rgba(255,255,255,.15);
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      padding:7px 10px;
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:900;
-      font-size:12px;
-      opacity:.90;
-    }
-    .pill.active{
-      background:linear-gradient(120deg,#ff5ef7,#b46bff);
-      color:#110020;
-      border-color:rgba(255,255,255,.0);
-      opacity:1;
+    .section-title{
+      font-size:18px;
+      font-weight:600;
+      margin-bottom:12px;
     }
 
-    .sectionTitle{
-      font-weight:900;
-      margin:12px 0 10px;
-      font-size:14px;
-      opacity:.95;
-    }
-
-    .game{
-      display:flex; align-items:center; justify-content:space-between;
+    .btn-row{
+      display:flex;
+      flex-wrap:wrap;
       gap:10px;
-      padding:12px;
-      border-radius:16px;
-      background:rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.10);
+      margin-bottom:12px;
+      justify-content:center;
+    }
+    .btn{
+      border:none;
       cursor:pointer;
-      margin-bottom:10px;
-      transition: transform .12s ease, border-color .12s ease, background .12s ease;
-    }
-    .game:hover{
-      transform: translateY(-1px);
-      border-color: rgba(255,255,255,.22);
-      background:rgba(0,0,0,.22);
-    }
-    .gameLeft{ display:flex; align-items:center; gap:10px; }
-    .icon{
-      width:42px; height:42px; border-radius:16px;
-      display:flex; align-items:center; justify-content:center;
-      background: radial-gradient(circle at 30% 25%, #fff, #ff85ff 35%, #431cd7 90%);
-      color:#150024;
-      font-size:22px;
-      font-weight:1000;
-      box-shadow:0 12px 24px rgba(0,0,0,.35);
-      flex:0 0 auto;
-    }
-    .gTitle{ font-weight:1000; margin:0; font-size:14px; }
-    .gSub{ margin:2px 0 0; font-size:12px; opacity:.75; }
-    .tag{
-      font-size:11px; opacity:.75;
-      padding:4px 8px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:14px;
+      font-weight:500;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease, color .12s ease;
       white-space:nowrap;
     }
-
-    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
-    .btn{
-      border:0; cursor:pointer; border-radius:999px;
-      padding:10px 14px; font-weight:1000; font-size:13px;
+    .btn-primary{
+      background: linear-gradient(120deg, #ff5ef7, #b46bff);
+      color:#020012;
+      box-shadow:
+        0 0 20px rgba(255,95,247,0.7),
+        0 0 40px rgba(170,110,255,0.5);
     }
-    .btnPrimary{
-      background:linear-gradient(120deg,#ff5ef7,#b46bff);
-      color:#110020;
-      box-shadow:0 0 18px rgba(255,95,247,.40);
+    .btn-primary:hover{
+      transform: translateY(-1px);
+      box-shadow:
+        0 0 30px rgba(255,95,247,0.95),
+        0 0 55px rgba(170,110,255,0.7);
     }
-    .btnGhost{
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      color:#fff;
+    .btn-ghost{
+      background: rgba(122,98,255,0.12);
+      color: rgba(255,255,255,0.85);
+      border-radius:999px;
+      border:1px solid rgba(175,150,255,0.35);
     }
-
-    .box{
-      margin-top:12px;
-      background:rgba(0,0,0,.20);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:16px;
-      padding:12px;
-      white-space:pre-line;
-      font-size:13px;
-      line-height:1.45;
+    .btn-ghost:hover{
+      background: rgba(149,124,255,0.35);
+      border-color: rgba(255,255,255,0.5);
+      transform: translateY(-1px);
     }
 
-    .crashCircle{
-      margin:14px auto 8px;
-      width:190px; height:190px;
-      border-radius:50%;
+    .btn-pill-group{
+      display:inline-flex;
+      background: rgba(9,1,60,0.9);
+      border-radius:999px;
+      padding:4px;
+      border:1px solid rgba(160,130,255,0.4);
+      gap:4px;
+    }
+    .btn-pill{
+      border-radius:999px;
+      border:none;
+      padding:6px 12px;
+      font-size:12px;
+      cursor:pointer;
+      color: rgba(255,255,255,0.75);
+      background:transparent;
+      transition: background .12s ease, color .12s ease;
+    }
+    .btn-pill-active{
+      background: linear-gradient(120deg, #ff5ef7, #b46bff);
+      color:#020012;
+    }
+
+    .game-grid{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap:14px;
+    }
+    .game-card{
+      background: radial-gradient(circle at top, rgba(225,173,255,0.22), rgba(17,4,60,0.9));
+      border-radius: 22px;
+      padding: 16px 14px 14px;
+      border: 1px solid rgba(180,145,255,0.5);
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .game-card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.75);
+      border-color: rgba(255,255,255,0.7);
+    }
+    .game-icon{
+      width:36px; height:36px;
+      border-radius:14px;
+      background: radial-gradient(circle at 30% 25%, #fff, #ff85ff 40%, #431cd7 90%);
       display:flex; align-items:center; justify-content:center;
-      background: radial-gradient(circle at 30% 0, #ff8fff 0%, #3b166a 45%, #050010 82%);
-      box-shadow:0 0 70px rgba(255,143,255,.35);
+      font-size:22px;
+      margin-bottom:10px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.55);
+    }
+    .game-title{ font-size:14px; font-weight:600; margin-bottom:4px; }
+    .game-sub{ font-size:11px; color: rgba(255,255,255,0.7); }
+
+    .back-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .back-btn{
+      border-radius:999px;
+      padding:6px 14px;
+      border:none;
+      background: rgba(19,9,60,0.9);
+      color: rgba(255,255,255,0.85);
+      font-size:12px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border:1px solid rgba(172,150,255,0.55);
+      transition: background .12s ease, transform .12s ease, box-shadow .12s ease;
+    }
+    .back-btn:hover{
+      background: rgba(33,19,98,0.95);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
+    .tagline{ font-size:12px; color: rgba(255,255,255,0.7); text-align:right; }
+    .tagline span{ color:#ff8fff; font-weight:600; }
+
+    .question{ margin-bottom:16px; font-size:14px; }
+
+    .strategy-box{
+      margin-top:14px;
+      padding:14px 14px 12px;
+      border-radius:18px;
+      background: radial-gradient(circle at top, rgba(210,160,255,0.18), rgba(8,0,40,0.96));
+      border:1px solid rgba(190,155,255,0.8);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.75);
+      font-size:13px;
+      line-height:1.5;
+      white-space:pre-line;
+    }
+    .strategy-title{ font-weight:600; margin-bottom:6px; font-size:14px; }
+    .strategy-footer{ margin-top:10px; font-size:11px; color: rgba(255,255,255,0.7); }
+
+    .divider{
+      margin: 16px 0 10px;
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    }
+
+    /* Crash */
+    .crash-container{ margin-top:6px; display:flex; flex-direction:column; gap:16px; }
+    .crash-top-row{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+    .crash-label{
+      font-size:12px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+    .crash-label span{ color:#ff8fff; }
+
+    .crash-main{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:16px;
+      padding:18px;
+      border-radius:26px;
+      background: radial-gradient(circle at top, rgba(255,133,255,0.3), rgba(10,0,40,0.98));
+      border:1px solid rgba(205,160,255,0.9);
+      box-shadow:
+        0 20px 45px rgba(0,0,0,0.9),
+        0 0 80px rgba(162,106,255,0.7);
+    }
+    .crash-circle{
+      width:210px; height:210px;
+      border-radius:50%;
+      background: radial-gradient(circle at 30% 0, #ff8fff 0%, #3b166a 40%, #050010 80%);
+      box-shadow: 0 0 65px rgba(255,143,255,0.9), inset 0 0 35px rgba(6,0,40,0.9);
+      display:flex; align-items:center; justify-content:center;
       position:relative; overflow:hidden;
     }
-    .crashCircle::before{
+    .crash-circle::before{
       content:"";
-      position:absolute; inset:10%;
+      position:absolute;
+      inset:10%;
       border-radius:50%;
-      border:2px solid rgba(255,255,255,.12);
-      border-top-color:rgba(255,255,255,.85);
-      animation:spin 3s linear infinite;
-      opacity:.75;
+      border:2px solid rgba(255,255,255,0.15);
+      border-top-color: rgba(255,255,255,0.85);
+      animation: spin 3s linear infinite;
+      opacity:0.7;
     }
-    .crashInner{ position:relative; z-index:2; text-align:center; }
-    .coeff{ font-size:34px; font-weight:1100; letter-spacing:.04em; }
-    .small{ margin-top:4px; font-size:12px; opacity:.82; }
-    @keyframes spin{ from{transform:rotate(0)} to{transform:rotate(360deg)} }
+    .crash-circle-inner{ position:relative; z-index:2; text-align:center; }
+    .crash-coeff{ font-size:32px; font-weight:800; letter-spacing:0.06em; margin-bottom:2px; }
+    .crash-coeff-label{ font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color: rgba(255,255,255,0.78); }
+    .crash-time{ font-size:13px; color: rgba(255,255,255,0.88); text-align:center; }
+    .crash-time span{ color:#ffb3ff; font-weight:600; }
+    .crash-hint{ font-size:12px; color: rgba(255,255,255,0.72); text-align:center; }
+    .crash-hint span{ color:#ff8fff; }
 
-    .muted{ opacity:.75; font-size:12px; margin-top:10px; text-align:center; }
+    @keyframes spin{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
-    .diffRow{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:8px; }
-    .diffPill{
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      padding:7px 10px;
-      border-radius:999px;
+    /* Online bar + Support bar */
+    .online-bar{
+      position: fixed;
+      top: 16px;
+      right: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(12px);
+      font-size: 14px;
+      font-weight: 500;
+      color: #e4ffde;
+      z-index: 50;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+    .online-dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3cff7f;
+      box-shadow: 0 0 8px rgba(60, 255, 127, 0.9);
+    }
+    #online-count{ font-variant-numeric: tabular-nums; }
+
+    .support-bar{
+      position: fixed;
+      top: 16px;
+      left: 24px;
+      z-index: 50;
+    }
+    .support-btn{
+      border:none;
       cursor:pointer;
-      font-weight:900;
-      font-size:12px;
-      opacity:.90;
+      padding:6px 12px;
+      border-radius:999px;
+      background: rgba(122,98,255,0.18);
+      border:1px solid rgba(175,150,255,0.35);
+      color:#fff;
+      font-size:14px;
+      font-weight:700;
+      backdrop-filter: blur(12px);
     }
-    .diffPill.active{
-      background:linear-gradient(120deg,#ff5ef7,#b46bff);
-      color:#110020;
-      border-color:rgba(255,255,255,0);
-      opacity:1;
+    .support-btn:hover{
+      background: rgba(149,124,255,0.35);
+      border-color: rgba(255,255,255,0.5);
     }
 
-    @media (max-width: 520px){
-      .title{ font-size:22px; }
-      .wrap{ max-width: 100%; }
+    @media (max-width: 600px){
+      .card{ padding:22px 16px 18px; border-radius:24px; }
+      .crash-circle{ width:180px; height:180px; }
+      .header-title{ font-size:22px; }
+      .game-grid{ grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+      .online-bar{ top:10px; right:12px; font-size:12px; padding:5px 10px; }
+      .support-bar{ top:10px; left:12px; }
+      .support-btn{ font-size:12px; padding:5px 10px; }
     }
   </style>
 </head>
+
 <body>
 
-  <div class="topbar">
-    <div class="badge">
-      <span class="dot"></span>
-      <span id="onlineLabel">Online now:</span>
-      <span id="onlineCount">—</span>
-    </div>
-    <button class="supportBtn" id="supportBtn">🛟 SUPPORT</button>
+  <div class="support-bar">
+    <button class="support-btn" id="supportBtn">🛟 SUPPORT</button>
   </div>
 
-  <div class="wrap">
-    <div class="card" id="app"></div>
-    <div class="muted" id="outsideHint" style="display:none;">
-      Open this page from Telegram WebApp button, not from a regular browser.
-    </div>
+  <div class="online-bar">
+    <span class="online-dot"></span>
+    <span id="online-label">Online now:</span>
+    <span id="online-count">—</span>
   </div>
+
+  <div id="app"></div>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <script>
     // ===== CONFIG =====
     const BUILD = "BUILD_001";
     const SUPPORT_USERNAME = "AstraMind_support";
+
     const LANGS = ["en","ru","es","pt","fr"];
 
-    // ===== i18n (ВСЁ переведено) =====
-    const I18N = {
-      en:{
-        brand:"ASTRAMIND AI",
-        title:"AI SIGNALS",
-        sub:"Choose the game you want signals for.",
-        choose:"Choose a game to get a strategy:",
-        bank:"Choose your bankroll:",
-        under:"💵 Under $5",
-        over:"💰 From $5 and higher",
-        back:"← Back",
-        get:"GET SIGNAL",
-        more:"Need another one? Pick a game again 👇",
-        online:"Online now:",
-        support:"🛟 SUPPORT",
-        signalFor:(t)=>`Signal for ${t}`,
-        crashHint:"Nearest round (~3 minutes). Play calm, no all-in.",
-        diffTitle:"Difficulty:",
-        diff:{ easy:"Easy", normal:"Normal", hard:"Hard" }
+    const TEXTS = {
+      en: {
+        brandTop: "ASTRAMIND AI",
+        brandTitle: "AI SIGNALS",
+        brandSub: "Choose the game you want signals for.",
+        build: (b) => `Build: ${b}`,
+        chooseLang: "Choose language:",
+        chooseGame: "Choose a game to get a strategy:",
+        balanceQuestion: (gameTitle) => `What's your bankroll for ${gameTitle}?`,
+        balanceLow: "💵 Under $5",
+        balanceHigh: "💰 From $5 and higher",
+        back: "Menu",
+        moreStrategy: "Need another one? Pick a game again 👇",
+        crashLabel: "COEFFICIENT",
+        crashBtn: "GET SIGNAL",
+        crashHint: "Tap the button to get a signal. One signal per minute.",
+        crashTimeLabel: (time) => `Signal at <span>${time}</span>`,
+        crashLockLabel: (time) => `Locked until <span>${time}</span>`,
+        crashTimeHint: "Nearest round (~1 minute window). Play calm, no all-in.",
+        onlineLabel: "Online now:",
+        support: "🛟 SUPPORT",
+        langNames: { en:"English", ru:"Русский", es:"Español", pt:"Português", fr:"Français" },
+        games: {
+          gates: "⚡ Gates of Olympus",
+          sweet: "🍬 Sweet Bonanza",
+          doghouse: "🐶 Dog House Megaways",
+          sugar: "🍭 Sugar Rush",
+          aviator: "✈️ Aviator",
+          chicken: "🐔 Chicken Road",
+        },
+        gameSubtitles: {
+          gates: "Low / mid risk grind",
+          sweet: "Candy spins & multipliers",
+          doghouse: "High volatility spins",
+          sugar: "Bonus series setup",
+          aviator: "Crash game, hunting x",
+          chicken: "Crash with risk levels",
+        },
+        strategyTitle: (gameTitle, balanceLabel) => `${gameTitle} — strategy for bankroll ${balanceLabel}`,
+        balanceLabelLow: "< $5",
+        balanceLabelHigh: "≥ $5",
+        stopLossNote: "Hard stop-loss: about −40% from starting bankroll. Stop and come back later.",
+        chickenDifficultyLabel: "Difficulty ·",
+        chickenDiffs: { easy:"Easy", normal:"Normal", hard:"Hard" },
       },
-      ru:{
-        brand:"ASTRAMIND AI",
-        title:"AI СИГНАЛЫ",
-        sub:"Выбери игру, для которой нужны сигналы.",
-        choose:"Выбери игру, чтобы получить стратегию:",
-        bank:"Выбери свой банк:",
-        under:"💵 Меньше 5 $",
-        over:"💰 От 5 $ и выше",
-        back:"← Назад",
-        get:"ПОЛУЧИТЬ СИГНАЛ",
-        more:"Нужна ещё? Выбери игру снова 👇",
-        online:"Online сейчас:",
-        support:"🛟 САППОРТ",
-        signalFor:(t)=>`Сигнал на ${t}`,
-        crashHint:"Ближайшая раздача (~3 минуты). Играем аккуратно, без all-in.",
-        diffTitle:"Сложность:",
-        diff:{ easy:"Лёгкая", normal:"Нормальная", hard:"Жёсткая" }
+
+      ru: {
+        brandTop: "ASTRAMIND AI",
+        brandTitle: "AI СИГНАЛЫ",
+        brandSub: "Выбери игру, для которой нужны сигналы.",
+        build: (b) => `Build: ${b}`,
+        chooseLang: "Выбери язык:",
+        chooseGame: "Выбери игру, чтобы получить стратегию:",
+        balanceQuestion: (gameTitle) => `Какой у тебя банк для ${gameTitle}?`,
+        balanceLow: "💵 Меньше 5 $",
+        balanceHigh: "💰 От 5 $ и выше",
+        back: "Меню",
+        moreStrategy: "Нужна ещё стратегия? Выбери игру снова 👇",
+        crashLabel: "КОЭФФИЦИЕНТ",
+        crashBtn: "ПОЛУЧИТЬ СИГНАЛ",
+        crashHint: "Нажми кнопку, чтобы получить сигнал. 1 сигнал в минуту.",
+        crashTimeLabel: (time) => `Сигнал в <span>${time}</span>`,
+        crashLockLabel: (time) => `Заблокировано до <span>${time}</span>`,
+        crashTimeHint: "Ближайшая раздача (окно ~1 мин). Играешь спокойно, без all-in.",
+        onlineLabel: "Online сейчас:",
+        support: "🛟 САППОРТ",
+        langNames: { en:"English", ru:"Русский", es:"Español", pt:"Português", fr:"Français" },
+        games: {
+          gates: "⚡ Gates of Olympus",
+          sweet: "🍬 Sweet Bonanza",
+          doghouse: "🐶 Dog House Megaways",
+          sugar: "🍭 Sugar Rush",
+          aviator: "✈️ Aviator",
+          chicken: "🐔 Chicken Road",
+        },
+        gameSubtitles: {
+          gates: "Низкий / средний риск",
+          sweet: "Сладкие спины и иксы",
+          doghouse: "Высокая волатильность",
+          sugar: "Сетап на серии бонусов",
+          aviator: "Краш, ловим иксы",
+          chicken: "Краш с уровнями риска",
+        },
+        strategyTitle: (gameTitle, balanceLabel) => `${gameTitle} — стратегия для банка ${balanceLabel}`,
+        balanceLabelLow: "< 5 $",
+        balanceLabelHigh: "≥ 5 $",
+        stopLossNote: "Жёсткий стоп-лосс: около −40% от стартового банка. Стоп и перерыв.",
+        chickenDifficultyLabel: "Сложность ·",
+        chickenDiffs: { easy:"Лёгкая", normal:"Нормальная", hard:"Жёсткая" },
       },
-      es:{
-        brand:"ASTRAMIND AI",
-        title:"SEÑALES IA",
-        sub:"Elige el juego para el que quieres señales.",
-        choose:"Elige un juego para recibir una estrategia:",
-        bank:"Elige tu banca:",
-        under:"💵 Menos de $5",
-        over:"💰 Desde $5 o más",
-        back:"← Atrás",
-        get:"OBTENER SEÑAL",
-        more:"¿Quieres otra? Elige un juego de nuevo 👇",
-        online:"En línea ahora:",
-        support:"🛟 SOPORTE",
-        signalFor:(t)=>`Señal para ${t}`,
-        crashHint:"Ronda más cercana (~3 minutos). Juega tranquilo, sin all-in.",
-        diffTitle:"Dificultad:",
-        diff:{ easy:"Fácil", normal:"Normal", hard:"Difícil" }
+
+      es: {
+        brandTop: "ASTRAMIND AI",
+        brandTitle: "SEÑALES IA",
+        brandSub: "Elige el juego para el que quieres señales.",
+        build: (b) => `Build: ${b}`,
+        chooseLang: "Elige idioma:",
+        chooseGame: "Elige un juego para obtener una estrategia:",
+        balanceQuestion: (gameTitle) => `¿Cuál es tu banca para ${gameTitle}?`,
+        balanceLow: "💵 Menos de $5",
+        balanceHigh: "💰 Desde $5 o más",
+        back: "Menú",
+        moreStrategy: "¿Quieres otra estrategia? Elige el juego de nuevo 👇",
+        crashLabel: "COEFICIENTE",
+        crashBtn: "OBTENER SEÑAL",
+        crashHint: "Pulsa el botón para obtener señal. 1 señal por minuto.",
+        crashTimeLabel: (time) => `Señal a las <span>${time}</span>`,
+        crashLockLabel: (time) => `Bloqueado hasta <span>${time}</span>`,
+        crashTimeHint: "Ronda más cercana (ventana ~1 min). Juega tranquilo, sin all-in.",
+        onlineLabel: "En línea ahora:",
+        support: "🛟 SOPORTE",
+        langNames: { en:"English", ru:"Русский", es:"Español", pt:"Português", fr:"Français" },
+        games: {
+          gates: "⚡ Gates of Olympus",
+          sweet: "🍬 Sweet Bonanza",
+          doghouse: "🐶 Dog House Megaways",
+          sugar: "🍭 Sugar Rush",
+          aviator: "✈️ Aviator",
+          chicken: "🐔 Chicken Road",
+        },
+        gameSubtitles: {
+          gates: "Riesgo bajo / medio",
+          sweet: "Giros y multiplicadores",
+          doghouse: "Alta volatilidad",
+          sugar: "Setup de bonos",
+          aviator: "Juego crash, buscar x",
+          chicken: "Crash con niveles",
+        },
+        strategyTitle: (gameTitle, balanceLabel) => `${gameTitle} — estrategia para banca ${balanceLabel}`,
+        balanceLabelLow: "< $5",
+        balanceLabelHigh: "≥ $5",
+        stopLossNote: "Stop-loss duro: aprox. −40% de la banca inicial. Para y descansa.",
+        chickenDifficultyLabel: "Dificultad ·",
+        chickenDiffs: { easy:"Fácil", normal:"Normal", hard:"Difícil" },
       },
-      pt:{
-        brand:"ASTRAMIND AI",
-        title:"SINAIS IA",
-        sub:"Escolhe o jogo para o qual queres sinais.",
-        choose:"Escolhe um jogo para receber uma estratégia:",
-        bank:"Escolhe a tua banca:",
-        under:"💵 Menos de $5",
-        over:"💰 A partir de $5 ou mais",
-        back:"← Voltar",
-        get:"PEGAR SINAL",
-        more:"Quer mais um? Escolhe um jogo de novo 👇",
-        online:"Online agora:",
-        support:"🛟 SUPORTE",
-        signalFor:(t)=>`Sinal para ${t}`,
-        crashHint:"Rodada mais próxima (~3 minutos). Joga calmo, sem all-in.",
-        diffTitle:"Dificuldade:",
-        diff:{ easy:"Fácil", normal:"Normal", hard:"Difícil" }
+
+      pt: {
+        brandTop: "ASTRAMIND AI",
+        brandTitle: "SINAIS IA",
+        brandSub: "Escolhe o jogo para o qual queres sinais.",
+        build: (b) => `Build: ${b}`,
+        chooseLang: "Escolhe o idioma:",
+        chooseGame: "Escolhe um jogo para obter estratégia:",
+        balanceQuestion: (gameTitle) => `Qual é a tua banca para ${gameTitle}?`,
+        balanceLow: "💵 Menos de $5",
+        balanceHigh: "💰 A partir de $5 ou mais",
+        back: "Menu",
+        moreStrategy: "Queres outra estratégia? Escolhe o jogo de novo 👇",
+        crashLabel: "COEFICIENTE",
+        crashBtn: "PEGAR SINAL",
+        crashHint: "Toca no botão para pegar sinal. 1 sinal por minuto.",
+        crashTimeLabel: (time) => `Sinal às <span>${time}</span>`,
+        crashLockLabel: (time) => `Bloqueado até <span>${time}</span>`,
+        crashTimeHint: "Rodada mais próxima (janela ~1 min). Joga calmo, sem all-in.",
+        onlineLabel: "Online agora:",
+        support: "🛟 SUPORTE",
+        langNames: { en:"English", ru:"Русский", es:"Español", pt:"Português", fr:"Français" },
+        games: {
+          gates: "⚡ Gates of Olympus",
+          sweet: "🍬 Sweet Bonanza",
+          doghouse: "🐶 Dog House Megaways",
+          sugar: "🍭 Sugar Rush",
+          aviator: "✈️ Aviator",
+          chicken: "🐔 Chicken Road",
+        },
+        gameSubtitles: {
+          gates: "Risco baixo / médio",
+          sweet: "Giros e multiplicadores",
+          doghouse: "Alta volatilidade",
+          sugar: "Setup de bônus",
+          aviator: "Jogo crash, buscar x",
+          chicken: "Crash com níveis",
+        },
+        strategyTitle: (gameTitle, balanceLabel) => `${gameTitle} — estratégia para banca ${balanceLabel}`,
+        balanceLabelLow: "< $5",
+        balanceLabelHigh: "≥ $5",
+        stopLossNote: "Stop-loss forte: aprox. −40% da banca inicial. Para e volta depois.",
+        chickenDifficultyLabel: "Dificuldade ·",
+        chickenDiffs: { easy:"Fácil", normal:"Normal", hard:"Difícil" },
       },
-      fr:{
-        brand:"ASTRAMIND AI",
-        title:"SIGNAUX IA",
-        sub:"Choisis le jeu pour lequel tu veux des signaux.",
-        choose:"Choisis un jeu pour obtenir une stratégie :",
-        bank:"Choisis ta bankroll :",
-        under:"💵 Moins de 5$",
-        over:"💰 À partir de 5$ et plus",
-        back:"← Retour",
-        get:"OBTENIR UN SIGNAL",
-        more:"Besoin d’un autre ? Choisis un jeu à nouveau 👇",
-        online:"En ligne :",
-        support:"🛟 SUPPORT",
-        signalFor:(t)=>`Signal pour ${t}`,
-        crashHint:"Prochaine manche (~3 minutes). Joue calme, pas de all-in.",
-        diffTitle:"Difficulté :",
-        diff:{ easy:"Facile", normal:"Normal", hard:"Difficile" }
-      }
+
+      fr: {
+        brandTop: "ASTRAMIND AI",
+        brandTitle: "SIGNAUX IA",
+        brandSub: "Choisis le jeu pour lequel tu veux des signaux.",
+        build: (b) => `Build: ${b}`,
+        chooseLang: "Choisis la langue :",
+        chooseGame: "Choisis un jeu pour obtenir une stratégie :",
+        balanceQuestion: (gameTitle) => `Quelle est ta bankroll pour ${gameTitle} ?`,
+        balanceLow: "💵 Moins de 5$",
+        balanceHigh: "💰 À partir de 5$ et plus",
+        back: "Menu",
+        moreStrategy: "Besoin d’une autre stratégie ? Choisis le jeu à nouveau 👇",
+        crashLabel: "COEFFICIENT",
+        crashBtn: "OBTENIR UN SIGNAL",
+        crashHint: "Appuie pour obtenir un signal. 1 signal par minute.",
+        crashTimeLabel: (time) => `Signal à <span>${time}</span>`,
+        crashLockLabel: (time) => `Bloqué jusqu'à <span>${time}</span>`,
+        crashTimeHint: "Manche la plus proche (fenêtre ~1 min). Joue calme, pas de all-in.",
+        onlineLabel: "En ligne :",
+        support: "🛟 SUPPORT",
+        langNames: { en:"English", ru:"Русский", es:"Español", pt:"Português", fr:"Français" },
+        games: {
+          gates: "⚡ Gates of Olympus",
+          sweet: "🍬 Sweet Bonanza",
+          doghouse: "🐶 Dog House Megaways",
+          sugar: "🍭 Sugar Rush",
+          aviator: "✈️ Aviator",
+          chicken: "🐔 Chicken Road",
+        },
+        gameSubtitles: {
+          gates: "Risque faible / moyen",
+          sweet: "Spins & multiplicateurs",
+          doghouse: "Forte volatilité",
+          sugar: "Setup de bonus",
+          aviator: "Jeu crash, chercher x",
+          chicken: "Crash avec niveaux",
+        },
+        strategyTitle: (gameTitle, balanceLabel) => `${gameTitle} — stratégie pour bankroll ${balanceLabel}`,
+        balanceLabelLow: "< 5$",
+        balanceLabelHigh: "≥ 5$",
+        stopLossNote: "Stop-loss strict : env. −40% de la bankroll de départ. Stop et pause.",
+        chickenDifficultyLabel: "Difficulté ·",
+        chickenDiffs: { easy:"Facile", normal:"Normal", hard:"Difficile" },
+      },
     };
 
-    // ===== Игры (переводы в 5 языков) =====
-    const GAMES = [
-      { key:"gates", icon:"⚡", type:"slot",
-        title:{en:"Gates of Olympus", ru:"Gates of Olympus", es:"Gates of Olympus", pt:"Gates of Olympus", fr:"Gates of Olympus"},
-        sub:{en:"Low / mid risk grind", ru:"Низкий / средний риск", es:"Riesgo bajo / medio", pt:"Risco baixo / médio", fr:"Risque faible / moyen"},
-        tag:{en:"SLOT · GRIND", ru:"SLOT · GRIND", es:"SLOT · GRIND", pt:"SLOT · GRIND", fr:"SLOT · GRIND"}
-      },
-      { key:"sweet", icon:"🍬", type:"slot",
-        title:{en:"Sweet Bonanza", ru:"Sweet Bonanza", es:"Sweet Bonanza", pt:"Sweet Bonanza", fr:"Sweet Bonanza"},
-        sub:{en:"Candy spins & multipliers", ru:"Сладкие спины и иксы", es:"Giros y multiplicadores", pt:"Giros e multiplicadores", fr:"Spins et multiplicateurs"},
-        tag:{en:"SLOT · MULTIPLIERS", ru:"SLOT · MULTIPLIERS", es:"SLOT · MULTIPLIERS", pt:"SLOT · MULTIPLIERS", fr:"SLOT · MULTIPLIERS"}
-      },
-      { key:"dog", icon:"🐶", type:"slot",
-        title:{en:"Dog House Megaways", ru:"Dog House Megaways", es:"Dog House Megaways", pt:"Dog House Megaways", fr:"Dog House Megaways"},
-        sub:{en:"High volatility spins", ru:"Высокая волатильность", es:"Alta volatilidad", pt:"Alta volatilidade", fr:"Forte volatilité"},
-        tag:{en:"SLOT · MEGAWAYS", ru:"SLOT · MEGAWAYS", es:"SLOT · MEGAWAYS", pt:"SLOT · MEGAWAYS", fr:"SLOT · MEGAWAYS"}
-      },
-      { key:"sugar", icon:"🍭", type:"slot",
-        title:{en:"Sugar Rush", ru:"Sugar Rush", es:"Sugar Rush", pt:"Sugar Rush", fr:"Sugar Rush"},
-        sub:{en:"Bonus series setup", ru:"Сетап на серии бонусов", es:"Setup de bonos", pt:"Setup de bônus", fr:"Setup de bonus"},
-        tag:{en:"SLOT · SERIES", ru:"SLOT · SERIES", es:"SLOT · SERIES", pt:"SLOT · SERIES", fr:"SLOT · SERIES"}
-      },
-      { key:"aviator", icon:"✈️", type:"crash",
-        title:{en:"Aviator", ru:"Aviator", es:"Aviator", pt:"Aviator", fr:"Aviator"},
-        sub:{en:"Crash game, hunting x", ru:"Краш, ловим иксы", es:"Juego crash, buscar x", pt:"Jogo crash, buscar x", fr:"Jeu crash, chercher x"},
-        tag:{en:"CRASH · X", ru:"CRASH · X", es:"CRASH · X", pt:"CRASH · X", fr:"CRASH · X"}
-      },
-      { key:"chicken", icon:"🐔", type:"crash",
-        title:{en:"Chicken Road", ru:"Chicken Road", es:"Chicken Road", pt:"Chicken Road", fr:"Chicken Road"},
-        sub:{en:"Crash with risk levels", ru:"Краш с уровнями риска", es:"Crash con niveles", pt:"Crash com níveis", fr:"Crash avec niveaux"},
-        tag:{en:"CRASH · LEVELS", ru:"CRASH · LEVELS", es:"CRASH · LEVELS", pt:"CRASH · LEVELS", fr:"CRASH · LEVELS"}
-      },
-    ];
+    // ===== Strategies fully translated (5 languages) =====
+    const STRATEGIES = {
+      en: {
+        gates: {
+          low: [
+`1) 15 spins @ $0.10
+2) 10 spins @ $0.20
+3) If you can — buy a minimum bonus.
+4) If you can’t — 25 spins @ $0.40, then stop.
 
-    // ===== Стратегии (переводы в 5 языков) =====
-    const STRATS = {
-      gates:{
-        low:{
-          en:[
-            "1) 15 spins @ $0.10\n2) 10 spins @ $0.20\n3) If it’s cold — stop and switch.\nStop-loss: −40% from start.",
-            "1) 3 short sessions: 10 spins @ $0.10 (pause 2–3 min)\n2) If you catch momentum — continue 20–30 spins.\n3) No action — exit."
+Stop-loss: −40% from start.`,
+`1) 20 spins @ $0.10 (watch the slot).
+2) If you hit 2–3 multipliers x10+ — raise to $0.20 for 15 spins.
+3) If no bonus at all — end session (slot is cold).`,
+`1) Do 3–4 short sessions: 10 spins @ $0.10, pause 2–3 min.
+2) In the session with momentum — extend to 30–40 spins.
+3) Don’t buy bonus if bankroll < $3.`
           ],
-          ru:[
-            "1) 15 спинов по 0.10 $\n2) 10 спинов по 0.20 $\n3) Если «холодно» — стоп и меняй слот.\nСтоп-лосс: −40% от старта.",
-            "1) 3 коротких захода по 10 спинов на 0.10 $ (пауза 2–3 мин)\n2) Поймал движуху — докрути ещё 20–30.\n3) Пусто — выход."
+          high: [
+`1) Start with 25 spins @ $0.20–0.40 (1–2% bankroll).
+2) If multipliers are frequent — buy bonus using 5–8% bankroll.
+3) After any bonus x150+ — cut bet and take a break.`,
+`1) Play in packs: 30 spins @ $0.20–0.40.
+2) No x20+ in a pack — switch slot or pause.
+3) Big win (x300+) = stop session and lock profit.`,
+`1) 15 spins @ $0.20, then 15 spins @ $0.40 — see what “responds”.
+2) Pick the better bet and play 40–50 spins max.
+3) Weak bonus? Don’t chase — pause and come back later.`
           ],
-          es:[
-            "1) 15 giros @ $0.10\n2) 10 giros @ $0.20\n3) Si está “frío” — para y cambia.\nStop-loss: −40% del inicio.",
-            "1) 3 sesiones cortas: 10 giros @ $0.10 (pausa 2–3 min)\n2) Si hay ritmo — sigue 20–30 giros.\n3) Sin señales — sal."
-          ],
-          pt:[
-            "1) 15 giros @ $0.10\n2) 10 giros @ $0.20\n3) Se estiver “frio” — para e troca.\nStop-loss: −40% do início.",
-            "1) 3 sessões curtas: 10 giros @ $0.10 (pausa 2–3 min)\n2) Se tiver ritmo — continua 20–30 giros.\n3) Sem ação — sai."
-          ],
-          fr:[
-            "1) 15 spins à $0.10\n2) 10 spins à $0.20\n3) Si c’est “froid” — stop et change.\nStop-loss : −40% du départ.",
-            "1) 3 petites sessions : 10 spins à $0.10 (pause 2–3 min)\n2) Si ça bouge — continue 20–30 spins.\n3) Rien — tu sors."
-          ]
         },
-        high:{
-          en:[
-            "1) 25 spins @ $0.20–0.40\n2) If multipliers are frequent — try a small bonus buy.\n3) Hit x150+? Close session.",
-            "1) Cycles: 30 spins → evaluate\n2) No x20+ in a cycle? Switch.\n3) Big win (x300+) = stop."
+        sweet: {
+          low: [
+`1) 20 spins @ $0.10.
+2) If a fast dead streak — pause 3–4 minutes.
+3) Hit x50+ — lower bet and secure profit.`,
+`1) Keep bet $0.10–0.20 (don’t jump).
+2) Play packs of 25 spins.
+3) Max 75–100 spins per session, then stop.`,
+`1) 10 careful spins @ $0.10.
+2) If you saw many scatters/candy action — add 20–30 spins.
+3) No activity — switch game.`
           ],
-          ru:[
-            "1) 25 спинов по 0.20–0.40 $\n2) Если множители частые — можно 1 покупку бонуса (малый %).\n3) Поймал x150+ — закрывай сессию.",
-            "1) Циклы: 30 спинов → оценка\n2) Нет x20+ за цикл — меняй слот.\n3) Жирный занос (x300+) = стоп."
+          high: [
+`1) Start with 20 spins @ $0.20–0.40.
+2) Bonus x100+ — cut bet in half and do максимум 20 spins.
+3) Max 3 bonus buys per session.`,
+`1) Cycles: 30 spins → evaluate.
+2) If it’s hot — buy bonus not more often than once per 40 spins.
+3) Session limit: 15–20% bankroll.`,
+`1) Choose a fixed bet (1–3% bankroll).
+2) Play only while you stay in corridor −20% / +50% from start.
+3) Outside corridor — close session.`
           ],
-          es:[
-            "1) 25 giros @ $0.20–0.40\n2) Si hay multiplicadores — prueba 1 compra de bonus (pequeño %).\n3) x150+? Cierra sesión.",
-            "1) Ciclos: 30 giros → evaluar\n2) Sin x20+ en el ciclo — cambia.\n3) Gran win (x300+) = stop."
-          ],
-          pt:[
-            "1) 25 giros @ $0.20–0.40\n2) Se os multiplicadores estiverem vindo — 1 compra de bônus (pequeno %).\n3) x150+? Fecha a sessão.",
-            "1) Ciclos: 30 giros → avaliar\n2) Sem x20+ no ciclo — troca.\n3) Win grande (x300+) = stop."
-          ],
-          fr:[
-            "1) 25 spins à $0.20–0.40\n2) Si les multiplicateurs sortent — 1 achat de bonus (petit %).\n3) x150+ ? Ferme la session.",
-            "1) Cycles : 30 spins → évaluer\n2) Pas de x20+ sur le cycle — change.\n3) Gros win (x300+) = stop."
-          ]
-        }
-      },
-
-      sweet:{
-        low:{
-          en:[
-            "1) 20 spins @ $0.10\n2) If dead — pause 3 minutes\n3) x50+ — lock profit, don’t chase."
-          ],
-          ru:[
-            "1) 20 спинов по 0.10 $\n2) Если пусто — пауза 3 минуты\n3) x50+ — фиксируй, не жадничай."
-          ],
-          es:[
-            "1) 20 giros @ $0.10\n2) Si está muerto — pausa 3 minutos\n3) x50+ — asegura ganancia."
-          ],
-          pt:[
-            "1) 20 giros @ $0.10\n2) Se estiver morto — pausa 3 minutos\n3) x50+ — trava o lucro."
-          ],
-          fr:[
-            "1) 20 spins à $0.10\n2) Si c’est mort — pause 3 minutes\n3) x50+ — sécurise le profit."
-          ]
         },
-        high:{
-          en:[
-            "1) 20 spins @ $0.20–0.40\n2) Bonus x100+ — cut bet in half\n3) Max 3 bonus buys per session."
+        doghouse: {
+          low: [
+`High volatility.
+1) Short packs: 10 spins @ $0.10–0.20.
+2) If 20–30 spins with no action — switch.
+3) Don’t chase losses here.`,
+`1) 15 spins at minimum — watch for wilds.
+2) Many “dogs/wilds” — add 20–25 spins.
+3) No signs — leave and look for a “live” slot.`,
+`Bite & run:
+1) 2–3 entries of 10–15 spins with pauses.
+2) As soon as you hit x50+ — take profit and don’t return today.`
           ],
-          ru:[
-            "1) 20 спинов по 0.20–0.40 $\n2) Бонус x100+ — режь ставку вдвое\n3) Макс 3 покупки бонуса за сессию."
+          high: [
+`1) Bet $0.20–0.40 (max 2–3% bankroll).
+2) Cycles of 20–25 spins.
+3) Any good bonus = end session (Dog House can pull back).`,
+`1) Warm up: 15 spins at mid-high bet.
+2) Max 2 bonus buys.
+3) If both are weak — switch slot, don’t feed it.`,
+`1) Set a loss limit for this slot (10–15% bankroll).
+2) Play packs of 20 spins while inside limit.
+3) Limit hit — STOP, no “one more spin”.`
           ],
-          es:[
-            "1) 20 giros @ $0.20–0.40\n2) Bonus x100+ — baja la apuesta a la mitad\n3) Máx 3 compras de bonus."
+        },
+        sugar: {
+          low: [
+`1) 20 spins @ $0.10.
+2) If clusters build often — add 20–30 spins.
+3) No movement — switch; Sugar likes streaks.`,
+`1) Watch first 15–20 spins: big clusters / chains?
+2) If active — play up to 60–80 spins max.
+3) If dead — exit immediately.`,
+`Short runs:
+1) 3 entries of 15 spins with pauses.
+2) If you got a bonus — cut bet and play only one more short run.`
           ],
-          pt:[
-            "1) 20 giros @ $0.20–0.40\n2) Bônus x100+ — reduz a aposta pela metade\n3) Máx 3 compras de bônus."
+          high: [
+`1) Split bankroll into 30–40 spins (bet 2–3% bankroll).
+2) A couple strong bonuses in a row = good sign, but also exit point.
+3) Don’t give it a chance to take profit back.`,
+`1) Bet $0.20–0.40 or higher, but max 3% bankroll.
+2) Cycle: 25 spins → evaluate → continue or switch.
+3) Bad cycle — switch game.`,
+`1) Series mode: 40–50 spins max at one bet.
+2) Bonus x200+ — lock profit and end session.`
           ],
-          fr:[
-            "1) 20 spins à $0.20–0.40\n2) Bonus x100+ — divise la mise par 2\n3) Max 3 achats de bonus."
-          ]
-        }
+        },
       },
 
-      dog:{
-        low:{
-          en:[
-            "High volatility.\n1) 2–3 runs: 10–15 spins at minimum\n2) No wilds/bonus — exit and switch."
+      ru: {
+        gates: {
+          low: [
+`1) 15 спинов по 0.10 $
+2) 10 спинов по 0.20 $
+3) Если хватает — купи бонуску по минималке.
+4) Если не хватает — 25 спинов по 0.40 $ и стоп.
+
+Стоп-лосс: −40% от старта.`,
+`1) 20 спинов по 0.10 $ (просто смотри слот).
+2) Поймал 2–3 мультика x10+ — подними до 0.20 $ на 15 спинов.
+3) Бонуски нет вообще — заверши сессию (слот холодный).`,
+`1) 3–4 короткие сессии: 10 спинов по 0.10 $, пауза 2–3 мин.
+2) Там, где пошла движуха — докрути до 30–40 спинов.
+3) Не покупай бонуску при банке < 3 $.`
           ],
-          ru:[
-            "Высокая волатильность.\n1) 2–3 захода по 10–15 спинов на минималке\n2) Нет вайлдов/бонуса — выход и смена слота."
+          high: [
+`1) 25 спинов по 0.20–0.40 $ (1–2% банка).
+2) Если множители частые — покупка бонуса на 5–8% банка.
+3) После бонуски x150+ — режь ставку и перерыв.`,
+`1) Пачки: 30 спинов по 0.20–0.40 $.
+2) Нет x20+ за пачку — меняй слот или пауза.
+3) Жирный занос (x300+) = стоп сессии и фикс.`,
+`1) 15 спинов по 0.20 $, потом 15 по 0.40 $ — смотри отклик.
+2) Выбери лучшую ставку и крути 40–50 спинов максимум.
+3) Слабая бонуска? Не догоняй — пауза и позже.`
           ],
-          es:[
-            "Alta volatilidad.\n1) 2–3 rondas: 10–15 giros al mínimo\n2) Sin wilds/bonus — salir y cambiar."
-          ],
-          pt:[
-            "Alta volatilidade.\n1) 2–3 rodadas: 10–15 giros no mínimo\n2) Sem wild/bonus — sai e troca."
-          ],
-          fr:[
-            "Forte volatilité.\n1) 2–3 runs : 10–15 spins au minimum\n2) Pas de wild/bonus — tu sors et tu changes."
-          ]
         },
-        high:{
-          en:[
-            "1) Bet = 1–3% of bankroll\n2) Loss limit for this slot: 10–15%\n3) Hit the limit — STOP, no chasing."
+        sweet: {
+          low: [
+`1) 20 спинов по 0.10 $.
+2) Если быстро пошла пустота — пауза 3–4 минуты.
+3) Поймал x50+ — снижай ставку и фиксируй.`,
+`1) Держи ставку 0.10–0.20 $, не прыгай.
+2) Пачками по 25 спинов.
+3) За сессию 75–100 спинов максимум.`,
+`1) 10 аккуратных спинов по 0.10 $.
+2) Видишь скаттеры/движуху — добавь 20–30 спинов.
+3) Нет активности — смени игру.`
           ],
-          ru:[
-            "1) Ставка = 1–3% от банка\n2) Лимит потерь на слот: 10–15%\n3) Выбил лимит — СТОП, без догонов."
+          high: [
+`1) 20 спинов по 0.20–0.40 $.
+2) Бонус x100+ — режь ставку вдвое и ещё максимум 20 спинов.
+3) Максимум 3 покупки бонуса за сессию.`,
+`1) Циклы: 30 спинов → оценка.
+2) Если жарко — покупка бонуса не чаще, чем раз в 40 спинов.
+3) Лимит сессии: 15–20% банка.`,
+`1) Фиксируй ставку (1–3% от банка).
+2) Играешь пока держишь коридор −20% / +50% от старта.
+3) Вышел — закрывай сессию.`
           ],
-          es:[
-            "1) Apuesta = 1–3% de tu banca\n2) Límite de pérdida: 10–15%\n3) Llegaste al límite — STOP."
+        },
+        doghouse: {
+          low: [
+`Высокая волатильность.
+1) Короткие пачки: 10 спинов по 0.10–0.20 $.
+2) 20–30 спинов без движухи — меняй слот.
+3) Не догоняй здесь минус.`,
+`1) 15 спинов на минималке — смотри вайлды.
+2) Много собак/вайлдов — добавь 20–25 спинов.
+3) Тишина — уходи, ищи живой слот.`,
+`Укус и бег:
+1) 2–3 захода по 10–15 спинов с паузами.
+2) Поймал x50+ — фикс и сегодня не возвращайся.`
           ],
-          pt:[
-            "1) Aposta = 1–3% da banca\n2) Limite de perda: 10–15%\n3) Bateu o limite — STOP."
+          high: [
+`1) Ставка 0.20–0.40 $ (не больше 2–3% банка).
+2) Циклы по 20–25 спинов.
+3) Любая нормальная бонуска = выход (может забрать назад).`,
+`1) Прогрев: 15 спинов средней/высокой ставкой.
+2) Максимум 2 покупки бонуса.
+3) Обе слабые — меняй слот, не корми.`,
+`1) Лимит потерь на слот: 10–15% банка.
+2) Игра пачками по 20 спинов, пока в лимите.
+3) Лимит выбит — СТОП, без “ещё спин”.`
           ],
-          fr:[
-            "1) Mise = 1–3% de la bankroll\n2) Limite de perte : 10–15%\n3) Limite touché — STOP."
-          ]
-        }
+        },
+        sugar: {
+          low: [
+`1) 20 спинов по 0.10 $.
+2) Кластеры часто собираются — добавь 20–30 спинов.
+3) Нет движения — меняй игру (Sugar любит серии).`,
+`1) Первые 15–20 спинов: есть большие кластеры/цепочки?
+2) Есть активность — до 60–80 спинов максимум.
+3) Нет — выход сразу.`,
+`Короткие забеги:
+1) 3 захода по 15 спинов с паузами.
+2) Бонуска упала — снизь ставку и только ещё один короткий заход.`
+          ],
+          high: [
+`1) Раздели банк на 30–40 спинов (ставка 2–3% банка).
+2) Пару сильных бонусок подряд — знак, но и точка выхода.
+3) Не дай слоту забрать профит обратно.`,
+`1) Ставка 0.20–0.40 $ или выше, но не больше 3% банка.
+2) Цикл: 25 спинов → оценка → продолжить/сменить.
+3) Плохой цикл — смена игры.`,
+`1) Серии: 40–50 спинов максимум на одной ставке.
+2) Бонус x200+ — фикс и конец сессии.`
+          ],
+        },
       },
 
-      sugar:{
-        low:{
-          en:[
-            "1) 20 spins @ $0.10\n2) If clusters are active — continue\n3) If dead — switch game."
+      es: {
+        gates: {
+          low: [
+`1) 15 giros @ $0.10
+2) 10 giros @ $0.20
+3) Si puedes — compra bonus mínimo.
+4) Si no — 25 giros @ $0.40 y stop.
+
+Stop-loss: −40% del inicio.`,
+`1) 20 giros @ $0.10 (solo observa).
+2) Si ves 2–3 multiplicadores x10+ — sube a $0.20 por 15 giros.
+3) Sin bonus — termina (está frío).`,
+`1) 3–4 sesiones cortas: 10 giros @ $0.10, pausa 2–3 min.
+2) Donde haya ritmo — extiende a 30–40 giros.
+3) No compres bonus si banca < $3.`
           ],
-          ru:[
-            "1) 20 спинов по 0.10 $\n2) Если кластеры активные — продолжай\n3) Если тишина — меняй игру."
+          high: [
+`1) 25 giros @ $0.20–0.40 (1–2% banca).
+2) Si hay multiplicadores frecuentes — compra bonus (5–8% banca).
+3) Tras bonus x150+ — baja apuesta y pausa.`,
+`1) Paquetes: 30 giros @ $0.20–0.40.
+2) Sin x20+ — cambia o pausa.
+3) Win grande (x300+) = cerrar sesión.`,
+`1) 15 giros @ $0.20 y 15 @ $0.40 — mira respuesta.
+2) Elige mejor apuesta y juega 40–50 giros máx.
+3) Bonus flojo — no persigas, pausa.`
           ],
-          es:[
-            "1) 20 giros @ $0.10\n2) Si hay actividad — continúa\n3) Si está muerto — cambia de juego."
-          ],
-          pt:[
-            "1) 20 giros @ $0.10\n2) Se estiver ativo — continua\n3) Se estiver morto — troca o jogo."
-          ],
-          fr:[
-            "1) 20 spins à $0.10\n2) Si c’est actif — continue\n3) Si c’est mort — change de jeu."
-          ]
         },
-        high:{
-          en:[
-            "1) Max 40–50 spins per session\n2) Bonus x200+ — lock profit and exit."
+        sweet: {
+          low: [
+`1) 20 giros @ $0.10.
+2) Si se muere rápido — pausa 3–4 min.
+3) x50+ — baja apuesta y asegura.`,
+`1) Mantén apuesta $0.10–0.20.
+2) Paquetes de 25 giros.
+3) Máx 75–100 giros por sesión.`,
+`1) 10 giros @ $0.10.
+2) Si ves scatters/actividad — añade 20–30 giros.
+3) Sin actividad — cambia de juego.`
           ],
-          ru:[
-            "1) Макс 40–50 спинов за сессию\n2) Бонус x200+ — фиксируй и выход."
+          high: [
+`1) 20 giros @ $0.20–0.40.
+2) Bonus x100+ — reduce a la mitad y máximo 20 giros.
+3) Máx 3 compras de bonus.`,
+`1) Ciclos: 30 giros → evaluar.
+2) Si está caliente — compra bonus no más de 1 cada 40 giros.
+3) Límite: 15–20% banca.`,
+`1) Apuesta fija (1–3% banca).
+2) Juega mientras estés en −20% / +50% del inicio.
+3) Fuera del rango — cerrar.`
           ],
-          es:[
-            "1) Máx 40–50 giros por sesión\n2) Bonus x200+ — asegurar y salir."
+        },
+        doghouse: {
+          low: [
+`Alta volatilidad.
+1) Paquetes cortos: 10 giros @ $0.10–0.20.
+2) 20–30 giros sin acción — cambia.
+3) No persigas pérdidas aquí.`,
+`1) 15 giros mínimo — mira wilds.
+2) Si salen muchos — añade 20–25 giros.
+3) Si está muerto — sal.`,
+`Muerde y corre:
+1) 2–3 entradas de 10–15 giros con pausas.
+2) x50+ — cobra y no vuelvas hoy.`
           ],
-          pt:[
-            "1) Máx 40–50 giros por sessão\n2) Bônus x200+ — trava e sai."
+          high: [
+`1) Apuesta $0.20–0.40 (máx 2–3% banca).
+2) Ciclos 20–25 giros.
+3) Bonus decente = salir (puede devolver).`,
+`1) Calienta 15 giros con apuesta media/alta.
+2) Máx 2 compras de bonus.
+3) Si ambas son malas — cambia.`,
+`1) Límite de pérdida: 10–15% banca.
+2) Paquetes de 20 giros mientras estés dentro.
+3) Límite alcanzado — STOP.`
           ],
-          fr:[
-            "1) Max 40–50 spins par session\n2) Bonus x200+ — sécurise et sors."
-          ]
-        }
-      }
+        },
+        sugar: {
+          low: [
+`1) 20 giros @ $0.10.
+2) Si hay clusters seguidos — añade 20–30.
+3) Sin movimiento — cambia (le gustan las rachas).`,
+`1) Primeros 15–20: ¿clusters grandes/cadenas?
+2) Si hay actividad — hasta 60–80 giros máx.
+3) Si no — salir.`,
+`Rachas cortas:
+1) 3 entradas de 15 giros con pausas.
+2) Si cae bonus — baja apuesta y solo 1 racha más.`
+          ],
+          high: [
+`1) Divide banca en 30–40 giros (2–3% banca).
+2) Un par de bonos fuertes seguidos = salida.
+3) No dejes que quite el profit.`,
+`1) Apuesta $0.20–0.40 (máx 3% banca).
+2) Ciclo: 25 giros → evaluar → seguir/cambiar.
+3) Ciclo malo — cambiar.`,
+`1) Series: 40–50 giros máx.
+2) Bonus x200+ — asegurar y terminar.`
+          ],
+        },
+      },
+
+      pt: {
+        gates: {
+          low: [
+`1) 15 giros @ $0.10
+2) 10 giros @ $0.20
+3) Se der — compra bônus mínimo.
+4) Se não — 25 giros @ $0.40 e stop.
+
+Stop-loss: −40% do início.`,
+`1) 20 giros @ $0.10 (só observar).
+2) 2–3 multiplicadores x10+ — sobe para $0.20 por 15 giros.
+3) Sem bônus — encerra (tá frio).`,
+`1) 3–4 sessões curtas: 10 giros @ $0.10, pausa 2–3 min.
+2) Onde tiver ritmo — vai até 30–40 giros.
+3) Não compra bônus se banca < $3.`
+          ],
+          high: [
+`1) 25 giros @ $0.20–0.40 (1–2% banca).
+2) Multiplicadores frequentes — compra bônus (5–8% banca).
+3) Bônus x150+ — baixa e pausa.`,
+`1) Pacotes: 30 giros @ $0.20–0.40.
+2) Sem x20+ — troca ou pausa.
+3) Win grande (x300+) = fechar sessão.`,
+`1) 15 giros @ $0.20 e 15 @ $0.40 — vê resposta.
+2) Escolhe melhor e joga 40–50 giros máx.
+3) Bônus fraco — não persegue, pausa.`
+          ],
+        },
+        sweet: {
+          low: [
+`1) 20 giros @ $0.10.
+2) Se morrer rápido — pausa 3–4 min.
+3) x50+ — baixa aposta e trava.`,
+`1) Mantém $0.10–0.20.
+2) Pacotes de 25 giros.
+3) Máx 75–100 giros por sessão.`,
+`1) 10 giros @ $0.10.
+2) Se tiver scatters/atividade — +20–30 giros.
+3) Sem atividade — troca de jogo.`
+          ],
+          high: [
+`1) 20 giros @ $0.20–0.40.
+2) Bônus x100+ — corta aposta pela metade e mais 20 giros máx.
+3) Máx 3 compras de bônus.`,
+`1) Ciclos: 30 giros → avaliar.
+2) Se estiver quente — 1 compra a cada 40 giros no máximo.
+3) Limite: 15–20% banca.`,
+`1) Aposta fixa (1–3% banca).
+2) Joga no corredor −20% / +50% do início.
+3) Saiu do corredor — fecha.`
+          ],
+        },
+        doghouse: {
+          low: [
+`Alta volatilidade.
+1) Pacotes curtos: 10 giros @ $0.10–0.20.
+2) 20–30 giros sem ação — troca.
+3) Não corre atrás de prejuízo aqui.`,
+`1) 15 giros mínimo — olha wilds.
+2) Se sair bastante — +20–25 giros.
+3) Se estiver morto — sai.`,
+`Morde e sai:
+1) 2–3 entradas de 10–15 giros com pausas.
+2) x50+ — garante e não volta hoje.`
+          ],
+          high: [
+`1) Aposta $0.20–0.40 (máx 2–3% banca).
+2) Ciclos 20–25 giros.
+3) Bônus bom = sair (pode devolver).`,
+`1) Aquece 15 giros com aposta média/alta.
+2) Máx 2 compras de bônus.
+3) Se ambas forem ruins — troca.`,
+`1) Limite de perda: 10–15% banca.
+2) Pacotes de 20 giros enquanto estiver dentro.
+3) Bateu limite — STOP.`
+          ],
+        },
+        sugar: {
+          low: [
+`1) 20 giros @ $0.10.
+2) Se clusters estiverem vindo — +20–30.
+3) Sem movimento — troca (gosta de sequência).`,
+`1) Primeiros 15–20: clusters grandes/cadeias?
+2) Ativo — até 60–80 giros máx.
+3) Morto — sai.`,
+`Corridas curtas:
+1) 3 entradas de 15 giros com pausas.
+2) Caiu bônus — baixa aposta e só mais 1 corrida.`
+          ],
+          high: [
+`1) Divide banca em 30–40 giros (2–3% banca).
+2) 2 bônus fortes seguidos = saída.
+3) Não deixa tirar o lucro.`,
+`1) Aposta $0.20–0.40 (máx 3% banca).
+2) Ciclo: 25 giros → avaliar → seguir/trocar.
+3) Ciclo ruim — troca.`,
+`1) Séries: 40–50 giros máx.
+2) Bônus x200+ — trava e encerra.`
+          ],
+        },
+      },
+
+      fr: {
+        gates: {
+          low: [
+`1) 15 spins à $0.10
+2) 10 spins à $0.20
+3) Si possible — achat de bonus minimum.
+4) Sinon — 25 spins à $0.40 puis stop.
+
+Stop-loss : −40% du départ.`,
+`1) 20 spins à $0.10 (observe).
+2) 2–3 multiplicateurs x10+ — monte à $0.20 pour 15 spins.
+3) Aucun bonus — fin (c’est froid).`,
+`1) 3–4 sessions courtes : 10 spins à $0.10, pause 2–3 min.
+2) Là où ça bouge — jusqu’à 30–40 spins.
+3) Pas d’achat bonus si bankroll < $3.`
+          ],
+          high: [
+`1) 25 spins à $0.20–0.40 (1–2% bankroll).
+2) Multiplicateurs fréquents — achat bonus (5–8% bankroll).
+3) Bonus x150+ — baisse la mise et pause.`,
+`1) Packs : 30 spins à $0.20–0.40.
+2) Pas de x20+ — change ou pause.
+3) Gros win (x300+) = stop session.`,
+`1) 15 spins à $0.20 puis 15 à $0.40 — vois la réponse.
+2) Choisis la meilleure et fais 40–50 spins max.
+3) Bonus faible — ne chase pas, pause.`
+          ],
+        },
+        sweet: {
+          low: [
+`1) 20 spins à $0.10.
+2) Si ça meurt vite — pause 3–4 min.
+3) x50+ — baisse la mise et sécurise.`,
+`1) Garde $0.10–0.20.
+2) Packs de 25 spins.
+3) Max 75–100 spins par session.`,
+`1) 10 spins à $0.10.
+2) Si scatters/activité — +20–30 spins.
+3) Pas d’activité — change de jeu.`
+          ],
+          high: [
+`1) 20 spins à $0.20–0.40.
+2) Bonus x100+ — divise la mise par 2 et encore 20 spins max.
+3) Max 3 achats de bonus.`,
+`1) Cycles : 30 spins → évaluer.
+2) Si c’est chaud — 1 achat max par 40 spins.
+3) Limite : 15–20% bankroll.`,
+`1) Mise fixe (1–3% bankroll).
+2) Joue dans le couloir −20% / +50% du départ.
+3) Hors couloir — ferme.`
+          ],
+        },
+        doghouse: {
+          low: [
+`Forte volatilité.
+1) Packs courts : 10 spins à $0.10–0.20.
+2) 20–30 spins sans action — change.
+3) Ne chase pas ici.`,
+`1) 15 spins minimum — regarde les wilds.
+2) Si ça sort — +20–25 spins.
+3) Si c’est mort — sors.`,
+`Bite & run :
+1) 2–3 entrées de 10–15 spins avec pauses.
+2) x50+ — prends le profit et reviens pas aujourd’hui.`
+          ],
+          high: [
+`1) Mise $0.20–0.40 (max 2–3% bankroll).
+2) Cycles de 20–25 spins.
+3) Bonus correct = fin (peut reprendre).`,
+`1) Chauffe 15 spins en mise moyenne/haute.
+2) Max 2 achats de bonus.
+3) Si les deux sont faibles — change.`,
+`1) Limite de perte : 10–15% bankroll.
+2) Packs de 20 spins tant que tu es dedans.
+3) Limite atteinte — STOP.`
+          ],
+        },
+        sugar: {
+          low: [
+`1) 20 spins à $0.10.
+2) Si les clusters viennent souvent — +20–30.
+3) Pas de mouvement — change (aime les séries).`,
+`1) 15–20 premiers spins : gros clusters/chaînes ?
+2) Actif — jusqu’à 60–80 spins max.
+3) Mort — sortie directe.`,
+`Courses courtes :
+1) 3 entrées de 15 spins avec pauses.
+2) Bonus tombé — baisse la mise et seulement 1 course en plus.`
+          ],
+          high: [
+`1) Divise la bankroll en 30–40 spins (mise 2–3%).
+2) Deux bons bonus d’affilée = sortie.
+3) Ne laisse pas reprendre le profit.`,
+`1) Mise $0.20–0.40 (max 3% bankroll).
+2) Cycle : 25 spins → évaluer → continuer/changer.
+3) Mauvais cycle — change.`,
+`1) Séries : 40–50 spins max.
+2) Bonus x200+ — sécurise et stop.`
+          ],
+        },
+      },
     };
 
-    // ===== Telegram =====
+    // ===== Online counter =====
+    (function(){
+      const MIN = 1700, MAX = 3000, STEP_MIN = 15, STEP_MAX = 80, INTERVAL_MS = 3000;
+      const counter = document.getElementById("online-count");
+      function format(n){ return n.toLocaleString("en-US").replace(/,/g," "); }
+      let current = Math.floor(MIN + Math.random()*(MAX-MIN));
+      counter.textContent = format(current);
+
+      setInterval(()=>{
+        const direction = Math.random() < 0.5 ? -1 : 1;
+        const step = Math.floor(STEP_MIN + Math.random()*(STEP_MAX-STEP_MIN));
+        current += direction * step;
+        if (current < MIN) current = MIN + Math.floor(Math.random()*40);
+        if (current > MAX) current = MAX - Math.floor(Math.random()*40);
+        counter.textContent = format(current);
+      }, INTERVAL_MS);
+    })();
+
+    // ===== Support button (works inside Telegram WebApp) =====
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
     if (tg) { tg.ready(); tg.expand(); }
-    else { document.getElementById("outsideHint").style.display = "block"; }
-
-    function detectLang(){
-      const code = tg?.initDataUnsafe?.user?.language_code?.toLowerCase() || "en";
-      if (code.startsWith("ru")) return "ru";
-      if (code.startsWith("es")) return "es";
-      if (code.startsWith("pt")) return "pt";
-      if (code.startsWith("fr")) return "fr";
-      return "en";
-    }
-
-    let lang = detectLang();
-    if (!LANGS.includes(lang)) lang = "en";
-
-    function T(){ return I18N[lang]; }
 
     function openSupport(){
       const link = `https://t.me/${SUPPORT_USERNAME}`;
       if (tg && tg.openTelegramLink) tg.openTelegramLink(link);
       else window.open(link, "_blank");
     }
-
     document.getElementById("supportBtn").addEventListener("click", openSupport);
 
-    // ===== ONLINE COUNTER =====
-    (function(){
-      const label = document.getElementById("onlineLabel");
-      label.textContent = T().online;
+    // ===== Crash: 1 signal per minute lock (per game + chicken difficulty) =====
+    const CRASH_SLOT_MS = 60 * 1000;
+    const CRASH_CACHE_KEY = "astramind_crash_cache_v2";
 
-      const el = document.getElementById("onlineCount");
-      let cur = Math.floor(1700 + Math.random() * (3000 - 1700));
-      const fmt = (n)=> n.toLocaleString("en-US").replace(/,/g," ");
-      el.textContent = fmt(cur);
-
-      setInterval(()=>{
-        const dir = Math.random() < 0.5 ? -1 : 1;
-        const step = Math.floor(15 + Math.random() * (80 - 15));
-        cur += dir * step;
-        if (cur < 1700) cur = 1715 + Math.floor(Math.random()*40);
-        if (cur > 3000) cur = 2980 - Math.floor(Math.random()*40);
-        el.textContent = fmt(cur);
-      }, 3000);
-    })();
-
-    // ===== APP =====
-    const app = document.getElementById("app");
-    let screen = "home"; // home | bank | strat | crash
-    let selected = null;
-    let bankroll = null; // low | high
-    let chickenDiff = "normal"; // easy | normal | hard
-
-    function renderHeader(){
-      return `
-        <div class="brandTop">${T().brand}</div>
-        <div class="title">${T().title}</div>
-        <div class="sub">${T().sub}</div>
-        <div class="build">${BUILD}</div>
-        <div class="langRow">
-          ${["EN","RU","ES","PT","FR"].map(code=>{
-            const lc = code.toLowerCase();
-            return `<button class="pill ${lang===lc?'active':''}" data-lang="${lc}">${code}</button>`;
-          }).join("")}
-        </div>
-      `;
-    }
-
-    function renderHome(){
-      screen = "home";
-      selected = null;
-      bankroll = null;
-
-      app.innerHTML = `
-        ${renderHeader()}
-        <div class="sectionTitle">${T().choose}</div>
-        ${GAMES.map(g=>`
-          <div class="game" data-game="${g.key}">
-            <div class="gameLeft">
-              <div class="icon">${g.icon}</div>
-              <div>
-                <p class="gTitle">${g.title[lang]}</p>
-                <p class="gSub">${g.sub[lang]}</p>
-              </div>
-            </div>
-            <div class="tag">${g.tag[lang]}</div>
-          </div>
-        `).join("")}
-      `;
-
-      bindLangButtons();
-      bindGameButtons();
-      document.getElementById("supportBtn").textContent = T().support;
-      document.getElementById("onlineLabel").textContent = T().online;
-    }
-
-    function renderBank(){
-      screen = "bank";
-      app.innerHTML = `
-        ${renderHeader()}
-        <button class="btn btnGhost" id="backHome">${T().back}</button>
-        <div class="sectionTitle" style="margin-top:14px;">${selected.title[lang]} — ${T().bank}</div>
-        <div class="btnRow">
-          <button class="btn btnGhost" id="bankLow">${T().under}</button>
-          <button class="btn btnPrimary" id="bankHigh">${T().over}</button>
-          <button class="btn btnGhost" id="supportIn">${T().support}</button>
-        </div>
-      `;
-
-      bindLangButtons();
-      document.getElementById("backHome").onclick = renderHome;
-      document.getElementById("bankLow").onclick = ()=>{ bankroll="low"; renderStrat(); };
-      document.getElementById("bankHigh").onclick = ()=>{ bankroll="high"; renderStrat(); };
-      document.getElementById("supportIn").onclick = openSupport;
-
-      document.getElementById("supportBtn").textContent = T().support;
-      document.getElementById("onlineLabel").textContent = T().online;
-    }
-
-    function pickStrategy(){
-      const pack = STRATS[selected.key];
-      if (!pack) return "No strategies yet.";
-      const arr = pack[bankroll][lang] || [];
-      if (!arr.length) return "No strategies yet.";
-      return arr[Math.floor(Math.random()*arr.length)];
-    }
-
-    function renderStrat(){
-      screen = "strat";
-      const s = pickStrategy();
-
-      app.innerHTML = `
-        ${renderHeader()}
-        <button class="btn btnGhost" id="backBank">${T().back}</button>
-        <div class="sectionTitle" style="margin-top:14px;">${selected.title[lang]} — ${T().get}</div>
-        <div class="box">${s}</div>
-        <div class="btnRow">
-          <button class="btn btnPrimary" id="reroll">${T().get}</button>
-          <button class="btn btnGhost" id="more">${T().more}</button>
-          <button class="btn btnGhost" id="supportIn">${T().support}</button>
-        </div>
-      `;
-
-      bindLangButtons();
-      document.getElementById("backBank").onclick = renderBank;
-      document.getElementById("reroll").onclick = renderStrat;
-      document.getElementById("more").onclick = renderHome;
-      document.getElementById("supportIn").onclick = openSupport;
-
-      document.getElementById("supportBtn").textContent = T().support;
-      document.getElementById("onlineLabel").textContent = T().online;
-    }
-
-    function futureTime(minAhead=3){
-      const d = new Date(Date.now()+minAhead*60*1000);
-      const hh = String(d.getHours()).padStart(2,"0");
-      const mm = String(d.getMinutes()).padStart(2,"0");
+    function hhmm(d){
+      const hh = String(d.getHours()).padStart(2, "0");
+      const mm = String(d.getMinutes()).padStart(2, "0");
       return `${hh}:${mm}`;
     }
-
-    function rndCoeff(gameKey){
+    function slotIdNow(){ return Math.floor(Date.now() / CRASH_SLOT_MS); }
+    function nextMinuteLabel(){
+      const d = new Date();
+      d.setSeconds(60, 0);
+      return hhmm(d);
+    }
+    function loadCrashCache(){
+      try { return JSON.parse(localStorage.getItem(CRASH_CACHE_KEY) || "{}"); }
+      catch(e){ return {}; }
+    }
+    function saveCrashCache(cache){
+      try { localStorage.setItem(CRASH_CACHE_KEY, JSON.stringify(cache)); }
+      catch(e){}
+    }
+    function crashKey(gameKey, diff){
+      return (gameKey === "chicken") ? `${gameKey}:${diff}` : gameKey;
+    }
+    function generateCoeff(gameKey, chickenDifficulty){
       let v;
       if (gameKey === "chicken") {
         const r = Math.random();
-        if (chickenDiff === "easy") {
-          v = (r < 0.92) ? (1.10 + Math.random()*(5-1.10)) : (5 + Math.random()*(20-5));
-        } else if (chickenDiff === "hard") {
-          v = (r < 0.45) ? (1.10 + Math.random()*(20-1.10)) : (20 + Math.random()*(120-20));
+        if (chickenDifficulty === "easy") {
+          v = (r < 0.92) ? (1.10 + Math.random()*(5 - 1.10)) : (5 + Math.random()*(20 - 5));
+        } else if (chickenDifficulty === "hard") {
+          v = (r < 0.45) ? (1.10 + Math.random()*(20 - 1.10)) : (20 + Math.random()*(120 - 20));
         } else {
-          v = (r < 0.78) ? (1.10 + Math.random()*(20-1.10)) : (20 + Math.random()*(100-20));
+          v = (r < 0.78) ? (1.10 + Math.random()*(20 - 1.10)) : (20 + Math.random()*(100 - 20));
         }
       } else {
         const r = Math.random();
-        v = (r < 0.80) ? (1.10 + Math.random()*(20-1.10)) : (20 + Math.random()*(100-20));
+        v = (r < 0.80) ? (1.10 + Math.random()*(20 - 1.10)) : (20 + Math.random()*(100 - 20));
       }
-      return (Math.round(v*100)/100).toFixed(2);
+      return (Math.round(v * 100) / 100).toFixed(2);
+    }
+    function getOrCreateCrashSignal(gameKey, chickenDifficulty){
+      const cache = loadCrashCache();
+      const key = crashKey(gameKey, chickenDifficulty);
+      const slot = slotIdNow();
+
+      if (cache[key] && cache[key].slot === slot) {
+        return { coeff: cache[key].coeff, time: cache[key].time, nextAt: nextMinuteLabel(), locked: true };
+      }
+
+      const coeff = generateCoeff(gameKey, chickenDifficulty);
+      const time = hhmm(new Date());
+      cache[key] = { slot, coeff, time };
+      saveCrashCache(cache);
+
+      return { coeff, time, nextAt: nextMinuteLabel(), locked: false };
     }
 
-    function renderCrash(){
-      screen = "crash";
-      const coeff = rndCoeff(selected.key);
-      const time = futureTime(3);
+    // ===== App data =====
+    const SLOT_GAMES = ["gates","sweet","doghouse","sugar"];
+    const CRASH_GAMES = ["aviator","chicken"];
+    const LANG_ORDER = ["en","ru","es","pt","fr"];
 
-      app.innerHTML = `
-        ${renderHeader()}
-        <button class="btn btnGhost" id="backHome">${T().back}</button>
-        <div class="sectionTitle" style="margin-top:14px;">${selected.title[lang]} — ${T().get}</div>
+    // ===== State =====
+    let currentLang = "en";
+    let currentGame = null;
+    let currentBalanceType = null; // low | high
+    let chickenDifficulty = "normal"; // easy | normal | hard
 
-        ${selected.key === "chicken" ? `
-          <div class="sectionTitle" style="margin-top:10px;">${T().diffTitle}</div>
-          <div class="diffRow">
-            <button class="diffPill ${chickenDiff==='easy'?'active':''}" data-diff="easy">${T().diff.easy}</button>
-            <button class="diffPill ${chickenDiff==='normal'?'active':''}" data-diff="normal">${T().diff.normal}</button>
-            <button class="diffPill ${chickenDiff==='hard'?'active':''}" data-diff="hard">${T().diff.hard}</button>
-          </div>
-        ` : ""}
+    const app = document.getElementById("app");
 
-        <div class="crashCircle">
-          <div class="crashInner">
-            <div class="coeff">x${coeff}</div>
-            <div class="small">${T().signalFor(time)}</div>
-          </div>
-        </div>
+    function t(){ return TEXTS[currentLang]; }
+    function s(){ return STRATEGIES[currentLang]; }
 
-        <div class="muted">${T().crashHint}</div>
+    function createButton(text, className, onClick){
+      const btn = document.createElement("button");
+      btn.className = "btn " + className;
+      btn.innerHTML = text;
+      btn.onclick = onClick;
+      return btn;
+    }
 
-        <div class="btnRow" style="justify-content:center;">
-          <button class="btn btnPrimary" id="refresh">${T().get}</button>
-          <button class="btn btnGhost" id="supportIn">${T().support}</button>
-          <button class="btn btnGhost" id="more">${T().more}</button>
-        </div>
+    function renderLangPills(){
+      const wrap = document.createElement("div");
+      wrap.className = "btn-row";
+
+      LANG_ORDER.forEach(lng=>{
+        const name = t().langNames[lng] || lng.toUpperCase();
+        const active = (lng === currentLang);
+        wrap.appendChild(createButton(
+          name,
+          active ? "btn-primary" : "btn-ghost",
+          ()=>{
+            currentLang = lng;
+            // обновляем верхние лейблы
+            document.getElementById("online-label").textContent = t().onlineLabel;
+            document.getElementById("supportBtn").textContent = t().support;
+
+            // перерисовываем актуальный экран
+            if (!currentGame) renderLanguageScreen();
+            else if (SLOT_GAMES.includes(currentGame) && !currentBalanceType) renderBalanceScreen();
+            else if (SLOT_GAMES.includes(currentGame) && currentBalanceType) renderStrategyScreen();
+            else renderCrashScreen();
+          }
+        ));
+      });
+
+      return wrap;
+    }
+
+    // ===== Screens =====
+    function renderLanguageScreen(){
+      currentGame = null;
+      currentBalanceType = null;
+
+      document.getElementById("online-label").textContent = t().onlineLabel;
+      document.getElementById("supportBtn").textContent = t().support;
+
+      app.innerHTML = "";
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <div class="header-top">${t().brandTop}</div>
+        <div class="header-title">${t().brandTitle}</div>
+        <div class="header-sub">${t().brandSub}</div>
+        <div class="build">${t().build(BUILD)}</div>
+        <div class="section-title" style="text-align:center">${t().chooseLang}</div>
       `;
 
-      bindLangButtons();
-      document.getElementById("backHome").onclick = renderHome;
-      document.getElementById("refresh").onclick = renderCrash;
-      document.getElementById("supportIn").onclick = openSupport;
-      document.getElementById("more").onclick = renderHome;
+      card.appendChild(renderLangPills());
 
-      if (selected.key === "chicken") {
-        document.querySelectorAll(".diffPill").forEach(btn=>{
-          btn.onclick = ()=>{
-            chickenDiff = btn.getAttribute("data-diff");
-            renderCrash();
+      const go = createButton("➡️ OK", "btn-primary", () => renderGameScreen());
+      go.style.margin = "0 auto";
+      go.style.display = "block";
+      card.appendChild(go);
+
+      app.appendChild(card);
+    }
+
+    function renderGameScreen(){
+      document.getElementById("online-label").textContent = t().onlineLabel;
+      document.getElementById("supportBtn").textContent = t().support;
+
+      app.innerHTML = "";
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <div class="header-top">${t().brandTop}</div>
+        <div class="header-title">${t().brandTitle}</div>
+        <div class="header-sub">${t().brandSub}</div>
+        <div class="build">${t().build(BUILD)}</div>
+      `;
+
+      // Языки в главном меню (как раньше)
+      card.appendChild(renderLangPills());
+
+      const st = document.createElement("div");
+      st.className = "section-title";
+      st.textContent = t().chooseGame;
+      card.appendChild(st);
+
+      const grid = document.createElement("div");
+      grid.className = "game-grid";
+
+      const allGames = [...SLOT_GAMES, ...CRASH_GAMES];
+      allGames.forEach(gameKey=>{
+        const gCard = document.createElement("div");
+        gCard.className = "game-card";
+        gCard.onclick = ()=>{
+          currentGame = gameKey;
+          currentBalanceType = null;
+          if (SLOT_GAMES.includes(gameKey)) renderBalanceScreen();
+          else renderCrashScreen();
+        };
+
+        const icon = document.createElement("div");
+        icon.className = "game-icon";
+        icon.textContent = t().games[gameKey].split(" ")[0];
+
+        const title = document.createElement("div");
+        title.className = "game-title";
+        title.textContent = t().games[gameKey];
+
+        const sub = document.createElement("div");
+        sub.className = "game-sub";
+        sub.textContent = t().gameSubtitles[gameKey];
+
+        gCard.appendChild(icon);
+        gCard.appendChild(title);
+        gCard.appendChild(sub);
+        grid.appendChild(gCard);
+      });
+
+      card.appendChild(grid);
+      app.appendChild(card);
+    }
+
+    function renderBalanceScreen(){
+      document.getElementById("online-label").textContent = t().onlineLabel;
+      document.getElementById("supportBtn").textContent = t().support;
+
+      const gameTitle = t().games[currentGame];
+
+      app.innerHTML = "";
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const topRow = document.createElement("div");
+      topRow.className = "back-row";
+
+      const backBtn = document.createElement("button");
+      backBtn.className = "back-btn";
+      backBtn.innerHTML = "← <span>" + t().back + "</span>";
+      backBtn.onclick = ()=> renderGameScreen();
+
+      const tag = document.createElement("div");
+      tag.className = "tagline";
+      tag.innerHTML = `<span>${gameTitle}</span> · slot`;
+
+      topRow.appendChild(backBtn);
+      topRow.appendChild(tag);
+      card.appendChild(topRow);
+
+      // языки остаются и тут
+      card.appendChild(renderLangPills());
+
+      const q = document.createElement("div");
+      q.className = "question";
+      q.textContent = t().balanceQuestion(gameTitle);
+      card.appendChild(q);
+
+      const row = document.createElement("div");
+      row.className = "btn-row";
+
+      row.appendChild(createButton(t().balanceLow, "btn-ghost", ()=>{
+        currentBalanceType = "low";
+        renderStrategyScreen();
+      }));
+      row.appendChild(createButton(t().balanceHigh, "btn-primary", ()=>{
+        currentBalanceType = "high";
+        renderStrategyScreen();
+      }));
+
+      card.appendChild(row);
+      app.appendChild(card);
+    }
+
+    function renderStrategyScreen(){
+      document.getElementById("online-label").textContent = t().onlineLabel;
+      document.getElementById("supportBtn").textContent = t().support;
+
+      const gameTitle = t().games[currentGame];
+      const balanceLabel = currentBalanceType === "low" ? t().balanceLabelLow : t().balanceLabelHigh;
+
+      const pack = s()[currentGame][currentBalanceType];
+      const strategyText = pack[Math.floor(Math.random() * pack.length)];
+
+      app.innerHTML = "";
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const topRow = document.createElement("div");
+      topRow.className = "back-row";
+
+      const backBtn = document.createElement("button");
+      backBtn.className = "back-btn";
+      backBtn.innerHTML = "← <span>" + t().back + "</span>";
+      backBtn.onclick = ()=> renderBalanceScreen();
+
+      const tag = document.createElement("div");
+      tag.className = "tagline";
+      tag.innerHTML = `<span>${gameTitle}</span> · slot`;
+
+      topRow.appendChild(backBtn);
+      topRow.appendChild(tag);
+      card.appendChild(topRow);
+
+      // языки остаются и тут
+      card.appendChild(renderLangPills());
+
+      const box = document.createElement("div");
+      box.className = "strategy-box";
+
+      const title = document.createElement("div");
+      title.className = "strategy-title";
+      title.textContent = t().strategyTitle(gameTitle, balanceLabel);
+
+      const text = document.createElement("div");
+      text.textContent = strategyText;
+
+      const footer = document.createElement("div");
+      footer.className = "strategy-footer";
+      footer.textContent = t().stopLossNote;
+
+      box.appendChild(title);
+      box.appendChild(text);
+      box.appendChild(footer);
+
+      card.appendChild(box);
+
+      const divider = document.createElement("div");
+      divider.className = "divider";
+      card.appendChild(divider);
+
+      const info = document.createElement("div");
+      info.className = "question";
+      info.textContent = t().moreStrategy;
+      card.appendChild(info);
+
+      const row = document.createElement("div");
+      row.className = "btn-row";
+
+      [...SLOT_GAMES, ...CRASH_GAMES].forEach(g=>{
+        row.appendChild(createButton(
+          t().games[g],
+          g === currentGame ? "btn-primary" : "btn-ghost",
+          ()=>{
+            currentGame = g;
+            currentBalanceType = null;
+            if (SLOT_GAMES.includes(g)) renderBalanceScreen();
+            else renderCrashScreen();
+          }
+        ));
+      });
+
+      card.appendChild(row);
+      app.appendChild(card);
+    }
+
+    function renderCrashScreen(){
+      document.getElementById("online-label").textContent = t().onlineLabel;
+      document.getElementById("supportBtn").textContent = t().support;
+
+      const gameTitle = t().games[currentGame];
+
+      const sig = getOrCreateCrashSignal(currentGame, chickenDifficulty);
+
+      app.innerHTML = "";
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const topRow = document.createElement("div");
+      topRow.className = "back-row";
+
+      const backBtn = document.createElement("button");
+      backBtn.className = "back-btn";
+      backBtn.innerHTML = "← <span>" + t().back + "</span>";
+      backBtn.onclick = ()=> renderGameScreen();
+
+      const tag = document.createElement("div");
+      tag.className = "tagline";
+      tag.innerHTML = `<span>${gameTitle}</span> · crash`;
+
+      topRow.appendChild(backBtn);
+      topRow.appendChild(tag);
+      card.appendChild(topRow);
+
+      // языки остаются и тут
+      card.appendChild(renderLangPills());
+
+      const container = document.createElement("div");
+      container.className = "crash-container";
+
+      const labelRow = document.createElement("div");
+      labelRow.className = "crash-top-row";
+
+      const leftLabel = document.createElement("div");
+      leftLabel.className = "crash-label";
+      leftLabel.innerHTML =
+        t().crashLabel + " · <span>" + (currentGame === "chicken" ? "CHICKEN ROAD" : "AVIATOR") + "</span>";
+
+      labelRow.appendChild(leftLabel);
+
+      // difficulty only for chicken
+      if (currentGame === "chicken") {
+        const diffWrap = document.createElement("div");
+
+        const diffLabel = document.createElement("div");
+        diffLabel.style.fontSize = "12px";
+        diffLabel.style.color = "rgba(255,255,255,0.7)";
+        diffLabel.style.marginBottom = "4px";
+        diffLabel.textContent = t().chickenDifficultyLabel;
+
+        const group = document.createElement("div");
+        group.className = "btn-pill-group";
+
+        ["easy","normal","hard"].forEach(mode=>{
+          const b = document.createElement("button");
+          b.className = "btn-pill " + (chickenDifficulty === mode ? "btn-pill-active" : "");
+          b.textContent = t().chickenDiffs[mode];
+          b.onclick = ()=>{
+            chickenDifficulty = mode;
+            renderCrashScreen(); // у каждой сложности свой отдельный lock
           };
+          group.appendChild(b);
         });
+
+        diffWrap.appendChild(diffLabel);
+        diffWrap.appendChild(group);
+        labelRow.appendChild(diffWrap);
       }
 
-      document.getElementById("supportBtn").textContent = T().support;
-      document.getElementById("onlineLabel").textContent = T().online;
+      container.appendChild(labelRow);
+
+      const main = document.createElement("div");
+      main.className = "crash-main";
+
+      const circle = document.createElement("div");
+      circle.className = "crash-circle";
+
+      const inner = document.createElement("div");
+      inner.className = "crash-circle-inner";
+
+      const coeffEl = document.createElement("div");
+      coeffEl.className = "crash-coeff";
+      coeffEl.textContent = "x" + sig.coeff;
+
+      const coeffLabel = document.createElement("div");
+      coeffLabel.className = "crash-coeff-label";
+      coeffLabel.textContent = t().crashLabel;
+
+      inner.appendChild(coeffEl);
+      inner.appendChild(coeffLabel);
+      circle.appendChild(inner);
+
+      const timeEl = document.createElement("div");
+      timeEl.className = "crash-time";
+      timeEl.innerHTML = t().crashTimeLabel(sig.time);
+
+      const hintEl = document.createElement("div");
+      hintEl.className = "crash-hint";
+      hintEl.innerHTML = `${t().crashTimeHint}<br>${t().crashLockLabel(sig.nextAt)}`;
+
+      main.appendChild(circle);
+      main.appendChild(timeEl);
+      main.appendChild(hintEl);
+
+      container.appendChild(main);
+
+      const btnRow = document.createElement("div");
+      btnRow.style.display = "flex";
+      btnRow.style.justifyContent = "center";
+      btnRow.style.gap = "10px";
+      btnRow.style.flexWrap = "wrap";
+
+      const crashBtn = createButton(t().crashBtn, "btn-primary", ()=> renderCrashScreen());
+      crashBtn.style.minWidth = "240px";
+
+      const supportBtn = createButton(t().support, "btn-ghost", ()=> openSupport());
+
+      btnRow.appendChild(crashBtn);
+      btnRow.appendChild(supportBtn);
+      container.appendChild(btnRow);
+
+      // small hint
+      const hint2 = document.createElement("div");
+      hint2.className = "crash-hint";
+      hint2.style.marginTop = "6px";
+      hint2.textContent = t().crashHint;
+      container.appendChild(hint2);
+
+      card.appendChild(container);
+      app.appendChild(card);
     }
 
-    function bindLangButtons(){
-      app.querySelectorAll("[data-lang]").forEach(btn=>{
-        btn.onclick = ()=>{
-          lang = btn.getAttribute("data-lang");
-          // перерисовываем текущий экран
-          if (screen === "home") renderHome();
-          else if (screen === "bank") renderBank();
-          else if (screen === "strat") renderStrat();
-          else renderCrash();
-        };
-      });
-    }
+    // Init defaults
+    currentLang = "en";
+    document.getElementById("online-label").textContent = TEXTS[currentLang].onlineLabel;
+    document.getElementById("supportBtn").textContent = TEXTS[currentLang].support;
 
-    function bindGameButtons(){
-      app.querySelectorAll("[data-game]").forEach(row=>{
-        row.onclick = ()=>{
-          const key = row.getAttribute("data-game");
-          selected = GAMES.find(g=>g.key===key);
-          if (!selected) return;
-          if (selected.type === "slot") renderBank();
-          else renderCrash();
-        };
-      });
-    }
-
-    // init
-    renderHome();
+    renderLanguageScreen();
   </script>
+
 </body>
 </html>
